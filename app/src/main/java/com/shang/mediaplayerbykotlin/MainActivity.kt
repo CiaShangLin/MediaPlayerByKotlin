@@ -1,5 +1,8 @@
 package com.shang.mediaplayerbykotlin
 
+import android.media.AudioManager
+import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -7,7 +10,10 @@ import android.os.Environment
 import android.support.annotation.RequiresApi
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.experimental.NonCancellable.start
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.attribute.BasicFileAttributes
 import java.sql.Date
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -17,78 +23,59 @@ import java.util.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
-    var MyLocal_Music_path: String = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString()
-    var MySDcard_Music_path: String = "/storage/9016-4EF8/"
 
-    var musicList:MutableList<File> = mutableListOf()
-
-    var file = Environment.getExternalStorageDirectory()
-
+    val TAG = "Music"
+    lateinit var mediaPlayer: MediaPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var bPlay = false
+
+        var file: MutableList<File> = FileUnits().getmusicList()
+
         button.setOnClickListener {
-            Log.d("Music",musicList.size.toString())
-            musicList.forEach {
-                Log.d("Music","Name:"+it.nameWithoutExtension)  //取得沒有附檔名的檔名
-                Log.d("Music","Path:"+it.canonicalPath)          //路徑
-                var s=SimpleDateFormat("yyyy/MM/dd hh:mm:ss").format(Date(it.lastModified()))
-
-                Log.d("Music","modi:"+s)  //修改時間
-                //播放長度 好像要在MediaPlayer尋找 您可以使用MediaMetadataRetriever獲取歌曲的持續時間。將METADATA_KEY_DURATION與extractMetadata（）函數結合使用。
-
-
-            }
-
-        }
-
-        Find_Music(MyLocal_Music_path)
-        Find_Music(MySDcard_Music_path)
-
-
-
-
-    }
-
-    fun Find_All_Directory_Parent(){
-        while (true) {
-            Log.d("TAG", "path:" + file.path)
-            if (file.listFiles() != null) {
-                for (item in file.listFiles()) {
-                    var f: String
-                    if (item.isFile) {
-                        f = "File"
-                    } else {
-                        f = "Directory"
-                    }
-                    Log.d("TAG", "${item.name} :is $f")
+            mediaPlayer = MediaPlayer()
+            mediaPlayer.reset()
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mediaPlayer.setDataSource(file.get(0).path)
+            mediaPlayer.prepare()
+            mediaPlayer.setOnPreparedListener {
+                if (it != null) {
+                    it.start()
+                    var time = mediaPlayer.duration / 1000
+                    var minute = time / 60
+                    var second = time - minute * 60
+                    Log.d("Music", file.get(0).name)
+                    Log.d("Music", "$minute 分/$second 秒")
                 }
-
             }
-            Log.d("TAG", "----------------------------------------")
 
-            try {
-                file = File(file.parent.toString())
-            } catch (e: Exception) {
-                break;
+            mediaPlayer.apply {
+             
             }
 
         }
+        //val attrs = Files.readAttributes("", BasicFileAttributes::class.java)
     }
 
-    fun Find_Music(path:String){
-        var file_music=File(path)
 
-        file_music.walk().filter {
-            it.isFile and (it.extension=="mp3")
-        }.forEach {
-            musicList.add(it)
-        }
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "onPause()")
     }
 
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "onStop")
+    }
+
+    override fun onDestroy() {   //案上一頁會啟動
+        super.onDestroy()
+
+        Log.d(TAG, "onDestroy()")
+    }
 
 
 }
