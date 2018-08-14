@@ -1,24 +1,13 @@
 package com.shang.mediaplayerbykotlin
 
+import android.arch.persistence.room.Room
 import android.content.Intent
-import android.media.AudioManager
 import android.media.MediaPlayer
-import android.net.Uri
 import android.os.*
 import android.support.v7.app.AppCompatActivity
-import android.support.annotation.RequiresApi
 import android.util.Log
-import android.widget.MediaController
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.experimental.NonCancellable.start
 import java.io.File
-import java.nio.file.Files
-import java.nio.file.attribute.BasicFileAttributes
-import java.sql.Date
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
-import java.util.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
@@ -64,6 +53,13 @@ class MainActivity : AppCompatActivity() {
             startService(Intent(this,MediaPlayerService::class.java).apply {
                 action="RESTART"
             })
+        }
+
+        button4.setOnClickListener {
+            AsyncTask.execute{
+                var database= Room.databaseBuilder(this@MainActivity,MusicDatabase::class.java,"MusicDataBase").build()
+            }
+
         }
 
     }

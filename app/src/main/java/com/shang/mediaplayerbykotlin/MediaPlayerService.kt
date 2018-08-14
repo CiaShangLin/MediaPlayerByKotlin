@@ -16,6 +16,10 @@ import java.security.Provider
  */
 class MediaPlayerService :Service() {
 
+    companion object {
+        val TAG="MediaPlayerService"
+    }
+
     override fun onBind(intent: Intent?): IBinder {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -46,12 +50,10 @@ class MediaPlayerService :Service() {
     }
 
 
-    companion object {
-        val TAG="MediaPlayerService"
-    }
 
 
     override fun onDestroy() {
+
         super.onDestroy()
         Log.d(TAG,"onDestroy")
 
