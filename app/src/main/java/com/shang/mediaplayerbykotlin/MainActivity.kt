@@ -1,12 +1,11 @@
 package com.shang.mediaplayerbykotlin
 
+import android.content.Intent
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
-import android.os.Build
+import android.os.*
 import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
-import android.os.Environment
 import android.support.annotation.RequiresApi
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
@@ -27,6 +26,14 @@ class MainActivity : AppCompatActivity() {
     val TAG = "Music"
     lateinit var mediaPlayer: MediaPlayer
 
+    var handler=object :Handler(){
+        override fun handleMessage(msg: Message?) {
+            super.handleMessage(msg)
+
+            Log.d("Music",msg?.what.toString())
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -35,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         var file: MutableList<File> = FileUnits().getmusicList()
 
         button.setOnClickListener {
-            mediaPlayer = MediaPlayer()
+           /* mediaPlayer = MediaPlayer()
             mediaPlayer.reset()
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mediaPlayer.setDataSource(file.get(0).path)
@@ -52,11 +59,21 @@ class MainActivity : AppCompatActivity() {
             }
 
             mediaPlayer.apply {
-             
-            }
+
+            }*/
+
+            startService(Intent(this,MediaPlayerService::class.java).apply {
+                putExtra("path",file.get(0).path)
+
+            })
+
 
         }
-        //val attrs = Files.readAttributes("", BasicFileAttributes::class.java)
+
+
+        button2.setOnClickListener {
+            MediaPlayerService.stop()
+        }
     }
 
 
