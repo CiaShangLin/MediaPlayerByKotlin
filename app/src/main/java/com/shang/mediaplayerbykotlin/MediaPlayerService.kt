@@ -16,9 +16,6 @@ import java.security.Provider
  */
 class MediaPlayerService :Service() {
 
-
-    val TAG="MediaPlayerService"
-
     override fun onBind(intent: Intent?): IBinder {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -30,33 +27,35 @@ class MediaPlayerService :Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(TAG,"onStartCommand")
-        mediaPlayer = MediaPlayer()
-        mediaPlayer.reset()
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mediaPlayer.setDataSource(intent!!.getStringExtra("path"))
-        mediaPlayer.prepare()
-        mediaPlayer.setOnPreparedListener {
-            if (it != null) {
-                it.start()
-            }
+
+        when(intent!!.action){
+            "START" -> MediaPlayerController.startMediaPlayer(intent.getStringExtra("path"))
+            "STOP" -> MediaPlayerController.stopMediaPlayer()
+            "RESTART" -> MediaPlayerController.reStartMediaPlayer()
+            "NEXT"->""
+            "PREVIOUS"->""
+            "RESET"->""
         }
+
         return START_NOT_STICKY
+
+        //START_STICKY : Service被殺掉, 系統會重啟, 但是Intent會是null。
+        //START_NOT_STICKY : Service被系統殺掉, 不會重啟。
+        //START_REDELIVER_INTENT : Service被系統殺掉, 重啟且Intent會重傳。
 
     }
 
 
     companion object {
-        lateinit var mediaPlayer:MediaPlayer
-        fun stop(){
-            mediaPlayer.stop()
-        }
+        val TAG="MediaPlayerService"
     }
 
 
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG,"onDestroy")
-        mediaPlayer.release()
 
+        MediaPlayerController.releaseMediaPlayer()
+        stopSelf()
     }
 }
