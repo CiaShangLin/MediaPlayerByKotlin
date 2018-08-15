@@ -1,0 +1,27 @@
+package com.shang.mediaplayerbykotlin.Room
+
+import android.arch.persistence.room.Database
+import android.arch.persistence.room.Room
+import android.arch.persistence.room.RoomDatabase
+import android.content.Context
+
+
+@Database(entities = arrayOf(Music_Data_Entity::class,Music_List_Entity::class),version = 1)
+abstract class MusicDatabase : RoomDatabase() {
+
+    abstract fun getMusicDao(): MusicDao
+    abstract fun getMusic_List_Dao():Music_List_Dao
+
+    companion object {
+        val DATABASE_NAME="MUSIC_DATABASE"
+        var musicDatabase: MusicDatabase?=null
+
+        fun getMusicDatabase(context:Context): MusicDatabase {
+            if(musicDatabase ==null){
+                musicDatabase = Room.databaseBuilder(context, MusicDatabase::class.java, DATABASE_NAME).build()
+            }
+            return musicDatabase as MusicDatabase
+        }
+
+    }
+}

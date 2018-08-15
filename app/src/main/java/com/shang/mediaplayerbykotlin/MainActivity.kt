@@ -1,12 +1,14 @@
 package com.shang.mediaplayerbykotlin
 
-import android.arch.persistence.room.Room
 import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.*
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
+import com.shang.mediaplayerbykotlin.Room.MusicDatabase
+import com.shang.mediaplayerbykotlin.Room.Music_List_Entity
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 
@@ -58,16 +60,16 @@ class MainActivity : AppCompatActivity() {
 
         button4.setOnClickListener {
 
-            var database=MusicDatabase.getMusicDatabase(this@MainActivity)
+            var database= MusicDatabase.getMusicDatabase(this@MainActivity)
 
 
             AsyncTask.execute{
 
                 for(i in 0..5){
-                    var musicData=MusicData()
+                    var musicData= Music_Data_Entity()
                     musicData.name=i.toString()+" name"
                     musicData.path=i.toString()+" path"
-                    musicData.time=MediaPlayer.create(this@MainActivity, Uri.fromFile(file.get(i))).duration
+                    //musicData.time=MediaPlayer.create(this@MainActivity, Uri.fromFile(file.get(i))).duration
                     database.getMusicDao().insert(musicData)
                 }
 

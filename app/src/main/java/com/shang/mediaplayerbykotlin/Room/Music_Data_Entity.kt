@@ -1,4 +1,4 @@
-package com.shang.mediaplayerbykotlin
+package com.shang.mediaplayerbykotlin.Room
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
@@ -7,15 +7,16 @@ import android.arch.persistence.room.PrimaryKey
 /**
  * Created by Shang on 2018/8/14.
  */
-@Entity(tableName = MusicData.TABLE_NAME)
-class MusicData {
+@Entity(tableName = Music_Data_Entity.TABLE_NAME)
+class Music_Data_Entity {
 
     companion object {
-        const val TABLE_NAME = "MusicTable"
+        const val TABLE_NAME = "Music_Data_Table"
     }
 
-    @ColumnInfo(name="id")
+
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name="id")
     var id: Long = 0
 
     @ColumnInfo(name = "name")
