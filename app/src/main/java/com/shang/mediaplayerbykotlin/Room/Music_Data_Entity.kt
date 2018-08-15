@@ -14,6 +14,7 @@ class Music_Data_Entity {
     companion object {
         const val TABLE_NAME = "Music_Data_Table"
     }
+
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     var id: Long = 0
