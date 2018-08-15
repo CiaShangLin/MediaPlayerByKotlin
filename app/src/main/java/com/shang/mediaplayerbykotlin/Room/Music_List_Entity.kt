@@ -2,6 +2,7 @@ package com.shang.mediaplayerbykotlin.Room
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
+import android.arch.persistence.room.ForeignKey
 import android.arch.persistence.room.PrimaryKey
 import org.jetbrains.annotations.NotNull
 
@@ -20,6 +21,8 @@ class Music_List_Entity {
 
     @ColumnInfo(name="child_tableName")
     var child_tableName:String=""
+
+
 
 
 

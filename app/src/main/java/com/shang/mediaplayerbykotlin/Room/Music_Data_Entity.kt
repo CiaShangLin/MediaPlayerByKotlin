@@ -1,6 +1,7 @@
 package com.shang.mediaplayerbykotlin.Room
 
 import android.arch.persistence.room.ColumnInfo
+import android.arch.persistence.room.Embedded
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 
@@ -16,17 +17,13 @@ class Music_Data_Entity {
 
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name="id")
+    @ColumnInfo(name = "id")
     var id: Long = 0
 
-    @ColumnInfo(name = "name")
-    var name: String = ""
+    @Embedded
+    lateinit var music_data:Music_Data
 
-    @ColumnInfo(name = "time")
-    var time: Int = 0
-
-    @ColumnInfo(name = "path")
-    var path: String = ""
-
-
+    //如果有原有資料庫 新增欄位會報錯 要不刪除資料庫,不然就是用程式碼解決
 }
+
+data class Music_Data(var name:String,var time:Int,var path:String,var favorite:Boolean){}
