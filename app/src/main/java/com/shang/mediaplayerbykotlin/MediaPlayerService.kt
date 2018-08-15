@@ -30,7 +30,7 @@ class MediaPlayerService :Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.d(TAG,"onStartCommand")
+        Log.d(TAG,"onStartCommand:"+startId)
 
         when(intent!!.action){
             "START" -> MediaPlayerController.startMediaPlayer(intent.getStringExtra("path"))
@@ -59,5 +59,6 @@ class MediaPlayerService :Service() {
 
         MediaPlayerController.releaseMediaPlayer()
         stopSelf()
+
     }
 }

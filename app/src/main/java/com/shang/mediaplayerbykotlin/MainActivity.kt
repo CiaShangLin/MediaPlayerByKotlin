@@ -3,6 +3,7 @@ package com.shang.mediaplayerbykotlin
 import android.arch.persistence.room.Room
 import android.content.Intent
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.*
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -56,9 +57,26 @@ class MainActivity : AppCompatActivity() {
         }
 
         button4.setOnClickListener {
+
+            var database=MusicDatabase.getMusicDatabase(this@MainActivity)
+
+
             AsyncTask.execute{
-                var database= Room.databaseBuilder(this@MainActivity,MusicDatabase::class.java,"MusicDataBase").build()
+
+                for(i in 0..5){
+                    var musicData=MusicData()
+                    musicData.name=i.toString()+" name"
+                    musicData.path=i.toString()+" path"
+                    musicData.time=MediaPlayer.create(this@MainActivity, Uri.fromFile(file.get(i))).duration
+                    database.getMusicDao().insert(musicData)
+                }
+
+
+                for(item in  database.getMusicDao().getAll()){
+                    Log.d("TAG","${item.id} ${item.name} ${item.path} ${item.time}")
+                }
             }
+
 
         }
 

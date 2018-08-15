@@ -1,6 +1,7 @@
 package com.shang.mediaplayerbykotlin
 
 import android.arch.persistence.room.Dao
+import android.arch.persistence.room.Insert
 import android.arch.persistence.room.Query
 
 /**
@@ -13,4 +14,6 @@ interface MusicDao {
     @Query("select * from " + MusicData.TABLE_NAME)
     fun getAll(): List<MusicData>
 
+    @Insert
+    fun insert(musicData: MusicData)
 }
