@@ -5,8 +5,10 @@ import android.media.MediaPlayer
 import android.os.*
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.widget.SeekBar
 import com.shang.mediaplayerbykotlin.Room.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.mediapalyer_controller_ui.*
 import java.io.File
 
 
@@ -113,9 +115,25 @@ class MainActivity : AppCompatActivity() {
                 it.lastModified()
             }
             Log.d(TAG,file.get(0).name+" "+FileUnits.lastModifiedToSimpleDateFormat(file.get(0).lastModified()))
-
-
         }
+
+
+        seekBar.progress=0
+        seekBar.max=100000
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                nameTv.text=progress.toString()
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+
+            }
+
+        })
 
     }
 
