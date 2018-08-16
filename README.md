@@ -7,9 +7,12 @@
 
 4.使用ViewPager或是negative抽屜,點擊功能
 
+5.睡眠定時器,撥放清單,最愛
+
 
 ------------------------------------------------
 1.取得所有MP3檔案,本地+SDCARD
 2.使用MediaPlayer
 3.使用Service控制MediaPlayer
 4.使用android最新資料庫ROOM取代SQLite
+5.MediaPlayer的UI控制器

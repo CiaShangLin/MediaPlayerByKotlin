@@ -14,10 +14,11 @@ import java.security.Provider
 /**
  * Created by Shang on 2018/8/12.
  */
-class MediaPlayerService :Service() {
+class MediaPlayerService : Service() {
 
     companion object {
-        val TAG="MediaPlayerService"
+        val TAG = "MediaPlayerService"
+
     }
 
     override fun onBind(intent: Intent?): IBinder {
@@ -26,19 +27,19 @@ class MediaPlayerService :Service() {
 
     override fun onCreate() {
         super.onCreate()
-        Log.d(TAG,"onCreate")
+        Log.d(TAG, "onCreate")
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.d(TAG,"onStartCommand:"+startId)
+        Log.d(TAG, "onStartCommand:" + startId)
 
-        when(intent!!.action){
+        when (intent!!.action) {
             "START" -> MediaPlayerController.startMediaPlayer(intent.getStringExtra("path"))
             "STOP" -> MediaPlayerController.stopMediaPlayer()
             "RESTART" -> MediaPlayerController.reStartMediaPlayer()
-            "NEXT"->""
-            "PREVIOUS"->""
-            "RESET"->""
+            "NEXT" -> ""
+            "PREVIOUS" -> ""
+            "RESET" -> MediaPlayerController.resetMediaPlayer()
         }
 
         return START_NOT_STICKY
@@ -49,16 +50,12 @@ class MediaPlayerService :Service() {
 
     }
 
-
-
-
     override fun onDestroy() {
 
         super.onDestroy()
-        Log.d(TAG,"onDestroy")
+        Log.d(TAG, "onDestroy")
 
         MediaPlayerController.releaseMediaPlayer()
         stopSelf()
-
     }
 }

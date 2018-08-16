@@ -3,6 +3,7 @@ package com.shang.mediaplayerbykotlin
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.util.Log
+import java.text.SimpleDateFormat
 
 /**
  * Created by Shang on 2018/8/14.
@@ -15,6 +16,8 @@ class MediaPlayerController {
         var mediaPlayer=MediaPlayer()
         var currentTime:Int=0
 
+
+        //可以考慮改用When 加上動作Int 這樣就可以不用這麼多fun了 缺點是會混再一起
 
         fun startMediaPlayer(path: String) {
             mediaPlayer = MediaPlayer()
@@ -34,16 +37,27 @@ class MediaPlayerController {
         }
 
         fun stopMediaPlayer() {
-            currentTime = mediaPlayer.currentPosition
-            mediaPlayer.pause()
+            if(mediaPlayer!=null && mediaPlayer.isPlaying){
+                currentTime = mediaPlayer.currentPosition
+                mediaPlayer.pause()
+            }
+
             Log.d(TAG, "pause()")
         }
 
         fun reStartMediaPlayer() {
-            mediaPlayer.seekTo(currentTime)
-            mediaPlayer.start()
-            Log.d(TAG, "reStart()")
+            if(mediaPlayer!=null){
+                mediaPlayer.seekTo(currentTime)
+                mediaPlayer.start()
+            }
 
+            Log.d(TAG, "reStart()")
+        }
+
+        fun resetMediaPlayer(){
+            if(mediaPlayer!=null && mediaPlayer.isPlaying){
+                mediaPlayer.reset()
+            }
         }
 
         fun releaseMediaPlayer(){
@@ -52,4 +66,6 @@ class MediaPlayerController {
         }
 
     }
+
+
 }

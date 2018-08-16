@@ -16,12 +16,12 @@ class FileUnits {
     val fileUnits:FileUnits ?= null
     var musicList: MutableList<File> = mutableListOf()
 
-
+    //還要修改 要改成找到Music所有的MP3
     fun get_Music_List(path: String) {
         var file_music = File(path)
 
-        file_music.walk().filter {
-            it.isFile and (it.extension == "mp3")
+        file_music.walkTopDown().filter {
+            it.isFile and (it.extension in listOf<String>("mp3","flac","3gp","wav"))
         }.forEach {
             musicList.add(it)
         }
@@ -45,6 +45,15 @@ class FileUnits {
 
         return musicList
     }
+
+    companion object {
+
+        //最後修改時間轉成時間格式
+        fun lastModifiedToSimpleDateFormat(time:Long):String{
+            return SimpleDateFormat("yyyy年MM月dd日 HH時mm分ss秒").format(time)
+        }
+    }
+
 
 
 }

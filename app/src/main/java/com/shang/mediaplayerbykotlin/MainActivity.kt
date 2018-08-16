@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
 
 
     val TAG = "Music"
-    lateinit var mediaPlayer: MediaPlayer
+
     lateinit var database:MusicDatabase
 
     var handler=object :Handler(){
@@ -109,24 +109,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         button5.setOnClickListener {
-
-
-
-            /*AsyncTask.execute{
-                database= MusicDatabase.getMusicDatabase(this@MainActivity)
-                database.getMusic_Data_Dao().delete(Music_Data_Entity().apply {
-                    this.id=3
-                })
-            }*/
-
-            AsyncTask.execute{
-                database= MusicDatabase.getMusicDatabase(this@MainActivity)
-                database.getMusic_ListName_Dao().delete(Music_ListName_Entity().apply {
-                    this.child_tableName="2"
-                    this.id=2
-                })
+            file.sortByDescending {
+                it.lastModified()
             }
-
+            Log.d(TAG,file.get(0).name+" "+FileUnits.lastModifiedToSimpleDateFormat(file.get(0).lastModified()))
 
 
         }

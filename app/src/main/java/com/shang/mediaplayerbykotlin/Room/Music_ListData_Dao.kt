@@ -9,7 +9,7 @@ interface Music_ListData_Dao {
 
 
     @Query("select * from "+Music_ListData_Entity.TABLE_NAME)
-    fun getAll_ListData()
+    fun getAll_ListData():List<Music_ListData_Entity>
 
     @Insert
     fun insert(musicListData:Music_ListData_Entity)
