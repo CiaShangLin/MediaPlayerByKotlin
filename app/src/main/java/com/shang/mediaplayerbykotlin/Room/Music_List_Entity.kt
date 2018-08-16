@@ -9,19 +9,18 @@ import org.jetbrains.annotations.Nullable
 ,childColumns = arrayOf("list"),
 onUpdate = ForeignKey.CASCADE,
 onDelete = ForeignKey.CASCADE))*/
-@Entity(tableName = Music_List_Entity.TABLE_NAME
-)
+@Entity(tableName = Music_List_Entity.TABLE_NAME)
 class Music_List_Entity {
 
     companion object {
         const val TABLE_NAME="Music_List_Table"
     }
 
-    @PrimaryKey(autoGenerate = true)
+
     @ColumnInfo(name="id")
     var id:Long=0
 
-
+    @PrimaryKey
     @ColumnInfo(name="child_tableName")
     var child_tableName:String=""
 }

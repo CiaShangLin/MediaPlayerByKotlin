@@ -9,10 +9,7 @@ import android.net.Uri
 import android.os.*
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
-import com.shang.mediaplayerbykotlin.Room.MusicDatabase
-import com.shang.mediaplayerbykotlin.Room.Music_Data
-import com.shang.mediaplayerbykotlin.Room.Music_List_Entity
+import com.shang.mediaplayerbykotlin.Room.*
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.toast
 import java.io.File
@@ -67,39 +64,41 @@ class MainActivity : AppCompatActivity() {
 
             database= MusicDatabase.getMusicDatabase(this@MainActivity)
             AsyncTask.execute{
-                for(i in 1..3){
-                    var music_data=Music_Data_Entity()
-                    music_data.music_data=Music_Data(i.toString(),i,i.toString(),true)
-
-                    database.getMusic_Data_Dao().insert(music_data)
+                for(i in 1..5){
+                    var musicData= Music_Data_Entity().apply {
+                        this.music_data= Music_Data(i.toString(),i,i.toString(),true)
+                    }
+                    database.getMusic_Data_Dao().insert(musicData)
                 }
 
-
+                for(i in 1..5){
+                    var musicList= Music_List_Entity().apply {
+                        this.id=i.toLong()
+                        this.child_tableName=i.toString()
+                    }
+                    database.getMusic_List_Dao().insert(musicList)
+                }
             }
 
 
         }
 
         button5.setOnClickListener {
-            var musicData= Music_Data_Entity().apply {
-                this.id=2
 
-            }
+
 
             AsyncTask.execute{
                 database= MusicDatabase.getMusicDatabase(this@MainActivity)
-                database.getMusic_Data_Dao().delete(musicData)
-
-
-                var r=object : RoomDatabase.Callback() {
-                    override fun onCreate(db: SupportSQLiteDatabase) {
-                        super.onCreate(db)
+                for(i in 1..3){
+                    var musicTest= Music_Test_Entity().apply {
+                        // this.id=i.toLong()
+                        this.childId=i.toLong()
+                        this.childName=i.toString()
                     }
-
-                    override fun onOpen(db: SupportSQLiteDatabase) {
-                        super.onOpen(db)
-                    }
+                    database.getMusic_Test_Dao().insert(musicTest)
                 }
+
+
 
             }
 
