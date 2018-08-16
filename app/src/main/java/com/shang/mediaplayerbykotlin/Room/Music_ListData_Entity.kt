@@ -5,7 +5,7 @@ import android.arch.persistence.room.*
 /**
  * Created by Shang on 2018/8/16.
  */
-@Entity(tableName = Music_Test_Entity.TABLE_NAME,
+@Entity(tableName = Music_ListData_Entity.TABLE_NAME,
         foreignKeys = arrayOf(ForeignKey(entity = Music_Data_Entity::class,
                 parentColumns = arrayOf("id"),
                 childColumns = arrayOf("childId"),
@@ -19,7 +19,7 @@ import android.arch.persistence.room.*
 )
 
 
-class Music_Test_Entity {
+class Music_ListData_Entity {
 
     companion object {
         const val TABLE_NAME="Music_Test"
@@ -31,9 +31,9 @@ class Music_Test_Entity {
     var id:Long=0
 
 
+
+    //由於是外來建 建議不要設置欄位名稱
     var childId:Long=0
-
-
     var childName:String=""
 
 

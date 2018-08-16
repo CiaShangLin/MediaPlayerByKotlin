@@ -4,10 +4,10 @@ import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 
 @Dao
-interface Music_Test_Dao {
+interface Music_ListData_Dao {
 
 
     @Insert
-    fun insert(musicTest:Music_Test_Entity)
+    fun insert(musicListData:Music_ListData_Entity)
 
 }

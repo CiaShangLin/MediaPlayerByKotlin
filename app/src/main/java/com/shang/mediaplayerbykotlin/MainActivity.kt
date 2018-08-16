@@ -1,17 +1,12 @@
 package com.shang.mediaplayerbykotlin
 
-import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.room.Room
-import android.arch.persistence.room.RoomDatabase
 import android.content.Intent
 import android.media.MediaPlayer
-import android.net.Uri
 import android.os.*
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.shang.mediaplayerbykotlin.Room.*
 import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.toast
 import java.io.File
 
 
@@ -90,7 +85,7 @@ class MainActivity : AppCompatActivity() {
             AsyncTask.execute{
                 database= MusicDatabase.getMusicDatabase(this@MainActivity)
                 for(i in 1..3){
-                    var musicTest= Music_Test_Entity().apply {
+                    var musicTest= Music_ListData_Entity().apply {
                         // this.id=i.toLong()
                         this.childId=i.toLong()
                         this.childName=i.toString()

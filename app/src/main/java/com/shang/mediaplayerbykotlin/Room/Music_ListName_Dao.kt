@@ -8,7 +8,7 @@ import android.arch.persistence.room.Query
  * Created by Shang on 2018/8/15.
  */
 @Dao
-interface Music_List_Dao {
+interface Music_ListName_Dao {
 
 
     @Query("select * from " + Music_List_Entity.TABLE_NAME)
