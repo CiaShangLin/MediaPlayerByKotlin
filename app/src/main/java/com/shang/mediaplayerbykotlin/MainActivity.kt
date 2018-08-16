@@ -57,23 +57,53 @@ class MainActivity : AppCompatActivity() {
 
         button4.setOnClickListener {
 
-            database= MusicDatabase.getMusicDatabase(this@MainActivity)
             AsyncTask.execute{
-                for(i in 1..5){
-                    var musicData= Music_Data_Entity().apply {
-                        this.music_data= Music_Data(i.toString(),i,i.toString(),true)
-                    }
-                    database.getMusic_Data_Dao().insert(musicData)
-                }
+                database= MusicDatabase.getMusicDatabase(this@MainActivity)
+                database.getMusic_Data_Dao().insert(Music_Data_Entity().apply {
+                    this.music_data=Music_Data("1",1,"1",true)
+                })
 
-                for(i in 1..5){
-                    var musicList= Music_List_Entity().apply {
-                        this.id=i.toLong()
-                        this.child_tableName=i.toString()
-                    }
-                    database.getMusic_List_Dao().insert(musicList)
-                }
+                database.getMusic_Data_Dao().insert(Music_Data_Entity().apply {
+                    this.music_data=Music_Data("2",2,"2",true)
+                })
+
+                database.getMusic_Data_Dao().insert(Music_Data_Entity().apply {
+                    this.music_data=Music_Data("3",3,"3",true)
+                })
+
+                database.getMusic_ListName_Dao().insert(Music_ListName_Entity().apply {
+                    this.child_tableName="1"
+                    this.id=1
+                })
+
+                database.getMusic_ListName_Dao().insert(Music_ListName_Entity().apply {
+                    this.child_tableName="2"
+                    this.id=2
+                })
+                database.getMusic_ListName_Dao().insert(Music_ListName_Entity().apply {
+                    this.child_tableName="3"
+                    this.id=3
+                })
+
+                database.getMusic_ListData_Dao().insert(Music_ListData_Entity().apply {
+                    this.childId=1
+                    this.childName="1"
+                })
+
+                database.getMusic_ListData_Dao().insert(Music_ListData_Entity().apply {
+                    this.childId=2
+                    this.childName="2"
+                })
+
+                database.getMusic_ListData_Dao().insert(Music_ListData_Entity().apply {
+                    this.childId=3
+                    this.childName="3"
+                })
             }
+
+
+
+
 
 
         }
@@ -82,19 +112,19 @@ class MainActivity : AppCompatActivity() {
 
 
 
+            /*AsyncTask.execute{
+                database= MusicDatabase.getMusicDatabase(this@MainActivity)
+                database.getMusic_Data_Dao().delete(Music_Data_Entity().apply {
+                    this.id=3
+                })
+            }*/
+
             AsyncTask.execute{
                 database= MusicDatabase.getMusicDatabase(this@MainActivity)
-                for(i in 1..3){
-                    var musicTest= Music_ListData_Entity().apply {
-                        // this.id=i.toLong()
-                        this.childId=i.toLong()
-                        this.childName=i.toString()
-                    }
-                    database.getMusic_Test_Dao().insert(musicTest)
-                }
-
-
-
+                database.getMusic_ListName_Dao().delete(Music_ListName_Entity().apply {
+                    this.child_tableName="2"
+                    this.id=2
+                })
             }
 
 
