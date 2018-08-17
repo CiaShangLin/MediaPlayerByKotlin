@@ -13,7 +13,7 @@ class MediaPlayerController {
     companion object {
         val TAG = "MediaPlayerController"
 
-        var mediaPlayer=MediaPlayer()
+        lateinit var mediaPlayer:MediaPlayer
         var currentTime:Int=0
         var playState:Boolean=false
 
@@ -30,7 +30,6 @@ class MediaPlayerController {
 
         fun startMediaPlayer(path: String) {
             mediaPlayer = MediaPlayer()
-            mediaPlayer.reset()
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mediaPlayer.setDataSource(path)
             mediaPlayer.prepare()
@@ -42,6 +41,10 @@ class MediaPlayerController {
                     var second = time - minute * 60
                     Log.d(TAG, "$minute 分/$second 秒")
                 }
+            }
+
+            mediaPlayer.setOnCompletionListener {
+                mediaPlayer.release()
             }
         }
 

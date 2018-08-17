@@ -2,6 +2,7 @@ package com.shang.mediaplayerbykotlin
 
 import android.content.Intent
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.*
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -132,17 +133,8 @@ class MainActivity : AppCompatActivity() {
         })
 
         playBt.setOnClickListener {
-            if (playState) {
-                startService(Intent(this, MediaPlayerService::class.java).apply {
-                    action = "STOP"
-                })
-            } else {
-                startService(Intent(this, MediaPlayerService::class.java).apply {
-                    action = "START"
-                    putExtra("path", file.get(0).path)
-                })
-            }
-            playState = !playState
+
+
         }
 
 
