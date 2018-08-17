@@ -18,14 +18,16 @@ class MainActivity : AppCompatActivity() {
 
     val TAG = "Music"
 
-    lateinit var database:MusicDatabase
-    var playState:Boolean=false
+    lateinit var database: MusicDatabase
+    var playState: Boolean = false
+    lateinit var file: MutableList<File>
 
-    var handler=object :Handler(){
+
+    var handler = object : Handler() {
         override fun handleMessage(msg: Message?) {
             super.handleMessage(msg)
 
-            Log.d("Music",msg?.what.toString())
+            Log.d("Music", msg?.what.toString())
         }
     }
 
@@ -33,96 +35,88 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        AsyncTask.execute {
+            FileUnits.findAllMusic(File(Environment.getExternalStorageDirectory().toString()))
+            file = FileUnits.musicList
+            Log.d(TAG,file.size.toString())
+        }
 
-        var file: MutableList<File> = FileUnits().getMusicList()
 
         button.setOnClickListener {
-
-
-            startService(Intent(this,MediaPlayerService::class.java).apply {
-                action="START"
-                putExtra("path",file.get(0).path)
+            startService(Intent(this, MediaPlayerService::class.java).apply {
+                action = "START"
+                putExtra("path", file.get(0).path)
             })
-
-
         }
 
         button2.setOnClickListener {
-            startService(Intent(this,MediaPlayerService::class.java).apply {
-                action="STOP"
+            startService(Intent(this, MediaPlayerService::class.java).apply {
+                action = "STOP"
             })
         }
 
         button3.setOnClickListener {
-            startService(Intent(this,MediaPlayerService::class.java).apply {
-                action="RESTART"
+            startService(Intent(this, MediaPlayerService::class.java).apply {
+                action = "RESTART"
             })
         }
 
         button4.setOnClickListener {
 
-            AsyncTask.execute{
-                database= MusicDatabase.getMusicDatabase(this@MainActivity)
+            AsyncTask.execute {
+                database = MusicDatabase.getMusicDatabase(this@MainActivity)
                 database.getMusic_Data_Dao().insert(Music_Data_Entity().apply {
-                    this.music_data=Music_Data("1",1,"1",true)
-                })
-
-                database.getMusic_Data_Dao().insert(Music_Data_Entity().apply {
-                    this.music_data=Music_Data("2",2,"2",true)
+                    this.music_data = Music_Data("1", 1, "1", true)
                 })
 
                 database.getMusic_Data_Dao().insert(Music_Data_Entity().apply {
-                    this.music_data=Music_Data("3",3,"3",true)
+                    this.music_data = Music_Data("2", 2, "2", true)
+                })
+
+                database.getMusic_Data_Dao().insert(Music_Data_Entity().apply {
+                    this.music_data = Music_Data("3", 3, "3", true)
                 })
 
                 database.getMusic_ListName_Dao().insert(Music_ListName_Entity().apply {
-                    this.child_tableName="1"
-                    this.id=1
+                    this.child_tableName = "1"
+                    this.id = 1
                 })
 
                 database.getMusic_ListName_Dao().insert(Music_ListName_Entity().apply {
-                    this.child_tableName="2"
-                    this.id=2
+                    this.child_tableName = "2"
+                    this.id = 2
                 })
                 database.getMusic_ListName_Dao().insert(Music_ListName_Entity().apply {
-                    this.child_tableName="3"
-                    this.id=3
+                    this.child_tableName = "3"
+                    this.id = 3
                 })
 
                 database.getMusic_ListData_Dao().insert(Music_ListData_Entity().apply {
-                    this.childId=1
-                    this.childName="1"
+                    this.childId = 1
+                    this.childName = "1"
                 })
 
                 database.getMusic_ListData_Dao().insert(Music_ListData_Entity().apply {
-                    this.childId=2
-                    this.childName="2"
+                    this.childId = 2
+                    this.childName = "2"
                 })
 
                 database.getMusic_ListData_Dao().insert(Music_ListData_Entity().apply {
-                    this.childId=3
-                    this.childName="3"
+                    this.childId = 3
+                    this.childName = "3"
                 })
             }
-
-
-
-
 
 
         }
 
         button5.setOnClickListener {
-            file.sortByDescending {
-                it.lastModified()
-            }
-            Log.d(TAG,file.get(0).name+" "+FileUnits.lastModifiedToSimpleDateFormat(file.get(0).lastModified()))
         }
 
 
-        seekBar.progress=0
-        seekBar.max=100000
-        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+        seekBar.progress = 0
+        seekBar.max = 100000
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
 
             }
@@ -132,23 +126,23 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                nameTv.text=seekBar?.progress.toString()
+                nameTv.text = seekBar?.progress.toString()
             }
 
         })
 
-        playBt.setOnClickListener{
-            if(playState){
-                startService(Intent(this,MediaPlayerService::class.java).apply {
-                    action="STOP"
+        playBt.setOnClickListener {
+            if (playState) {
+                startService(Intent(this, MediaPlayerService::class.java).apply {
+                    action = "STOP"
                 })
-            }else{
-                startService(Intent(this,MediaPlayerService::class.java).apply {
-                    action="START"
-                    putExtra("path",file.get(0).path)
+            } else {
+                startService(Intent(this, MediaPlayerService::class.java).apply {
+                    action = "START"
+                    putExtra("path", file.get(0).path)
                 })
             }
-            playState=!playState
+            playState = !playState
         }
 
 
