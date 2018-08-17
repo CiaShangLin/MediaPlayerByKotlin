@@ -34,6 +34,7 @@ class MediaPlayerService : Service() {
         Log.d(TAG, "onStartCommand:" + startId)
 
         when (intent!!.action) {
+            "PLAY" -> MediaPlayerController.play(intent.getStringExtra("path"))
             "START" -> MediaPlayerController.startMediaPlayer(intent.getStringExtra("path"))
             "STOP" -> MediaPlayerController.stopMediaPlayer()
             "RESTART" -> MediaPlayerController.reStartMediaPlayer()

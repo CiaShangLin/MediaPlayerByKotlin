@@ -15,9 +15,18 @@ class MediaPlayerController {
 
         var mediaPlayer=MediaPlayer()
         var currentTime:Int=0
+        var playState:Boolean=false
 
 
         //可以考慮改用When 加上動作Int 這樣就可以不用這麼多fun了 缺點是會混再一起
+
+        fun play(path:String){
+            if(playState && path==null){
+                stopMediaPlayer()
+            }else{
+                startMediaPlayer(path)
+            }
+        }
 
         fun startMediaPlayer(path: String) {
             mediaPlayer = MediaPlayer()
@@ -41,7 +50,6 @@ class MediaPlayerController {
                 currentTime = mediaPlayer.currentPosition
                 mediaPlayer.pause()
             }
-
             Log.d(TAG, "pause()")
         }
 

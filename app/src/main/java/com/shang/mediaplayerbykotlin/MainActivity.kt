@@ -9,6 +9,7 @@ import android.widget.SeekBar
 import com.shang.mediaplayerbykotlin.Room.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.mediapalyer_controller_ui.*
+import org.jetbrains.anko.toast
 import java.io.File
 
 
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     val TAG = "Music"
 
     lateinit var database:MusicDatabase
+    var playState:Boolean=false
 
     var handler=object :Handler(){
         override fun handleMessage(msg: Message?) {
@@ -32,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        var file: MutableList<File> = FileUnits().getmusicList()
+        var file: MutableList<File> = FileUnits().getMusicList()
 
         button.setOnClickListener {
 
@@ -122,7 +124,7 @@ class MainActivity : AppCompatActivity() {
         seekBar.max=100000
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                nameTv.text=progress.toString()
+
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -130,10 +132,25 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-
+                nameTv.text=seekBar?.progress.toString()
             }
 
         })
+
+        playBt.setOnClickListener{
+            if(playState){
+                startService(Intent(this,MediaPlayerService::class.java).apply {
+                    action="STOP"
+                })
+            }else{
+                startService(Intent(this,MediaPlayerService::class.java).apply {
+                    action="START"
+                    putExtra("path",file.get(0).path)
+                })
+            }
+            playState=!playState
+        }
+
 
     }
 
