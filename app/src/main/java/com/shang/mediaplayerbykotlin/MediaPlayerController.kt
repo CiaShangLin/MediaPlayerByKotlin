@@ -16,6 +16,7 @@ class MediaPlayerController {
         lateinit var mediaPlayer:MediaPlayer
         var currentTime:Int=0
         var playState:Boolean=false
+        var index:Int=0
 
 
         //可以考慮改用When 加上動作Int 這樣就可以不用這麼多fun了 缺點是會混再一起
