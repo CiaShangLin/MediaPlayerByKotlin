@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.drawer_layout.*
 import kotlinx.android.synthetic.main.mediapalyer_controller_ui.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
+import org.jetbrains.anko.act
 import org.jetbrains.anko.toast
 import java.io.File
 
@@ -26,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var database: MusicDatabase
     lateinit var file: MutableList<File>
+
 
 
     var handler = object : Handler() {
@@ -40,12 +42,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+        //耗時工作
         AsyncTask.execute {
             FileUnits.findAllMusic(File(Environment.getExternalStorageDirectory().toString()))
             file = FileUnits.musicList
             Log.d(TAG, file.size.toString())
         }
 
+        initView()
+
+
+
+    }
+    fun initView(){
 
         seekBar.progress = 0
         seekBar.max = 100000
@@ -74,18 +84,32 @@ class MainActivity : AppCompatActivity() {
 
         nav_view.setNavigationItemSelectedListener{
             when(it.itemId){
-                R.id.search->{
+                R.id.favorite->{
                     drawerLayout.closeDrawers()
-                }
-                R.id.sort->{
-                    drawerLayout.closeDrawers()
-                }
-                else -> {}
+                    startService(Intent(this,MediaPlayerService::class.java).apply {
+                        action="START"
+                        putExtra("path",file.get(0).path)
+                    })
 
+                }
+                R.id.musicList->{
+                    drawerLayout.closeDrawers()
+
+                    startService(Intent(this,MediaPlayerService::class.java).apply {
+                        action="STOP"
+                    })
+
+                }
+                R.id.timer->{
+
+                    startService(Intent(this,MediaPlayerService::class.java).apply {
+                        action="MODE"
+                    })
+
+                }
             }
             true
         }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

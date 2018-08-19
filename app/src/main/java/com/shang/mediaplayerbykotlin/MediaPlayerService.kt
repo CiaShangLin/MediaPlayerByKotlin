@@ -1,15 +1,11 @@
 package com.shang.mediaplayerbykotlin
 
-import android.app.IntentService
 import android.app.Service
-import android.content.Context
 import android.content.Intent
-import android.media.AudioManager
-import android.media.MediaPlayer
+import android.os.Handler
 import android.os.IBinder
-import android.os.Message
 import android.util.Log
-import java.security.Provider
+
 
 /**
  * Created by Shang on 2018/8/12.
@@ -18,29 +14,33 @@ class MediaPlayerService : Service() {
 
     companion object {
         val TAG = "MediaPlayerService"
-
     }
+
+   // lateinit var mpc_mode : MPC_Interface
 
     override fun onBind(intent: Intent?): IBinder {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
-
+    
     override fun onCreate() {
         super.onCreate()
         Log.d(TAG, "onCreate")
+
+        //mpc_mode=MPC.mpc_mode
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(TAG, "onStartCommand:" + startId)
 
         when (intent!!.action) {
-            "PLAY" -> MediaPlayerController.play(intent.getStringExtra("path"))
-            "START" -> MediaPlayerController.startMediaPlayer(intent.getStringExtra("path"))
-            "STOP" -> MediaPlayerController.stopMediaPlayer()
-            "RESTART" -> MediaPlayerController.reStartMediaPlayer()
+            "START" -> MPC.mpc_mode.start(intent.getStringExtra("path"))
+            "STOP" -> MPC.mpc_mode.stop()
+            "RESTART" -> { }
             "NEXT" -> ""
             "PREVIOUS" -> ""
-            "RESET" -> MediaPlayerController.resetMediaPlayer()
+            "RESET" -> { }
+            "MODE" ->{ Log.d(TAG,MPC.mpc_mode.getName())
+                         MPC.mpc_mode=MPC_random()}
         }
 
         return START_NOT_STICKY
@@ -56,7 +56,6 @@ class MediaPlayerService : Service() {
         super.onDestroy()
         Log.d(TAG, "onDestroy")
 
-        MediaPlayerController.releaseMediaPlayer()
         stopSelf()
     }
 }
