@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity() {
             FileUnits.findAllMusic(File(Environment.getExternalStorageDirectory().toString()))
             file = FileUnits.musicList
             Log.d(TAG, file.size.toString())
+            MPC.musicList=file
         }
 
         initView()

@@ -11,6 +11,9 @@ import java.text.SimpleDateFormat
  */
 open class MPC {
 
+    var v:Int=0
+    object mpc
+
     companion object {
         val TAG = "MPC"
 
