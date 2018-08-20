@@ -10,8 +10,9 @@ import android.arch.persistence.room.*
 interface Music_Data_Dao {
 
     @Query("select * from " + Music_Data_Entity.TABLE_NAME)
-    fun getAll(): List<Music_Data_Entity>
+    fun getAll(): MutableList<Music_Data_Entity>
 
+    //vararg
     @Insert
     fun insert(musicEntity: Music_Data_Entity)
 

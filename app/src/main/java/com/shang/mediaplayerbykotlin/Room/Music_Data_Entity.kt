@@ -15,12 +15,14 @@ class Music_Data_Entity {
         const val TABLE_NAME = "Music_Data_Table"
     }
 
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    var id: Long = 0
 
-    @Embedded
-    lateinit var music_data:Music_Data
+
+    @PrimaryKey()
+    var name:String=""
+
+    var time:Int=0
+    var path:String=""
+    var favorite:Boolean=false
 
     //如果有原有資料庫 新增欄位會報錯 要不刪除資料庫,不然就是用程式碼解決
 }

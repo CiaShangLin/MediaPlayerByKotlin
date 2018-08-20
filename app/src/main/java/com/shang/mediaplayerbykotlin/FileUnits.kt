@@ -1,5 +1,6 @@
 package com.shang.mediaplayerbykotlin
 
+import android.os.AsyncTask
 import android.os.Environment
 import android.util.Log
 import java.io.File
@@ -20,11 +21,9 @@ class FileUnits {
             return SimpleDateFormat("yyyy年MM月dd日 HH時mm分ss秒").format(time)
         }
 
-
         //取得所有Music底下的音樂檔
         fun findAllMusic(path: File){
             try {
-
                 var f = File(path.path)
 
                 f.walkTopDown().filter {

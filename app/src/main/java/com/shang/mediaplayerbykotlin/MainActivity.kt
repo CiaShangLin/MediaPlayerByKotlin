@@ -49,6 +49,14 @@ class MainActivity : AppCompatActivity() {
             file = FileUnits.musicList
             Log.d(TAG, file.size.toString())
             MPC.musicList=file
+
+
+
+            database=MusicDatabase.getMusicDatabase(this)
+            var list=database.getMusic_Data_Dao().getAll()
+            Log.d(TAG,list.size.toString())
+            Log.d(TAG," "+list.get(0).name)
+
         }
 
         initView()
@@ -56,6 +64,7 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
     fun initView(){
 
         seekBar.progress = 0
