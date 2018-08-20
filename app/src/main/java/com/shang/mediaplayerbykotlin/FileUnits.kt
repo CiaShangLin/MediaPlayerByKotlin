@@ -1,5 +1,9 @@
 package com.shang.mediaplayerbykotlin
 
+import android.content.Context
+import android.media.MediaMetadata
+import android.media.MediaPlayer
+import android.net.Uri
 import android.os.AsyncTask
 import android.os.Environment
 import android.util.Log
@@ -43,13 +47,7 @@ class FileUnits {
         }
 
 
-       /* fun getMusic_Data_Entity_ToList(list: MutableList<File>): MutableList<Music_Data_Entity> {
 
-            for(i in 0 .. list.size){
-
-            }
-            return null
-        }*/
 
     }
 

@@ -1,6 +1,8 @@
 package com.shang.mediaplayerbykotlin
 
 import android.content.Intent
+import android.media.MediaMetadata
+import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.*
@@ -125,6 +127,8 @@ class MainActivity : AppCompatActivity() {
                 var l=database.getMusic_Data_Dao().getAll().size
                 Log.d(TAG,"room:"+l.toString())
             }
+
+
 
 
             true

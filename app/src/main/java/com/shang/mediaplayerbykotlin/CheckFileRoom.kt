@@ -2,6 +2,7 @@ package com.shang.mediaplayerbykotlin
 
 import android.content.Context
 import android.database.sqlite.SQLiteConstraintException
+import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.AsyncTask
@@ -12,46 +13,45 @@ import com.shang.mediaplayerbykotlin.Room.MusicDatabase
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Dao
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import java.io.File
+import java.sql.SQLClientInfoException
 
-/**
- * Created by Shang on 2018/8/20.
- */
 class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
 
-    val TAG="CheckFileRoom"
+    val TAG = "CheckFileRoom"
     lateinit var database: MusicDatabase
     lateinit var music_data_dao: Music_Data_Dao
+    var mediaMata:MediaMetadataRetriever= MediaMetadataRetriever()
     lateinit var musicList: MutableList<File>
     lateinit var dataList: MutableList<Music_Data_Entity>
 
+    var start: Long = 0
+
     override fun onPreExecute() {
         super.onPreExecute()
+        start = System.currentTimeMillis()
+
     }
 
     override fun doInBackground(vararg params: Void?): Boolean {
 
         //資料庫
         database = MusicDatabase.getMusicDatabase(context)
-        music_data_dao=database.getMusic_Data_Dao()
+        music_data_dao = database.getMusic_Data_Dao()
 
         FileUnits.findAllMusic(File(Environment.getExternalStorageDirectory().toString()))    //取得所有音樂
 
         musicList = FileUnits.musicList
-        Log.d(TAG,"size:"+musicList.size.toString())
+        Log.d(TAG, "size:" + musicList.size.toString())
 
-        for(i in musicList.indices){   //直接寫入 不管已有無
-            Log.d(TAG,i.toString())
-            try{
-                music_data_dao.insert(Music_Data_Entity().apply {
-                    this.name=musicList.get(i).nameWithoutExtension
-                    this.time=MediaPlayer.create(context, Uri.fromFile(musicList.get(i))).duration
-                    this.path=musicList.get(i).path
-                    this.favorite=false
-                    Log.d(TAG,name+" "+time+" "+path+" "+favorite)
-                })
 
-            }catch (e: SQLiteConstraintException){   //重複插入primaryKey的話 會噴出錯誤
-                Log.d(TAG,"已有這首:"+musicList.get(i).name)
+
+        for (i in musicList.indices) {
+            if (music_data_dao.find_FileByName(musicList.get(i).nameWithoutExtension) == null) {
+                try {
+                    music_data_dao.insert(getFileToMusicDataEntity(musicList.get(i)))
+                } catch (e: SQLiteConstraintException) {
+                    Log.d(TAG, "已有這首:" + musicList.get(i).name)
+                }
             }
         }
 
@@ -61,8 +61,8 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
         musicList.forEach {
             map.put(it.nameWithoutExtension,it)
         }
-
         dataList = music_data_dao.getAll()
+
         for(i in dataList.indices){
             var d=dataList.get(i)
             var m=map.get(d.name)
@@ -89,9 +89,20 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
     override fun onPostExecute(result: Boolean?) {
         super.onPostExecute(result)
 
-        Log.d(TAG,"fanlsh")
+        Log.d(TAG, "finish:" + (System.currentTimeMillis() - start) / 1000)
 
+        //27 秒 有create
+        //沒create 4秒
+    }
 
-
+    fun getFileToMusicDataEntity(file:File): Music_Data_Entity {
+        mediaMata.setDataSource(file.path)
+        var entity=Music_Data_Entity().apply {
+            this.name=file.nameWithoutExtension
+            this.favorite=false
+            this.path=file.path
+            this.time=mediaMata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION).toInt()
+        }
+        return entity
     }
 }
