@@ -3,6 +3,7 @@ package com.shang.mediaplayerbykotlin
 import android.os.AsyncTask
 import android.os.Environment
 import android.util.Log
+import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import java.io.File
 import java.sql.Date
 import java.text.SimpleDateFormat
@@ -22,7 +23,7 @@ class FileUnits {
         }
 
         //取得所有Music底下的音樂檔
-        fun findAllMusic(path: File){
+        fun findAllMusic(path: File) {
             try {
                 var f = File(path.path)
 
@@ -40,6 +41,16 @@ class FileUnits {
                 e.printStackTrace()
             }
         }
+
+
+       /* fun getMusic_Data_Entity_ToList(list: MutableList<File>): MutableList<Music_Data_Entity> {
+
+            for(i in 0 .. list.size){
+
+            }
+            return null
+        }*/
+
     }
 
 

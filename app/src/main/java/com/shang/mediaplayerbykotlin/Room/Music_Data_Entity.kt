@@ -4,6 +4,7 @@ import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Embedded
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
+import java.io.File
 
 /**
  * Created by Shang on 2018/8/14.
@@ -25,4 +26,8 @@ class Music_Data_Entity {
     var favorite:Boolean=false
 
     //如果有原有資料庫 新增欄位會報錯 要不刪除資料庫,不然就是用程式碼解決
+
+
+
+
 }

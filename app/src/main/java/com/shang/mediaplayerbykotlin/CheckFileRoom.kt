@@ -37,23 +37,49 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
         FileUnits.findAllMusic(File(Environment.getExternalStorageDirectory().toString()))    //取得所有音樂
 
         musicList = FileUnits.musicList
-        for(i in musicList.indices){
+        Log.d(TAG,"size:"+musicList.size.toString())
+
+        for(i in musicList.indices){   //直接寫入 不管已有無
+            Log.d(TAG,i.toString())
             try{
                 music_data_dao.insert(Music_Data_Entity().apply {
                     this.name=musicList.get(i).nameWithoutExtension
                     this.time=MediaPlayer.create(context, Uri.fromFile(musicList.get(i))).duration
                     this.path=musicList.get(i).path
                     this.favorite=false
+                    Log.d(TAG,name+" "+time+" "+path+" "+favorite)
                 })
+
             }catch (e: SQLiteConstraintException){   //重複插入primaryKey的話 會噴出錯誤
                 Log.d(TAG,"已有這首:"+musicList.get(i).name)
             }
         }
 
+
+        //之後再轉list to map的方法
+        var map:MutableMap<String,File> = mutableMapOf()
+        musicList.forEach {
+            map.put(it.nameWithoutExtension,it)
+        }
+
         dataList = music_data_dao.getAll()
         for(i in dataList.indices){
-            var l=(dataList.get(i).name in musicList)
-
+            var d=dataList.get(i)
+            var m=map.get(d.name)
+            if(m!=null){    //兩邊都有 但有可能改路徑
+                if(m.path != d.path){
+                    music_data_dao.update(Music_Data_Entity().apply {
+                        this.name=d.name
+                        this.time=d.time        //不給予值得話 他會變成預設值
+                        this.path=m.path         //唯一修改路徑
+                        this.favorite=d.favorite
+                    })
+                }
+            }else{   //資料庫有 但是現在沒有 所以刪除
+                music_data_dao.delete(Music_Data_Entity().apply {
+                    this.name=d.name
+                })
+            }
         }
 
 
@@ -62,5 +88,10 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
 
     override fun onPostExecute(result: Boolean?) {
         super.onPostExecute(result)
+
+        Log.d(TAG,"fanlsh")
+
+
+
     }
 }

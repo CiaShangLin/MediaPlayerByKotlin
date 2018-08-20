@@ -13,13 +13,13 @@ interface Music_Data_Dao {
     fun getAll(): MutableList<Music_Data_Entity>
 
     //vararg
-    @Insert
-    fun insert(musicEntity: Music_Data_Entity)
+    @Insert()
+    fun insert(vararg musicEntity: Music_Data_Entity)
 
     @Update()
     fun update(musicEntity: Music_Data_Entity)    //找primary key去判斷的樣子 沒有賦予值的 會改回預設值
 
-    @Delete
+    @Delete()
     fun delete(musicEntity: Music_Data_Entity)
 
 }

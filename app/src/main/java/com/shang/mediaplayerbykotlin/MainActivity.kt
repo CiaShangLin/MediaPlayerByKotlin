@@ -44,20 +44,7 @@ class MainActivity : AppCompatActivity() {
 
 
         //耗時工作
-        AsyncTask.execute {
-            FileUnits.findAllMusic(File(Environment.getExternalStorageDirectory().toString()))
-            file = FileUnits.musicList
-            Log.d(TAG, file.size.toString())
-            MPC.musicList=file
-
-
-
-            database=MusicDatabase.getMusicDatabase(this)
-            var list=database.getMusic_Data_Dao().getAll()
-            Log.d(TAG,list.size.toString())
-            Log.d(TAG," "+list.get(0).name)
-
-        }
+        CheckFileRoom(this).execute()
 
         initView()
 
@@ -130,6 +117,15 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
 
         R.id.search -> {
+
+
+            AsyncTask.execute {
+                Log.d(TAG,"now:"+FileUnits.musicList.size)
+                database=MusicDatabase.getMusicDatabase(this)
+                var l=database.getMusic_Data_Dao().getAll().size
+                Log.d(TAG,"room:"+l.toString())
+            }
+
 
             true
         }
