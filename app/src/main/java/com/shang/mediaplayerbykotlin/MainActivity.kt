@@ -2,6 +2,7 @@ package com.shang.mediaplayerbykotlin
 
 import android.content.Intent
 import android.database.Cursor
+import android.graphics.BitmapFactory
 import android.media.MediaMetadata
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
@@ -56,8 +57,8 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        recyclerview.layoutManager=LinearLayoutManager(this)
-        recyclerview.adapter=MusicAdapter(this, mutableListOf())
+        //recyclerview.layoutManager=LinearLayoutManager(this)
+        //recyclerview.adapter=MusicAdapter(this, mutableListOf())
 
     }
 
@@ -132,6 +133,17 @@ class MainActivity : AppCompatActivity() {
                 database=MusicDatabase.getMusicDatabase(this)
                 var l=database.getMusic_Data_Dao().getAll().size
                 Log.d(TAG,"room:"+l.toString())
+
+                var k=database.getMusic_Data_Dao().getAll()
+
+
+                var bitmap=BitmapFactory.decodeFile(k.get(0).picture)
+
+
+                Handler().post{
+                    imageView2.setImageBitmap(bitmap)
+                }
+
             }
 
             true

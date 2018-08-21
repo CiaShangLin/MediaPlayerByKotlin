@@ -1,6 +1,7 @@
 package com.shang.mediaplayerbykotlin
 
 import android.content.Context
+import android.database.Cursor
 import android.media.MediaMetadata
 import android.media.MediaPlayer
 import android.net.Uri
@@ -62,10 +63,38 @@ class FileUnits {
                     this.duration=duration.toLong()
                     this.modified=modified.toLong()
                     this.favorite=false
+                    this.picture=getPicture(uri,context)
                 })
+
             }
             return entity
         }
+
+        fun getPicture(cursor:Cursor,context: Context):String{
+            var albumId=cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID))
+            var cursorAlbum=context.contentResolver.query(
+                    MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
+                    arrayOf(MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART),
+                    MediaStore.Audio.Albums._ID + "=" + albumId,
+                    null,null)
+            if(cursorAlbum!=null && cursorAlbum.moveToFirst()){
+                var albumCoverPath = cursorAlbum.getString(cursorAlbum.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
+                //var data = cursorAlbum.getString(cursorAlbum.getColumnIndex(MediaStore.Audio.Media.DATA));
+
+                if(albumCoverPath != null ){
+                    Log.d("FileUnits",albumCoverPath)
+                    return albumCoverPath
+
+                }else{
+                    Log.d("FileUnits","null")
+
+
+                }
+            }
+            return ""
+        }
+
+
     }
 
 

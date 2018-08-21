@@ -23,6 +23,7 @@ class Music_Data_Entity {
     var path:String=""
     var favorite:Boolean=false
     var modified:Long=0
+    var picture:String=""
 
     //如果有原有資料庫 新增欄位會報錯 要不刪除資料庫,不然就是用程式碼解決
 }
