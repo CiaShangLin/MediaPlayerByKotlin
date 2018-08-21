@@ -1,28 +1,19 @@
 package com.shang.mediaplayerbykotlin
 
 import android.content.Intent
-import android.database.Cursor
 import android.graphics.BitmapFactory
-import android.media.MediaMetadata
-import android.media.MediaMetadataRetriever
-import android.media.MediaPlayer
-import android.net.Uri
 import android.os.*
-import android.provider.MediaStore
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.SeekBar
 import com.shang.mediaplayerbykotlin.Room.*
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.drawer_layout.*
 import kotlinx.android.synthetic.main.mediapalyer_controller_ui.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
-import org.jetbrains.anko.act
 import org.jetbrains.anko.toast
 import java.io.File
 
@@ -41,7 +32,12 @@ class MainActivity : AppCompatActivity() {
         override fun handleMessage(msg: Message?) {
             super.handleMessage(msg)
 
-            Log.d("Music", msg?.what.toString())
+            when(msg?.what){
+                MusicAdapter.DATABASE_SUCCCESS->{
+                    recyclerview.layoutManager= LinearLayoutManager(this@MainActivity)
+                    recyclerview.adapter=MusicAdapter(this@MainActivity,msg.obj as MutableList<Music_Data_Entity>)
+                }
+            }
         }
     }
 
@@ -51,15 +47,9 @@ class MainActivity : AppCompatActivity() {
 
 
         //耗時工作
-        //CheckFileRoom(this).execute()
+        CheckFileRoom(this).execute()
 
         initView()
-
-
-
-        //recyclerview.layoutManager=LinearLayoutManager(this)
-        //recyclerview.adapter=MusicAdapter(this, mutableListOf())
-
     }
 
     fun initView(){
@@ -140,9 +130,6 @@ class MainActivity : AppCompatActivity() {
                 var bitmap=BitmapFactory.decodeFile(k.get(0).picture)
 
 
-                Handler().post{
-                    imageView2.setImageBitmap(bitmap)
-                }
 
             }
 

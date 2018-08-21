@@ -7,6 +7,7 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Environment
+import android.os.Message
 import android.util.Log
 import com.shang.mediaplayerbykotlin.Room.MusicDatabase
 
@@ -38,95 +39,44 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
         database = MusicDatabase.getMusicDatabase(context)
         music_data_dao = database.getMusic_Data_Dao()
 
-        /*FileUnits.findAllMusic(File(Environment.getExternalStorageDirectory().toString()))    //取得所有音樂
-
-        musicList = FileUnits.musicList
-        Log.d(TAG, "size:" + musicList.size.toString())
-
-
-
-        for (i in musicList.indices) {
-            if (music_data_dao.find_FileByName(musicList.get(i).nameWithoutExtension) == null) {
-                try {
-                    music_data_dao.insert(getFileToMusicDataEntity(musicList.get(i)))
-                } catch (e: SQLiteConstraintException) {
-                    Log.d(TAG, "已有這首:" + musicList.get(i).name)
-                }
-            }
-        }
-
-
-        //之後再轉list to map的方法
-        var map:MutableMap<String,File> = mutableMapOf()
-        musicList.forEach {
-            map.put(it.nameWithoutExtension,it)
-        }
-        dataList = music_data_dao.getAll()
-
-        for(i in dataList.indices){
-            var d=dataList.get(i)
-            var m=map.get(d.name)
-            if(m!=null){    //兩邊都有 但有可能改路徑
-                if(m.path != d.path){
-                    music_data_dao.update(Music_Data_Entity().apply {
-                        this.name=d.name
-                        this.time=d.time        //不給予值得話 他會變成預設值
-                        this.path=m.path         //唯一修改路徑
-                        this.favorite=d.favorite
-                    })
-                }
-            }else{   //資料庫有 但是現在沒有 所以刪除
-                music_data_dao.delete(Music_Data_Entity().apply {
-                    this.name=d.name
-                })
-            }
-        }*/
-
         musicList = FileUnits.findAllMusicFromContentResolver(context)
         Log.d(TAG, "size:" + musicList.size)
         musicList.sortByDescending {
             it.modified
         }
         for (i in musicList.indices) {
-            Log.d(TAG, "name:" +musicList.get(i).name)
+            Log.d(TAG, "name:" + musicList.get(i).name)
             Log.d(TAG, "duration:" + musicList.get(i).duration)
             Log.d(TAG, "path:" + musicList.get(i).path)
             Log.d(TAG, "modified:" + musicList.get(i).modified)
             Log.d(TAG, "favorite:" + musicList.get(i).favorite)
         }
 
-        musicList.forEach{
-            try{
-                music_data_dao.insert(it)
-            }catch (e:SQLiteConstraintException){
-                Log.d(TAG, "已有這首:" + it.name)
+        musicList.forEach {
+            if (music_data_dao.find_FileByName(it.name) == null) {
+                try {
+                    music_data_dao.insert(it)
+                } catch (e: SQLiteConstraintException) {
+                    Log.d(TAG, "已有這首:" + it.name)
+                }
             }
         }
-
-
-
-
-
         return true
     }
 
     override fun onPostExecute(result: Boolean?) {
         super.onPostExecute(result)
 
-        Log.d(TAG, "finish:" + (System.currentTimeMillis() - start) / 1000)
+        Log.d(TAG, "finish:" + (System.currentTimeMillis() - start) / 1000.0)
 
-        //27 秒 有create
-        //沒create 4秒
+        (context as MainActivity).handler.sendMessage(Message().apply {
+            this.what = MusicAdapter.DATABASE_SUCCCESS
+            this.obj = musicList
+        })
+
+        //insert不管有沒有 6秒
+        //先query 5秒
+        //不做取圖片1.186秒  取徒占了大份的時間
     }
 
-    /*fun getFileToMusicDataEntity(file:File): Music_Data_Entity {
-        mediaMata.setDataSource(file.path)
-        var entity=Music_Data_Entity().apply {
-            this.name=file.nameWithoutExtension
-            this.favorite=false
-            this.path=file.path
-            this.time=mediaMata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION).toInt()
-        }
-        return entity
-    }*/
 }
