@@ -19,9 +19,10 @@ class Music_Data_Entity {
     @PrimaryKey()
     var name:String=""
 
-    var time:Int=0
+    var duration:Long=0
     var path:String=""
     var favorite:Boolean=false
+    var modified:Long=0
 
     //如果有原有資料庫 新增欄位會報錯 要不刪除資料庫,不然就是用程式碼解決
 }

@@ -20,8 +20,8 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
     val TAG = "CheckFileRoom"
     lateinit var database: MusicDatabase
     lateinit var music_data_dao: Music_Data_Dao
-    var mediaMata:MediaMetadataRetriever= MediaMetadataRetriever()
-    lateinit var musicList: MutableList<File>
+    var mediaMata: MediaMetadataRetriever = MediaMetadataRetriever()
+    lateinit var musicList: MutableList<Music_Data_Entity>
     lateinit var dataList: MutableList<Music_Data_Entity>
 
     var start: Long = 0
@@ -38,7 +38,7 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
         database = MusicDatabase.getMusicDatabase(context)
         music_data_dao = database.getMusic_Data_Dao()
 
-        FileUnits.findAllMusic(File(Environment.getExternalStorageDirectory().toString()))    //取得所有音樂
+        /*FileUnits.findAllMusic(File(Environment.getExternalStorageDirectory().toString()))    //取得所有音樂
 
         musicList = FileUnits.musicList
         Log.d(TAG, "size:" + musicList.size.toString())
@@ -80,7 +80,31 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
                     this.name=d.name
                 })
             }
+        }*/
+
+        musicList = FileUnits.findAllMusicFromContentResolver(context)
+        Log.d(TAG, "size:" + musicList.size)
+        musicList.sortByDescending {
+            it.modified
         }
+        for (i in musicList.indices) {
+            Log.d(TAG, "name:" +musicList.get(i).name)
+            Log.d(TAG, "duration:" + musicList.get(i).duration)
+            Log.d(TAG, "path:" + musicList.get(i).path)
+            Log.d(TAG, "modified:" + musicList.get(i).modified)
+            Log.d(TAG, "favorite:" + musicList.get(i).favorite)
+        }
+
+        musicList.forEach{
+            try{
+                music_data_dao.insert(it)
+            }catch (e:SQLiteConstraintException){
+                Log.d(TAG, "已有這首:" + it.name)
+            }
+        }
+
+
+
 
 
         return true
@@ -95,7 +119,7 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
         //沒create 4秒
     }
 
-    fun getFileToMusicDataEntity(file:File): Music_Data_Entity {
+    /*fun getFileToMusicDataEntity(file:File): Music_Data_Entity {
         mediaMata.setDataSource(file.path)
         var entity=Music_Data_Entity().apply {
             this.name=file.nameWithoutExtension
@@ -104,5 +128,5 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
             this.time=mediaMata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION).toInt()
         }
         return entity
-    }
+    }*/
 }

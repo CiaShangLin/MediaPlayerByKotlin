@@ -6,6 +6,7 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import java.io.File
@@ -46,9 +47,25 @@ class FileUnits {
             }
         }
 
-
-
-
+        fun findAllMusicFromContentResolver(context:Context):MutableList<Music_Data_Entity>{
+            var entity= mutableListOf<Music_Data_Entity>()
+            var uri=context.contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,null,null,null,null)
+            uri.moveToFirst()
+            while(uri.moveToNext()){
+                var name=uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME))
+                var duration=uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.DURATION))
+                var path=uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.DATA))
+                var modified=uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED))
+                entity.add(Music_Data_Entity().apply {
+                    this.name=name
+                    this.path=path
+                    this.duration=duration.toLong()
+                    this.modified=modified.toLong()
+                    this.favorite=false
+                })
+            }
+            return entity
+        }
     }
 
 

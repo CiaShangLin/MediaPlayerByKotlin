@@ -1,11 +1,13 @@
 package com.shang.mediaplayerbykotlin
 
 import android.content.Intent
+import android.database.Cursor
 import android.media.MediaMetadata
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.*
+import android.provider.MediaStore
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -122,20 +124,19 @@ class MainActivity : AppCompatActivity() {
 
 
             AsyncTask.execute {
-                Log.d(TAG,"now:"+FileUnits.musicList.size)
                 database=MusicDatabase.getMusicDatabase(this)
                 var l=database.getMusic_Data_Dao().getAll().size
                 Log.d(TAG,"room:"+l.toString())
             }
 
-
-
-
             true
         }
 
         R.id.sort -> {
-
+            AsyncTask.execute {
+                database=MusicDatabase.getMusicDatabase(this)
+                var l=database.getMusic_Data_Dao().deleteALL(database.getMusic_Data_Dao().getAll())
+            }
             true
         }
 
