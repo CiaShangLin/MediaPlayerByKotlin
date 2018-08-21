@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
 
         //耗時工作
-        CheckFileRoom(this).execute()
+        //CheckFileRoom(this).execute()
 
         initView()
     }
@@ -121,14 +121,10 @@ class MainActivity : AppCompatActivity() {
 
             AsyncTask.execute {
                 database=MusicDatabase.getMusicDatabase(this)
-                var l=database.getMusic_Data_Dao().getAll().size
-                Log.d(TAG,"room:"+l.toString())
+                var d=database.getMusic_Data_Dao().getAll()
 
-                var k=database.getMusic_Data_Dao().getAll()
-
-
-                var bitmap=BitmapFactory.decodeFile(k.get(0).picture)
-
+                Log.d(TAG,database.getMusic_Data_Dao().findByName(d.get(0).name).toString())
+                Log.d(TAG,database.getMusic_Data_Dao().findByName("xxx").toString())
 
 
             }

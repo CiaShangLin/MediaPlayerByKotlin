@@ -41,7 +41,7 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
 
         musicList = FileUnits.findAllMusicFromContentResolver(context)
         Log.d(TAG, "size:" + musicList.size)
-        musicList.sortByDescending {
+        /*musicList.sortByDescending {
             it.modified
         }
         for (i in musicList.indices) {
@@ -50,7 +50,7 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
             Log.d(TAG, "path:" + musicList.get(i).path)
             Log.d(TAG, "modified:" + musicList.get(i).modified)
             Log.d(TAG, "favorite:" + musicList.get(i).favorite)
-        }
+        }*/
 
         musicList.forEach {
             if (music_data_dao.find_FileByName(it.name) == null) {
