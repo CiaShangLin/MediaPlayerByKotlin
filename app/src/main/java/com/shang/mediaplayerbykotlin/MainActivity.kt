@@ -10,6 +10,8 @@ import android.os.*
 import android.provider.MediaStore
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -48,11 +50,14 @@ class MainActivity : AppCompatActivity() {
 
 
         //耗時工作
-        CheckFileRoom(this).execute()
+        //CheckFileRoom(this).execute()
 
         initView()
 
 
+
+        recyclerview.layoutManager=LinearLayoutManager(this)
+        recyclerview.adapter=MusicAdapter(this, mutableListOf())
 
     }
 
