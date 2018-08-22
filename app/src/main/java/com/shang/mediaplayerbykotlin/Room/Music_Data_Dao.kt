@@ -19,13 +19,6 @@ interface Music_Data_Dao {
     @Query("select name from "+Music_Data_Entity.TABLE_NAME)
     fun findAllName():MutableList<String>
 
-    @Query("")
-    fun findByName(name:String):Boolean{
-        if(find_FileByName(name)!=null){
-            return true
-        }
-        return false
-    }
 
     //vararg
     @Insert()

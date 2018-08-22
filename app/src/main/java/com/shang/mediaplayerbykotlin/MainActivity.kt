@@ -49,12 +49,13 @@ class MainActivity : AppCompatActivity() {
         //耗時工作
         //CheckFileRoom(this).execute()
 
+
         initView()
     }
 
     fun initView(){
 
-        seekBar.progress = 0
+        /*seekBar.progress = 0
         seekBar.max = 100000
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -69,7 +70,7 @@ class MainActivity : AppCompatActivity() {
                 nameTv.text = seekBar?.progress.toString()
             }
 
-        })
+        })*/
 
         setSupportActionBar(toolbar)
         toolbar.title="我的音樂"
@@ -107,6 +108,16 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+
+
+        AsyncTask.execute {
+            var start=System.currentTimeMillis()
+            database=MusicDatabase.getMusicDatabase(this)
+            recyclerview.layoutManager= LinearLayoutManager(this@MainActivity)
+            recyclerview.adapter=MusicAdapter(this@MainActivity,database.getMusic_Data_Dao().getAll())
+            Log.d(TAG,((System.currentTimeMillis()-start)/1000.0).toString())
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -122,10 +133,6 @@ class MainActivity : AppCompatActivity() {
             AsyncTask.execute {
                 database=MusicDatabase.getMusicDatabase(this)
                 var d=database.getMusic_Data_Dao().getAll()
-
-                Log.d(TAG,database.getMusic_Data_Dao().findByName(d.get(0).name).toString())
-                Log.d(TAG,database.getMusic_Data_Dao().findByName("xxx").toString())
-
 
             }
 

@@ -1,6 +1,7 @@
 package com.shang.mediaplayerbykotlin
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +27,10 @@ class MusicAdapter(var context:Context,var musicList : MutableList<Music_Data_En
 
         holder.itemView.moreBt.setOnClickListener{
             Toast.makeText(context,musicList.get(position).name,Toast.LENGTH_SHORT).show()
+        }
+
+        holder.itemView.setOnClickListener {
+            Toast.makeText(context,holder.itemView.getTag().toString(),Toast.LENGTH_SHORT).show()
         }
 
         holder.itemView.setTag(position)

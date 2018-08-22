@@ -46,7 +46,7 @@
 
             <include
                 android:id="@+id/include2"
-                layout="@layout/mediapalyer_controller_ui"
+                layout="@layout/play_music_ui_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
