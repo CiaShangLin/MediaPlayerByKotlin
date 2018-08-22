@@ -76,17 +76,12 @@ class MainActivity : AppCompatActivity() {
 
             val no=getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             no.notify(1,notification)
-
-
-
-
-
         }
     }
 
     fun initView(){
 
-        /*seekBar.progress = 0
+        seekBar.progress = 0
         seekBar.max = 100000
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -101,7 +96,7 @@ class MainActivity : AppCompatActivity() {
                 nameTv.text = seekBar?.progress.toString()
             }
 
-        })*/
+        })
 
         setSupportActionBar(toolbar)
         toolbar.title="我的音樂"
@@ -141,13 +136,27 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        /*AsyncTask.execute {
-            var start=System.currentTimeMillis()
-            database=MusicDatabase.getMusicDatabase(this)
+        AsyncTask.execute {
+            //database=MusicDatabase.getMusicDatabase(this)
+            var list= mutableListOf<Music_Data_Entity>()
+            list.add(Music_Data_Entity().apply {
+                this.name="龍珠超 OP2 - 限界突破×サバイバー"
+                this.duration=200000
+            })
+            list.add(Music_Data_Entity().apply {
+                this.name="龍珠超：究極的聖戰（BGM）"
+                this.duration=210000
+            })
+            list.add(Music_Data_Entity().apply {
+                this.name="10 Gamble Rumble"
+                this.duration=220000
+            })
+
+
             recyclerview.layoutManager= LinearLayoutManager(this@MainActivity)
-            recyclerview.adapter=MusicAdapter(this@MainActivity,database.getMusic_Data_Dao().getAll())
-            Log.d(TAG,((System.currentTimeMillis()-start)/1000.0).toString())
-        }*/
+            recyclerview.adapter=MusicAdapter(this@MainActivity, list)
+
+        }
 
     }
 
