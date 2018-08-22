@@ -45,7 +45,7 @@ class MusicAdapter(var context:Context,var musicList : MutableList<Music_Data_En
     }
 
     override fun getItemCount(): Int {
-        return musicList.size
+        return 5
     }
 
 

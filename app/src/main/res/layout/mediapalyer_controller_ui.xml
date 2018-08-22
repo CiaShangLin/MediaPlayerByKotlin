@@ -11,11 +11,10 @@
         android:layout_height="30dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/nameTv" />
 
     <TextView
         android:id="@+id/startTimeTv"
@@ -41,74 +40,21 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="TextView"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/seekBar"
         app:layout_constraintEnd_toEndOf="@+id/seekBar"
-        app:layout_constraintStart_toStartOf="@+id/seekBar" />
+        app:layout_constraintStart_toStartOf="@+id/seekBar"
+        app:layout_constraintTop_toBottomOf="@+id/include" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <include
+        android:id="@+id/include"
+        layout="@layout/play_music_ui_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@android:color/darker_gray"
-        android:orientation="horizontal"
-        android:padding="6dp"
-        app:layout_constraintBottom_toTopOf="@+id/nameTv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/randomBt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_random_nofocus"
-            tools:layout_editor_absoluteX="318dp" />
-
-        <ImageButton
-            android:id="@+id/previousBt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_previous"
-            tools:layout_editor_absoluteX="240dp" />
-
-        <ImageButton
-            android:id="@+id/playBt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_play" />
-
-        <ImageButton
-            android:id="@+id/nextBt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_next"
-            tools:layout_editor_absoluteX="167dp" />
-
-        <ImageButton
-            android:id="@+id/repeatBt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_repeat_nofocus"
-            tools:layout_editor_absoluteX="92dp" />
-    </LinearLayout>
 </android.support.constraint.ConstraintLayout>
