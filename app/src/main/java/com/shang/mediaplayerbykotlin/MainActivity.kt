@@ -1,18 +1,24 @@
 package com.shang.mediaplayerbykotlin
 
+import android.app.Notification
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.*
+import android.support.v4.app.NotificationCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.RemoteViews
 import android.widget.SeekBar
 import com.shang.mediaplayerbykotlin.Room.*
 import kotlinx.android.synthetic.main.drawer_layout.*
 import kotlinx.android.synthetic.main.mediapalyer_controller_ui.*
+import kotlinx.android.synthetic.main.play_music_ui_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 import org.jetbrains.anko.toast
 import java.io.File
@@ -51,6 +57,31 @@ class MainActivity : AppCompatActivity() {
 
 
         initView()
+
+        playerBt.setOnClickListener{
+
+            var remote=RemoteViews(packageName,R.layout.remote_view_layout)
+            remote.setImageViewResource(R.id.remoteIg,R.drawable.ic_music)
+            remote.setImageViewResource(R.id.remotePreBt,R.drawable.ic_previous)
+            remote.setImageViewResource(R.id.remotePlayBt,R.drawable.ic_remote_play)
+            remote.setImageViewResource(R.id.remoteNextBt,R.drawable.ic_next)
+            remote.setImageViewResource(R.id.remoteCancelBt,R.drawable.ic_cancel)
+            remote.setTextViewText(R.id.remoteNameTv,"Song Name")
+            remote.setTextViewText(R.id.remoteTimeTv,"03:14")
+
+            var notification=NotificationCompat.Builder(this).apply {
+                this.setSmallIcon(R.drawable.ic_music)
+                this.setContent(remote)
+            }.build()
+
+            val no=getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            no.notify(1,notification)
+
+
+
+
+
+        }
     }
 
     fun initView(){
@@ -110,13 +141,13 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        AsyncTask.execute {
+        /*AsyncTask.execute {
             var start=System.currentTimeMillis()
             database=MusicDatabase.getMusicDatabase(this)
             recyclerview.layoutManager= LinearLayoutManager(this@MainActivity)
             recyclerview.adapter=MusicAdapter(this@MainActivity,database.getMusic_Data_Dao().getAll())
             Log.d(TAG,((System.currentTimeMillis()-start)/1000.0).toString())
-        }
+        }*/
 
     }
 

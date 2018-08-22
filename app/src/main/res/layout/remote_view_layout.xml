@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:background="@android:color/black">
+
+    <ImageView
+        android:id="@+id/remoteIg"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        app:srcCompat="@drawable/ic_music" />
+
+    <TextView
+        android:id="@+id/remoteNameTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/remoteTimeTv"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="歌名"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/remoteTimeTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/remoteNameTv"
+        android:layout_marginStart="18dp"
+        android:layout_toEndOf="@+id/remoteIg"
+        android:text="03:14"
+        android:textColor="@android:color/white"
+        android:textSize="12sp" />
+
+    <ImageButton
+        android:id="@+id/remotePreBt"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignBottom="@+id/remoteIg"
+        android:layout_alignStart="@+id/remoteTimeTv"
+        android:layout_marginBottom="2dp"
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/ic_previous" />
+
+    <ImageButton
+        android:id="@+id/remotePlayBt"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="2dp"
+        android:layout_marginStart="88dp"
+        android:layout_toEndOf="@+id/remoteTimeTv"
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/ic_remote_play" />
+
+    <ImageButton
+        android:id="@+id/remoteNextBt"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/remotePlayBt"
+        android:layout_marginBottom="2dp"
+        android:layout_marginEnd="12dp"
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/ic_next" />
+
+    <ImageButton
+        android:id="@+id/remoteCancelBt"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_above="@+id/remoteTimeTv"
+        android:layout_alignEnd="@+id/remoteNextBt"
+        android:layout_marginTop="4dp"
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/ic_cancel" />
+
+</RelativeLayout>

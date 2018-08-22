@@ -9,7 +9,7 @@
 
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/playerBt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -21,10 +21,11 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_play" />
+        app:srcCompat="@drawable/ic_play"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageButton
-        android:id="@+id/imageButton2"
+        android:id="@+id/nextBt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -32,14 +33,15 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="@+id/imageButton"
+        app:layout_constraintBottom_toBottomOf="@+id/playerBt"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
-        app:layout_constraintTop_toTopOf="@+id/imageButton"
-        app:srcCompat="@drawable/ic_next" />
+        app:layout_constraintTop_toTopOf="@+id/playerBt"
+        app:srcCompat="@drawable/ic_next"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageButton
-        android:id="@+id/imageButton3"
+        android:id="@+id/previousBt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -47,14 +49,15 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="@+id/imageButton"
+        app:layout_constraintBottom_toBottomOf="@+id/playerBt"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="@+id/imageButton"
-        app:srcCompat="@drawable/ic_previous" />
+        app:layout_constraintTop_toTopOf="@+id/playerBt"
+        app:srcCompat="@drawable/ic_previous"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageButton
-        android:id="@+id/imageButton4"
+        android:id="@+id/repeatBt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -62,14 +65,15 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="@+id/imageButton"
+        app:layout_constraintBottom_toBottomOf="@+id/playerBt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline5"
-        app:layout_constraintTop_toTopOf="@+id/imageButton"
-        app:srcCompat="@drawable/ic_repeat_nofocus" />
+        app:layout_constraintTop_toTopOf="@+id/playerBt"
+        app:srcCompat="@drawable/ic_repeat_nofocus"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageButton
-        android:id="@+id/imageButton5"
+        android:id="@+id/randomBt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -77,11 +81,12 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="@+id/imageButton"
+        app:layout_constraintBottom_toBottomOf="@+id/playerBt"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageButton"
-        app:srcCompat="@drawable/ic_random_nofocus" />
+        app:layout_constraintTop_toTopOf="@+id/playerBt"
+        app:srcCompat="@drawable/ic_random_nofocus"
+        tools:ignore="VectorDrawableCompat" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline2"
