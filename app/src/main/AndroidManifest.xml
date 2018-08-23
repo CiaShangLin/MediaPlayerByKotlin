@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".MediaPlayerService"
+        <service android:name=".MP.MediaPlayerService"
             android:exported="false">
         </service>
     </application>

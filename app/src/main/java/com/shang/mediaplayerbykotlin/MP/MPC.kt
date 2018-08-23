@@ -1,10 +1,7 @@
-package com.shang.mediaplayerbykotlin
+package com.shang.mediaplayerbykotlin.MP
 
-import android.media.AudioManager
 import android.media.MediaPlayer
-import android.util.Log
 import java.io.File
-import java.text.SimpleDateFormat
 
 /**
  * Created by Shang on 2018/8/14.

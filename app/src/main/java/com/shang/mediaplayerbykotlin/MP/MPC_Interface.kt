@@ -1,4 +1,4 @@
-package com.shang.mediaplayerbykotlin
+package com.shang.mediaplayerbykotlin.MP
 
 /**
  * Created by Shang on 2018/8/19.

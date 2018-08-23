@@ -5,16 +5,15 @@ import android.os.*
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
-import android.widget.SeekBar
+import com.shang.mediaplayerbykotlin.MP.MediaPlayerService
 import com.shang.mediaplayerbykotlin.Room.*
 import kotlinx.android.synthetic.main.drawer_layout.*
-import kotlinx.android.synthetic.main.mediapalyer_controller_ui.*
-import kotlinx.android.synthetic.main.play_music_ui_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 import org.jetbrains.anko.toast
 import java.io.File
@@ -27,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var database: MusicDatabase
     lateinit var file: MutableList<File>
+
 
 
     var handler = object : Handler() {
@@ -57,30 +57,11 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        playerBt.setOnClickListener {
-
-            /*var remote=RemoteViews(packageName,R.layout.remote_view_layout)
-            remote.setImageViewResource(R.id.remoteIg,R.drawable.ic_music)
-            remote.setImageViewResource(R.id.remotePreBt,R.drawable.ic_previous)
-            remote.setImageViewResource(R.id.remotePlayBt,R.drawable.ic_remote_play)
-            remote.setImageViewResource(R.id.remoteNextBt,R.drawable.ic_next)
-            remote.setImageViewResource(R.id.remoteCancelBt,R.drawable.ic_cancel)
-            remote.setTextViewText(R.id.remoteNameTv,"Song Name")
-            remote.setTextViewText(R.id.remoteTimeTv,"03:14")
-
-            var notification=NotificationCompat.Builder(this).apply {
-                this.setSmallIcon(R.drawable.ic_music)
-                this.setContent(remote)
-            }.build()
-
-            val no=getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            no.notify(1,notification)*/
-        }
     }
 
     fun initView() {
 
-        seekBar.progress = 0
+        /*seekBar.progress = 0
         seekBar.max = 100000
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -95,11 +76,12 @@ class MainActivity : AppCompatActivity() {
                 nameTv.text = seekBar?.progress.toString()
             }
 
-        })
+        })*/
 
         setSupportActionBar(toolbar)
         toolbar.title = "我的音樂"
         toolbar.setNavigationIcon(R.drawable.ic_navigation)
+
 
         val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name)
         drawerLayout.addDrawerListener(toggle)
@@ -108,52 +90,31 @@ class MainActivity : AppCompatActivity() {
         nav_view.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.favorite -> {
-                    drawerLayout.closeDrawers()
-                    startService(Intent(this, MediaPlayerService::class.java).apply {
-                        action = "START"
-                        putExtra("path", file.get(0).path)
-                    })
+
 
                 }
                 R.id.musicList -> {
-                    drawerLayout.closeDrawers()
+                    AsyncTask.execute {
+                        var playList= mutableListOf<Music_ListName_Entity>()
+                        playList.addAll(database.getMusic_ListName_Dao().getAll())
 
-                    startService(Intent(this, MediaPlayerService::class.java).apply {
-                        action = "STOP"
-                    })
+                        runOnUiThread{
+                            recyclerview.adapter=PlayListAdapter(this,playList)
+                        }
+                    }
 
                 }
                 R.id.timer -> {
 
-                    startService(Intent(this, MediaPlayerService::class.java).apply {
-                        action = "MODE"
-                    })
-
                 }
             }
+            drawerLayout.closeDrawers()
             true
         }
 
         AsyncTask.execute {
-            //database=MusicDatabase.getMusicDatabase(this)
-            var list = mutableListOf<Music_Data_Entity>()
-            list.add(Music_Data_Entity().apply {
-                this.name = "龍珠超 OP2 - 限界突破×サバイバー"
-                this.duration = 200000
-            })
-            list.add(Music_Data_Entity().apply {
-                this.name = "龍珠超：究極的聖戰（BGM）"
-                this.duration = 210000
-            })
-            list.add(Music_Data_Entity().apply {
-                this.name = "10 Gamble Rumble"
-                this.duration = 220000
-            })
-
-
             recyclerview.layoutManager = LinearLayoutManager(this@MainActivity)
-            recyclerview.adapter = MusicAdapter(this@MainActivity, list)
-
+            recyclerview.adapter = MusicAdapter(this@MainActivity, database.getMusic_Data_Dao().getAll())
         }
 
     }
@@ -218,13 +179,10 @@ class MainActivity : AppCompatActivity() {
             }
 
 
-
-
             true
         }
 
         else -> {
-
             super.onOptionsItemSelected(item)
         }
     }

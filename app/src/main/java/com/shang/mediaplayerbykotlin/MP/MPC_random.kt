@@ -1,9 +1,9 @@
-package com.shang.mediaplayerbykotlin
+package com.shang.mediaplayerbykotlin.MP
 
 /**
  * Created by Shang on 2018/8/19.
  */
-class MPC_random:MPC_Interface{
+class MPC_random: MPC_Interface {
 
     override fun getName():String{
         return "MPC_random"

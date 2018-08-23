@@ -1,8 +1,7 @@
-package com.shang.mediaplayerbykotlin
+package com.shang.mediaplayerbykotlin.MP
 
 import android.app.Service
 import android.content.Intent
-import android.os.Handler
 import android.os.IBinder
 import android.util.Log
 
@@ -39,8 +38,9 @@ class MediaPlayerService : Service() {
             "NEXT" -> ""
             "PREVIOUS" -> ""
             "RESET" -> { }
-            "MODE" ->{ Log.d(TAG,MPC.mpc_mode.getName())
-                         MPC.mpc_mode=MPC_random()}
+            "MODE" ->{ Log.d(TAG, MPC.mpc_mode.getName())
+                         MPC.mpc_mode= MPC_random()
+            }
         }
 
         return START_NOT_STICKY

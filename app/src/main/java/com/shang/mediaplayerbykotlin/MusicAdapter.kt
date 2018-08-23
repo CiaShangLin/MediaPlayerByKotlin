@@ -26,26 +26,34 @@ class MusicAdapter(var context: Context, var musicList: MutableList<Music_Data_E
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        holder.itemView.title.text = musicList.get(position).name
+        if(position<musicList.size)
+        {
+            holder.itemView.title.text = musicList.get(position).name
 
-        holder.itemView.time.text = FileUnits.lastModifiedToSimpleDateFormat(musicList.get(position).duration)
+            holder.itemView.time.text = FileUnits.lastModifiedToSimpleDateFormat(musicList.get(position).duration)
 
-        holder.itemView.moreBt.setOnClickListener {
-            var popupMenu=PopupMenu(context,it)
-            popupMenu.menuInflater.inflate(R.menu.more_menu,popupMenu.menu)
+            holder.itemView.moreBt.setOnClickListener {
+                var popupMenu=PopupMenu(context,it)
+                popupMenu.menuInflater.inflate(R.menu.more_menu,popupMenu.menu)
 
-            popupMenu.setOnMenuItemClickListener {
-                true
+                popupMenu.setOnMenuItemClickListener {
+                    when(it.itemId){
+                        R.id.more_play->{}
+                        R.id.more_add->{}
+                    }
+                    true
+                }
+                popupMenu.show()
+
             }
-            popupMenu.show()
 
+            holder.itemView.setOnClickListener {
+                Toast.makeText(context, holder.itemView.getTag().toString(), Toast.LENGTH_SHORT).show()
+            }
+
+            holder.itemView.setTag(position)
         }
 
-        holder.itemView.setOnClickListener {
-            Toast.makeText(context, holder.itemView.getTag().toString(), Toast.LENGTH_SHORT).show()
-        }
-
-        holder.itemView.setTag(position)
 
     }
 
@@ -57,7 +65,7 @@ class MusicAdapter(var context: Context, var musicList: MutableList<Music_Data_E
     }
 
     override fun getItemCount(): Int {
-        return 3
+        return 10
     }
 
 

@@ -1,4 +1,4 @@
-package com.shang.mediaplayerbykotlin
+package com.shang.mediaplayerbykotlin.MP
 
 import android.media.AudioManager
 import android.media.MediaPlayer
@@ -7,7 +7,7 @@ import android.util.Log
 /**
  * Created by Shang on 2018/8/19.
  */
-class MPC_normal :MPC_Interface{
+class MPC_normal : MPC_Interface {
 
     override fun getName():String{
         return "MPC_normal"
