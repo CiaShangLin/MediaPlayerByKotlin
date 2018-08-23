@@ -1,19 +1,14 @@
 package com.shang.mediaplayerbykotlin
 
-import android.app.Notification
-import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.os.*
-import android.support.v4.app.NotificationCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.RemoteViews
+import android.view.View
+import android.widget.PopupMenu
 import android.widget.SeekBar
 import com.shang.mediaplayerbykotlin.Room.*
 import kotlinx.android.synthetic.main.drawer_layout.*
@@ -31,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var database: MusicDatabase
     lateinit var file: MutableList<File>
+
 
 
 
@@ -60,7 +56,7 @@ class MainActivity : AppCompatActivity() {
 
         playerBt.setOnClickListener{
 
-            var remote=RemoteViews(packageName,R.layout.remote_view_layout)
+            /*var remote=RemoteViews(packageName,R.layout.remote_view_layout)
             remote.setImageViewResource(R.id.remoteIg,R.drawable.ic_music)
             remote.setImageViewResource(R.id.remotePreBt,R.drawable.ic_previous)
             remote.setImageViewResource(R.id.remotePlayBt,R.drawable.ic_remote_play)
@@ -75,7 +71,7 @@ class MainActivity : AppCompatActivity() {
             }.build()
 
             val no=getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            no.notify(1,notification)
+            no.notify(1,notification)*/
         }
     }
 
@@ -180,10 +176,34 @@ class MainActivity : AppCompatActivity() {
         }
 
         R.id.sort -> {
-            AsyncTask.execute {
-                database=MusicDatabase.getMusicDatabase(this)
-                var l=database.getMusic_Data_Dao().deleteALL(database.getMusic_Data_Dao().getAll())
+
+            var view=findViewById<View>(R.id.sort)
+            var popupMenu=PopupMenu(this,view)
+            var inf=popupMenu?.menuInflater
+            inf?.inflate(R.menu.sort_menu,popupMenu?.menu)
+
+            popupMenu.menu.findItem(R.id.sort_mode).setChecked(false)
+            popupMenu.menu.findItem(R.id.sort_modify).setChecked(false)
+            popupMenu.menu.findItem(R.id.sort_name).setChecked(false)
+            popupMenu.menu.findItem(R.id.sort_time).setChecked(false)
+
+            popupMenu?.setOnMenuItemClickListener {
+
+                when(it.itemId){
+                    R.id.sort_mode->{
+                        it.setChecked(false)
+                        toast(it.title.toString())
+                    }
+                    R.id.sort_modify->{toast(it.title.toString())}
+                    R.id.sort_name->{toast(it.title.toString())}
+                    R.id.sort_time->{toast(it.title.toString())}
+                }
+
+                true
             }
+
+            popupMenu?.show()
+
             true
         }
 

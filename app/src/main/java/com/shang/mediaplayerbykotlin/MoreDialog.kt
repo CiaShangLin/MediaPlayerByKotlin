@@ -22,14 +22,11 @@ class MoreDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         var array= arrayOf("播放","加入至播放清單")
-        var dialog=AlertDialog.Builder(activity).setItems(array, DialogInterface.OnClickListener { dialog, which ->
+        var dialog=AlertDialog.Builder(activity,android.R.style.TextAppearance_Widget_PopupMenu_Small).setItems(array, DialogInterface.OnClickListener { dialog, which ->
             Toast.makeText(activity,which.toString(),Toast.LENGTH_SHORT).show()
         }).create()
 
         return dialog
     }
 
-    override fun getTheme(): Int {
-        return android.R.style.Widget_PopupMenu
-    }
 }

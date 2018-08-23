@@ -7,14 +7,15 @@
         android:id="@+id/sort"
         android:icon="@drawable/ic_sort"
         android:title="排序"
-        app:showAsAction="always"></item>
+        app:showAsAction="always">
+    </item>
+
 
     <item
         android:id="@+id/search"
         android:icon="@drawable/ic_search"
         android:title="搜尋"
         app:showAsAction="always"></item>
-
 
 
 </menu>
