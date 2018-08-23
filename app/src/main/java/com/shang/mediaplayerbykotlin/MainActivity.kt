@@ -5,6 +5,7 @@ import android.os.*
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -28,16 +29,14 @@ class MainActivity : AppCompatActivity() {
     lateinit var file: MutableList<File>
 
 
-
-
     var handler = object : Handler() {
         override fun handleMessage(msg: Message?) {
             super.handleMessage(msg)
 
-            when(msg?.what){
-                MusicAdapter.DATABASE_SUCCCESS->{
-                    recyclerview.layoutManager= LinearLayoutManager(this@MainActivity)
-                    recyclerview.adapter=MusicAdapter(this@MainActivity,msg.obj as MutableList<Music_Data_Entity>)
+            when (msg?.what) {
+                MusicAdapter.DATABASE_SUCCCESS -> {
+                    recyclerview.layoutManager = LinearLayoutManager(this@MainActivity)
+                    recyclerview.adapter = MusicAdapter(this@MainActivity, msg.obj as MutableList<Music_Data_Entity>)
                 }
             }
         }
@@ -51,10 +50,14 @@ class MainActivity : AppCompatActivity() {
         //耗時工作
         //CheckFileRoom(this).execute()
 
+        AsyncTask.execute {
+            database = MusicDatabase.getMusicDatabase(this)
+            initView()
+        }
 
-        initView()
 
-        playerBt.setOnClickListener{
+
+        playerBt.setOnClickListener {
 
             /*var remote=RemoteViews(packageName,R.layout.remote_view_layout)
             remote.setImageViewResource(R.id.remoteIg,R.drawable.ic_music)
@@ -75,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun initView(){
+    fun initView() {
 
         seekBar.progress = 0
         seekBar.max = 100000
@@ -95,35 +98,35 @@ class MainActivity : AppCompatActivity() {
         })
 
         setSupportActionBar(toolbar)
-        toolbar.title="我的音樂"
+        toolbar.title = "我的音樂"
         toolbar.setNavigationIcon(R.drawable.ic_navigation)
 
-        val toggle=ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.app_name,R.string.app_name)
+        val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        nav_view.setNavigationItemSelectedListener{
-            when(it.itemId){
-                R.id.favorite->{
+        nav_view.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.favorite -> {
                     drawerLayout.closeDrawers()
-                    startService(Intent(this,MediaPlayerService::class.java).apply {
-                        action="START"
-                        putExtra("path",file.get(0).path)
+                    startService(Intent(this, MediaPlayerService::class.java).apply {
+                        action = "START"
+                        putExtra("path", file.get(0).path)
                     })
 
                 }
-                R.id.musicList->{
+                R.id.musicList -> {
                     drawerLayout.closeDrawers()
 
-                    startService(Intent(this,MediaPlayerService::class.java).apply {
-                        action="STOP"
+                    startService(Intent(this, MediaPlayerService::class.java).apply {
+                        action = "STOP"
                     })
 
                 }
-                R.id.timer->{
+                R.id.timer -> {
 
-                    startService(Intent(this,MediaPlayerService::class.java).apply {
-                        action="MODE"
+                    startService(Intent(this, MediaPlayerService::class.java).apply {
+                        action = "MODE"
                     })
 
                 }
@@ -131,33 +134,32 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-
         AsyncTask.execute {
             //database=MusicDatabase.getMusicDatabase(this)
-            var list= mutableListOf<Music_Data_Entity>()
+            var list = mutableListOf<Music_Data_Entity>()
             list.add(Music_Data_Entity().apply {
-                this.name="龍珠超 OP2 - 限界突破×サバイバー"
-                this.duration=200000
+                this.name = "龍珠超 OP2 - 限界突破×サバイバー"
+                this.duration = 200000
             })
             list.add(Music_Data_Entity().apply {
-                this.name="龍珠超：究極的聖戰（BGM）"
-                this.duration=210000
+                this.name = "龍珠超：究極的聖戰（BGM）"
+                this.duration = 210000
             })
             list.add(Music_Data_Entity().apply {
-                this.name="10 Gamble Rumble"
-                this.duration=220000
+                this.name = "10 Gamble Rumble"
+                this.duration = 220000
             })
 
 
-            recyclerview.layoutManager= LinearLayoutManager(this@MainActivity)
-            recyclerview.adapter=MusicAdapter(this@MainActivity, list)
+            recyclerview.layoutManager = LinearLayoutManager(this@MainActivity)
+            recyclerview.adapter = MusicAdapter(this@MainActivity, list)
 
         }
 
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.toolbar_menu,menu)
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
         return true
     }
 
@@ -165,44 +167,58 @@ class MainActivity : AppCompatActivity() {
 
         R.id.search -> {
 
-
-            AsyncTask.execute {
-                database=MusicDatabase.getMusicDatabase(this)
-                var d=database.getMusic_Data_Dao().getAll()
-
-            }
-
             true
         }
 
         R.id.sort -> {
 
-            var view=findViewById<View>(R.id.sort)
-            var popupMenu=PopupMenu(this,view)
-            var inf=popupMenu?.menuInflater
-            inf?.inflate(R.menu.sort_menu,popupMenu?.menu)
+            var view = findViewById<View>(R.id.sort)
+            var popupMenu = PopupMenu(this, view)
+            var inf = popupMenu.menuInflater
+            inf.inflate(R.menu.sort_menu, popupMenu.menu)
 
-            popupMenu.menu.findItem(R.id.sort_mode).setChecked(false)
-            popupMenu.menu.findItem(R.id.sort_modify).setChecked(false)
-            popupMenu.menu.findItem(R.id.sort_name).setChecked(false)
-            popupMenu.menu.findItem(R.id.sort_time).setChecked(false)
+            AsyncTask.execute {
+                var settingDao=database.getSetting_Dao()
+                var settingEntity=settingDao.getSetting()
 
-            popupMenu?.setOnMenuItemClickListener {
-
-                when(it.itemId){
-                    R.id.sort_mode->{
-                        it.setChecked(false)
-                        toast(it.title.toString())
-                    }
-                    R.id.sort_modify->{toast(it.title.toString())}
-                    R.id.sort_name->{toast(it.title.toString())}
-                    R.id.sort_time->{toast(it.title.toString())}
+                if(settingEntity==null){  //第一次使用
+                    settingDao.insertSetting(Setting_Entity())
+                    settingEntity=settingDao.getSetting()
                 }
 
-                true
+                var mode: Boolean = settingEntity.sort_mode
+                var type: Int = settingEntity.sort_type
+                Log.d(TAG,mode.toString()+" "+type)
+
+                popupMenu.menu.findItem(R.id.sort_mode).setChecked(mode)
+                popupMenu.menu.getItem(type).setChecked(true)
+
+                popupMenu?.setOnMenuItemClickListener {
+                    when (it.itemId) {
+                        R.id.sort_mode -> {
+                            it.setChecked(false)
+                            toast(it.title.toString())
+                        }
+                        R.id.sort_modify -> {
+                            toast(it.title.toString())
+                        }
+                        R.id.sort_name -> {
+                            toast(it.title.toString())
+                        }
+                        R.id.sort_time -> {
+                            toast(it.title.toString())
+                        }
+                    }
+                    true
+                }
+
+                runOnUiThread{
+                    popupMenu.show()
+                }
             }
 
-            popupMenu?.show()
+
+
 
             true
         }
