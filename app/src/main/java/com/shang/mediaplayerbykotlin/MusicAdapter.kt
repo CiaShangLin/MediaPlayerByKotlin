@@ -6,9 +6,11 @@ import android.content.Context
 import android.content.DialogInterface
 import android.graphics.BitmapFactory
 import android.support.v7.widget.RecyclerView
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import android.widget.Toast
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import kotlinx.android.synthetic.main.music_item.view.*
@@ -29,10 +31,14 @@ class MusicAdapter(var context: Context, var musicList: MutableList<Music_Data_E
         holder.itemView.time.text = FileUnits.lastModifiedToSimpleDateFormat(musicList.get(position).duration)
 
         holder.itemView.moreBt.setOnClickListener {
-            var dialog=MoreDialog()
+            var popupMenu=PopupMenu(context,it)
+            popupMenu.menuInflater.inflate(R.menu.more_menu,popupMenu.menu)
 
+            popupMenu.setOnMenuItemClickListener {
+                true
+            }
+            popupMenu.show()
 
-            dialog.show((context as MainActivity).fragmentManager,"")
         }
 
         holder.itemView.setOnClickListener {
