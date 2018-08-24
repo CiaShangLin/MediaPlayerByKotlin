@@ -11,12 +11,13 @@ class Music_ListName_Entity {
         const val TABLE_NAME="Music_ListName_Table"
     }
 
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name="id")
     var id:Long=0
 
-    @PrimaryKey
-    @ColumnInfo(name="child_tableName")
-    var child_tableName:String=""
+
+    @ColumnInfo(name="tableName")
+    var tableName:String=""
 
 
 

@@ -17,10 +17,11 @@ class Music_Data_Entity {
     }
 
     @PrimaryKey()
-    var name:String=""
-
-    var duration:Long=0
+    @ColumnInfo(name="path")
     var path:String=""
+
+    var name:String=""
+    var duration:Long=0
     var favorite:Boolean=false
     var modified:Long=0
     var picture:String=""

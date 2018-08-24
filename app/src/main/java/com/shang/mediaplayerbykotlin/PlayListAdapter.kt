@@ -57,7 +57,7 @@ class PlayListAdapter(var context: Context, var playList: MutableList<Music_List
                                 if(name.length!=0){
                                     AsyncTask.execute {
                                         var entity=Music_ListName_Entity().apply {
-                                            this.child_tableName=name
+                                            this.tableName=name
                                         }
 
                                         database.getMusic_ListName_Dao().insert(entity)
@@ -83,7 +83,7 @@ class PlayListAdapter(var context: Context, var playList: MutableList<Music_List
             holder.itemView.playListBt.visibility = View.VISIBLE
             holder.itemView.playListAddBt.visibility = View.INVISIBLE
 
-            holder.itemView.playListTv.text=playList.get(position).child_tableName
+            holder.itemView.playListTv.text=playList.get(position).tableName
             holder.itemView.playListBt.setOnClickListener{
                 var popupMenu= PopupMenu(context,it)
                 popupMenu.menuInflater.inflate(R.menu.play_list_more_menu,popupMenu.menu)
@@ -93,7 +93,8 @@ class PlayListAdapter(var context: Context, var playList: MutableList<Music_List
                         R.id.playListDelete->{
                             AsyncTask.execute {
                                 database.getMusic_ListName_Dao().delete(Music_ListName_Entity().apply {
-                                    this.child_tableName=playList.get(position).child_tableName
+                                    this.id=playList.get(position).id
+                                    this.tableName=playList.get(position).tableName
                                 })
                                 playList.removeAt(position)
                                 context.runOnUiThread {
@@ -104,12 +105,12 @@ class PlayListAdapter(var context: Context, var playList: MutableList<Music_List
                         }
                         R.id.playListUpdate->{
                             var view=LayoutInflater.from(context).inflate(R.layout.input_edittext,null)
-                            view.playListEt.setText(playList.get(position).child_tableName.toString())
+                            view.playListEt.setText(playList.get(position).tableName.toString())
                             AlertDialog.Builder(context)
                                     .setView(view)
                                     .setPositiveButton("修改", DialogInterface.OnClickListener { dialog, which ->
                                         AsyncTask.execute {
-                                            playList.get(position).child_tableName=view.playListEt.text.toString().trim()
+                                            playList.get(position).tableName=view.playListEt.text.toString().trim()
                                             //database.getMusic_ListName_Dao().update()
                                             context.runOnUiThread {
                                                 notifyDataSetChanged()
