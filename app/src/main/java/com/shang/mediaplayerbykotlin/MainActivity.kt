@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var file: MutableList<File>
 
 
-
     var handler = object : Handler() {
         override fun handleMessage(msg: Message?) {
             super.handleMessage(msg)
@@ -54,7 +53,6 @@ class MainActivity : AppCompatActivity() {
             database = MusicDatabase.getMusicDatabase(this)
             initView()
         }
-
 
 
     }
@@ -89,7 +87,10 @@ class MainActivity : AppCompatActivity() {
 
         nav_view.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.myMusic->{
+                R.id.myMusic -> {
+                    AsyncTask.execute {
+                        recyclerview.adapter = MusicAdapter(this, database.getMusic_Data_Dao().getAll())
+                    }
 
                 }
                 R.id.favorite -> {
@@ -98,12 +99,10 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.musicList -> {
                     AsyncTask.execute {
-                        var playList= mutableListOf<Music_ListName_Entity>()
+                        var playList = mutableListOf<Music_ListName_Entity>()
                         playList.addAll(database.getMusic_ListName_Dao().getAll())
+                        recyclerview.adapter = PlayListAdapter(this, playList)
 
-                        runOnUiThread{
-                            recyclerview.adapter=PlayListAdapter(this,playList)
-                        }
                     }
 
                 }
@@ -142,17 +141,17 @@ class MainActivity : AppCompatActivity() {
             inf.inflate(R.menu.sort_menu, popupMenu.menu)
 
             AsyncTask.execute {
-                var settingDao=database.getSetting_Dao()
-                var settingEntity=settingDao.getSetting()
+                var settingDao = database.getSetting_Dao()
+                var settingEntity = settingDao.getSetting()
 
-                if(settingEntity==null){  //第一次使用
+                if (settingEntity == null) {  //第一次使用
                     settingDao.insertSetting(Setting_Entity())
-                    settingEntity=settingDao.getSetting()
+                    settingEntity = settingDao.getSetting()
                 }
 
                 var mode: Boolean = settingEntity.sort_mode
                 var type: Int = settingEntity.sort_type
-                Log.d(TAG,mode.toString()+" "+type)
+                Log.d(TAG, mode.toString() + " " + type)
 
                 popupMenu.menu.findItem(R.id.sort_mode).setChecked(mode)
                 popupMenu.menu.getItem(type).setChecked(true)
@@ -160,28 +159,37 @@ class MainActivity : AppCompatActivity() {
                 popupMenu?.setOnMenuItemClickListener {
                     when (it.itemId) {
                         R.id.sort_mode -> {
-                            it.setChecked(false)
-                            toast(it.title.toString())
+                            mode = !mode
+                            it.setChecked(mode)
                         }
                         R.id.sort_modify -> {
-                            toast(it.title.toString())
+                            type=1
+                            it.setChecked(true)
                         }
                         R.id.sort_name -> {
-                            toast(it.title.toString())
+                            type=2
+                            it.setChecked(true)
                         }
                         R.id.sort_time -> {
-                            toast(it.title.toString())
+                            type=3
+                            it.setChecked(true)
                         }
+                    }
+
+                    AsyncTask.execute {
+                        database.getSetting_Dao().update(Setting_Entity().apply {
+                            this.name=Setting_Entity.key
+                            this.sort_mode=mode
+                            this.sort_type=type
+                        })
                     }
                     true
                 }
 
-                runOnUiThread{
+                runOnUiThread {
                     popupMenu.show()
                 }
             }
-
-
             true
         }
 

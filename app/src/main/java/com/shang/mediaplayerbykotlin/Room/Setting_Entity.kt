@@ -23,7 +23,7 @@ class Setting_Entity  {
     var sort_mode:Boolean=true
 
     //0=修改日期 1=名稱長度 2=時間長度
-    var sort_type:Int=0
+    var sort_type:Int=1
 
 
 }
