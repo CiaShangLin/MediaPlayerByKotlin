@@ -62,13 +62,11 @@ class PlayListAdapter(var context: Context, var playList: MutableList<Music_List
 
                                         database.getMusic_ListName_Dao().insert(entity)
                                         playList.add(entity)
-
                                     }
                                     context.runOnUiThread {
                                         Toast.makeText(context,"新增成功",Toast.LENGTH_SHORT).show()
                                         notifyDataSetChanged()
                                     }
-
                                 }else{
                                     context.runOnUiThread {
                                         Toast.makeText(context,"名稱不能為空",Toast.LENGTH_SHORT).show()
@@ -92,8 +90,41 @@ class PlayListAdapter(var context: Context, var playList: MutableList<Music_List
 
                 popupMenu.setOnMenuItemClickListener {
                     when(it.itemId){
-                        R.id.playListDelete->{}
-                        R.id.playListUpdate->{}
+                        R.id.playListDelete->{
+                            AsyncTask.execute {
+                                database.getMusic_ListName_Dao().delete(Music_ListName_Entity().apply {
+                                    this.child_tableName=playList.get(position).child_tableName
+                                })
+                                playList.removeAt(position)
+                                context.runOnUiThread {
+                                    notifyDataSetChanged()
+                                    Toast.makeText(context,"刪除成功",Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                        R.id.playListUpdate->{
+                            var view=LayoutInflater.from(context).inflate(R.layout.input_edittext,null)
+                            view.playListEt.setText(playList.get(position).child_tableName.toString())
+                            AlertDialog.Builder(context)
+                                    .setView(view)
+                                    .setPositiveButton("修改", DialogInterface.OnClickListener { dialog, which ->
+                                        AsyncTask.execute {
+                                            playList.get(position).child_tableName=view.playListEt.text.toString().trim()
+                                            //database.getMusic_ListName_Dao().update()
+                                            context.runOnUiThread {
+                                                notifyDataSetChanged()
+                                            }
+                                        }
+
+
+
+
+                                    }).setNegativeButton("取消", DialogInterface.OnClickListener { dialog, which ->
+
+                                    })
+                                    .show()
+
+                        }
                     }
                     true
                 }

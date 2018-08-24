@@ -1,9 +1,6 @@
 package com.shang.mediaplayerbykotlin.Room
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Delete
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 
 /**
  * Created by Shang on 2018/8/15.
@@ -20,6 +17,9 @@ interface Music_ListName_Dao {
 
     @Delete
     fun delete(musicList:Music_ListName_Entity)
+
+    @Update
+    fun update(musicList:Music_ListName_Entity)
 
 
 }
