@@ -18,8 +18,4 @@ class Music_ListName_Entity {
 
     @ColumnInfo(name="tableName")
     var tableName:String=""
-
-
-
-
 }

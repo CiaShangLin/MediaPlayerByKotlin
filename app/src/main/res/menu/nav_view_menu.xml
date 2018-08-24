@@ -5,6 +5,12 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:title="我的音樂"
+            android:id="@+id/myMusic"
+            android:icon="@drawable/ic_music">
+
+        </item>
+        <item
             android:id="@+id/favorite"
             android:icon="@drawable/ic_favorite"
             android:title="最愛"

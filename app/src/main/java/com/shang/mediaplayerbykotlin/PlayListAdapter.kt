@@ -111,15 +111,14 @@ class PlayListAdapter(var context: Context, var playList: MutableList<Music_List
                                     .setPositiveButton("修改", DialogInterface.OnClickListener { dialog, which ->
                                         AsyncTask.execute {
                                             playList.get(position).tableName=view.playListEt.text.toString().trim()
-                                            //database.getMusic_ListName_Dao().update()
+                                            database.getMusic_ListName_Dao().update(Music_ListName_Entity().apply {
+                                                this.id=playList.get(position).id
+                                                this.tableName=view.playListEt.text.toString().trim()
+                                            })
                                             context.runOnUiThread {
                                                 notifyDataSetChanged()
                                             }
                                         }
-
-
-
-
                                     }).setNegativeButton("取消", DialogInterface.OnClickListener { dialog, which ->
 
                                     })
