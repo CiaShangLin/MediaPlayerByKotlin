@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MediaPlayerByKotlin</string>
+
+    <string name="MyRecevier">MyRecevier</string>
 </resources>

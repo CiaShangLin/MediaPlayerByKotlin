@@ -44,7 +44,6 @@ class MusicAdapter(var context: Context, var musicList: MutableList<Music_Data_E
                     true
                 }
                 popupMenu.show()
-
             }
 
             holder.itemView.setOnClickListener {
@@ -65,7 +64,7 @@ class MusicAdapter(var context: Context, var musicList: MutableList<Music_Data_E
     }
 
     override fun getItemCount(): Int {
-        return 10
+        return musicList.size
     }
 
 

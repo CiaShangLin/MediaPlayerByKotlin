@@ -54,7 +54,7 @@
 
     <include
         android:id="@+id/include"
-        layout="@layout/play_music_ui_layout"
+        layout="@layout/media_play_controller"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

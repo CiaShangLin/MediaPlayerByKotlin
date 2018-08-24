@@ -11,6 +11,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
+import com.shang.mediaplayerbykotlin.MP.MPC
 import com.shang.mediaplayerbykotlin.MP.MediaPlayerService
 import com.shang.mediaplayerbykotlin.Room.*
 import kotlinx.android.synthetic.main.drawer_layout.*
@@ -34,8 +35,11 @@ class MainActivity : AppCompatActivity() {
 
             when (msg?.what) {
                 MusicAdapter.DATABASE_SUCCCESS -> {
+                    MPC.musicList=msg.obj as MutableList<Music_Data_Entity>
                     recyclerview.layoutManager = LinearLayoutManager(this@MainActivity)
                     recyclerview.adapter = MusicAdapter(this@MainActivity, msg.obj as MutableList<Music_Data_Entity>)
+                    database = MusicDatabase.getMusicDatabase(this@MainActivity)
+                    initView()
                 }
             }
         }
@@ -45,14 +49,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        Log.d(TAG,"onCreate")
 
         //耗時工作
-        //CheckFileRoom(this).execute()
+        CheckFileRoom(this).execute()
 
-        AsyncTask.execute {
+        /*AsyncTask.execute {
             database = MusicDatabase.getMusicDatabase(this)
             initView()
-        }
+        }*/
 
 
     }
@@ -89,9 +94,11 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.myMusic -> {
                     AsyncTask.execute {
-                        recyclerview.adapter = MusicAdapter(this, database.getMusic_Data_Dao().getAll())
+                        var list = database.getMusic_Data_Dao().getAll()
+                        runOnUiThread {
+                            recyclerview.adapter = MusicAdapter(this, list)
+                        }
                     }
-
                 }
                 R.id.favorite -> {
 
@@ -101,10 +108,10 @@ class MainActivity : AppCompatActivity() {
                     AsyncTask.execute {
                         var playList = mutableListOf<Music_ListName_Entity>()
                         playList.addAll(database.getMusic_ListName_Dao().getAll())
-                        recyclerview.adapter = PlayListAdapter(this, playList)
-
+                        runOnUiThread {
+                            recyclerview.adapter = PlayListAdapter(this, playList)
+                        }
                     }
-
                 }
                 R.id.timer -> {
 
@@ -129,7 +136,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
 
         R.id.search -> {
-
+            startActivity(Intent(this,PlayMusicActivity::class.java))
             true
         }
 
@@ -163,24 +170,24 @@ class MainActivity : AppCompatActivity() {
                             it.setChecked(mode)
                         }
                         R.id.sort_modify -> {
-                            type=1
+                            type = 1
                             it.setChecked(true)
                         }
                         R.id.sort_name -> {
-                            type=2
+                            type = 2
                             it.setChecked(true)
                         }
                         R.id.sort_time -> {
-                            type=3
+                            type = 3
                             it.setChecked(true)
                         }
                     }
 
                     AsyncTask.execute {
                         database.getSetting_Dao().update(Setting_Entity().apply {
-                            this.name=Setting_Entity.key
-                            this.sort_mode=mode
-                            this.sort_type=type
+                            this.name = Setting_Entity.key
+                            this.sort_mode = mode
+                            this.sort_type = type
                         })
                     }
                     true
@@ -198,6 +205,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        Log.d(TAG,"onResume()")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG,"onStop()")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG,"onDestroy()")
+    }
 }
 
 

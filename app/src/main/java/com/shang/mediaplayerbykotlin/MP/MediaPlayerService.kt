@@ -4,6 +4,9 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
+import com.shang.mediaplayerbykotlin.MainActivity
+import com.shang.mediaplayerbykotlin.PlayMusicActivity
+import com.shang.mediaplayerbykotlin.R
 
 
 /**
@@ -15,7 +18,6 @@ class MediaPlayerService : Service() {
         val TAG = "MediaPlayerService"
     }
 
-   // lateinit var mpc_mode : MPC_Interface
 
     override fun onBind(intent: Intent?): IBinder {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -31,8 +33,15 @@ class MediaPlayerService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(TAG, "onStartCommand:" + startId)
 
+
+
         when (intent!!.action) {
-            "START" -> MPC.mpc_mode.start(intent.getStringExtra("path"))
+            "START" ->{//MPC.mpc_mode.start(intent.getStringExtra("path"))
+            sendBroadcast(Intent().apply {
+                this.action=getString(R.string.MyRecevier)
+                this.putExtra("test",intent.getStringExtra("path"))
+            })
+            }
             "STOP" -> MPC.mpc_mode.stop()
             "RESTART" -> { }
             "NEXT" -> ""

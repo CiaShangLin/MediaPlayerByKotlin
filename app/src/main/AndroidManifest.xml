@@ -2,9 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.shang.mediaplayerbykotlin">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -13,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,9 +21,27 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".MP.MediaPlayerService"
+        <service
+            android:name=".MP.MediaPlayerService"
             android:exported="false">
+            <intent-filter>
+                <action android:name="test"></action>
+
+            </intent-filter>
+
         </service>
+
+        <activity android:name=".PlayMusicActivity">
+            
+        </activity>
+        
+        <receiver android:name=".PlayMusicActivity$MyReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="@string/MyRecevier"></action>
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

@@ -1,5 +1,7 @@
 package com.shang.mediaplayerbykotlin.MP
 
+import android.media.MediaPlayer
+
 /**
  * Created by Shang on 2018/8/19.
  */
@@ -10,6 +12,7 @@ class MPC_random: MPC_Interface {
     }
 
     override fun start(path: String) {
+        //MPC.mediaPlayer= MediaPlayer.create(MPC.context)
 
     }
 
