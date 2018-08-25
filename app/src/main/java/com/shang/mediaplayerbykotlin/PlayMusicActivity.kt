@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.BitmapFactory
 import android.location.LocationManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -18,6 +19,7 @@ import com.shang.mediaplayerbykotlin.MP.MediaPlayerService
 import kotlinx.android.synthetic.main.activity_play_music.*
 import kotlinx.android.synthetic.main.media_play_controller.*
 import kotlinx.android.synthetic.main.media_player.*
+import kotlinx.android.synthetic.main.nav_header_main.view.*
 import org.jetbrains.anko.toast
 
 class PlayMusicActivity : AppCompatActivity() {
@@ -34,6 +36,7 @@ class PlayMusicActivity : AppCompatActivity() {
         val NEXT: String = "NEXT"
         val PREVIOUS: String = "PREVIOUS"
         val MODE: String = "MODE"
+
         val CURRENT_TIME:String="CURRENT_TIME"
     }
 
@@ -60,17 +63,17 @@ class PlayMusicActivity : AppCompatActivity() {
 
                     seekBar.progress = 0
                     seekBar.max = duration
-                    var time = MPC.mediaPlayer.duration / 1000
-                    var minute = time / 60
-                    var second = time - minute * 60
                     startTimeTv.text = "0:00"
-                    endTimeTv.text = "$minute:$second "
-
+                    endTimeTv.text = getTimeFormat(duration)
                     nameTv.text = intent.getStringExtra(MPC_Interface.NAME)
+                    playmusicIg.setImageBitmap(BitmapFactory.decodeFile(MPC.musicList.get(MPC.index).picture))
+
                 }
                 CURRENT_TIME->{
                     Log.d(TAG,intent.getIntExtra(MPC_Interface.CURRENT_TIME,0).toString())
-                    seekBar.progress=intent.getIntExtra(MPC_Interface.CURRENT_TIME,0)
+                    var duration:Int=intent.getIntExtra(MPC_Interface.CURRENT_TIME,0)
+                    seekBar.progress=duration
+                    startTimeTv.text=getTimeFormat(duration)
                 }
             }
         }
@@ -81,8 +84,9 @@ class PlayMusicActivity : AppCompatActivity() {
         setContentView(R.layout.activity_play_music)
 
 
-
         Log.d(TAG, "onCreate")
+
+        MPC.index=intent.getIntExtra("index",0)
 
         myReceiver = MyReceiver()
 
@@ -96,6 +100,11 @@ class PlayMusicActivity : AppCompatActivity() {
                 this.action = START
                 this.putExtra(MPC_Interface.PATH, MPC.musicList.get(MPC.index).path)
             })
+            if(MPC.mediaPlayer==null || MPC.mediaPlayer!!.isPlaying){
+                playerBt.setImageResource(R.drawable.ic_pause)
+            }else{
+                playerBt.setImageResource(R.drawable.ic_play)
+            }
         }
 
         nextBt.setOnClickListener {}
@@ -103,8 +112,7 @@ class PlayMusicActivity : AppCompatActivity() {
         repeatBt.setOnClickListener { }
         randomBt.setOnClickListener { }
 
-        seekBar.progress = 0
-        seekBar.max = 100000
+
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
 
@@ -119,15 +127,29 @@ class PlayMusicActivity : AppCompatActivity() {
             }
 
         })
+    }
 
+    fun getTimeFormat(duration:Int):String{
+        var time = duration / 1000
+        var minute = time / 60
+        var second = time - minute * 60
+
+        return "$minute:$second"
     }
 
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "onStart()")
-        var intentFilter=IntentFilter()
-        intentFilter.addAction(START)
-        intentFilter.addAction(CURRENT_TIME)
+        var intentFilter=IntentFilter().apply {
+            this.addAction(START)
+            this.addAction(STOP)
+            this.addAction(NEXT)
+            this.addAction(PREVIOUS)
+            this.addAction(RESET)
+            this.addAction(RESTART)
+            this.addAction(MODE)
+            this.addAction(CURRENT_TIME)
+        }
         registerReceiver(myReceiver, intentFilter)
     }
 

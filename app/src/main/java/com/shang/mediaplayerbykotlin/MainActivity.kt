@@ -38,8 +38,12 @@ class MainActivity : AppCompatActivity() {
             when (msg?.what) {
                 MusicAdapter.DATABASE_SUCCCESS -> {
                     MPC.musicList=msg.obj as MutableList<Music_Data_Entity>
+                    MPC.musicList.sortByDescending {
+                        it.modified
+                    }
                     recyclerview.layoutManager = LinearLayoutManager(this@MainActivity)
                     recyclerview.adapter = MusicAdapter(this@MainActivity, MPC.musicList)
+
                     database = MusicDatabase.getMusicDatabase(this@MainActivity)
                     initView()
                 }
@@ -109,10 +113,10 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        AsyncTask.execute {
+        /*AsyncTask.execute {
             recyclerview.layoutManager = LinearLayoutManager(this@MainActivity)
             recyclerview.adapter = MusicAdapter(this@MainActivity, database.getMusic_Data_Dao().getAll())
-        }
+        }*/
 
     }
 

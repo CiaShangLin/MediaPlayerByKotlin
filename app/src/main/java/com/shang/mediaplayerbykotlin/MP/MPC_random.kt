@@ -12,7 +12,7 @@ class MPC_random(var context: Context): MPC_Interface {
         return "MPC_random"
     }
 
-    override fun start(path: String) {
+    override fun start() {
         //MPC.mediaPlayer= MediaPlayer.create(MPC.context)
 
     }

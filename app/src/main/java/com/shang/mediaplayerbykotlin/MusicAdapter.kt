@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.app.FragmentManager
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.support.v7.widget.RecyclerView
 import android.view.Gravity
@@ -47,7 +48,9 @@ class MusicAdapter(var context: Context, var musicList: MutableList<Music_Data_E
             }
 
             holder.itemView.setOnClickListener {
-                Toast.makeText(context, holder.itemView.getTag().toString(), Toast.LENGTH_SHORT).show()
+                context.startActivity(Intent(context,PlayMusicActivity::class.java).apply {
+                    this.putExtra("index",position)
+                })
             }
 
             holder.itemView.setTag(position)

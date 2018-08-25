@@ -13,7 +13,7 @@ interface MPC_Interface{
     }
 
 
-    fun start(path:String)
+    fun start()
     fun stop()
     fun reset()
     fun next()

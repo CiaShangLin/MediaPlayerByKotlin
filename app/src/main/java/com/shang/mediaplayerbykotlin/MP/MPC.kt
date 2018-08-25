@@ -13,7 +13,7 @@ open class MPC {
     companion object {
         val TAG = "MPC"
 
-        lateinit var mediaPlayer: MediaPlayer
+        var mediaPlayer: MediaPlayer ?= null
         var currentTime: Int = 0
         var index: Int = 0
         lateinit var mpc_mode: MPC_Interface

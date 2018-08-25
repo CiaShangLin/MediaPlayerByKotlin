@@ -35,18 +35,24 @@ class MediaPlayerService : Service() {
 
         when (intent!!.action) {
             PlayMusicActivity.START -> {
-                MPC.mpc_mode.start(intent.getStringExtra(MPC_Interface.PATH))
+                MPC.mpc_mode.start()
             }
             PlayMusicActivity.STOP -> {
                 MPC.mpc_mode.stop()
             }
             PlayMusicActivity.RESTART -> {
+                MPC.mpc_mode.reStart()
             }
-            "NEXT" -> ""
-            "PREVIOUS" -> ""
-            "RESET" -> {
+            PlayMusicActivity.NEXT -> {
+                MPC.mpc_mode.next()
             }
-            "MODE" -> {
+            PlayMusicActivity.PREVIOUS -> {
+                MPC.mpc_mode.previous()
+            }
+            PlayMusicActivity.RESET -> {
+                MPC.mpc_mode.reset()
+            }
+            PlayMusicActivity.MODE -> {
                 Log.d(TAG, MPC.mpc_mode.getName())
                 MPC.mpc_mode = MPC_random(baseContext)
             }
