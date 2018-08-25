@@ -56,6 +56,10 @@ class MediaPlayerService : Service() {
                 Log.d(TAG, MPC.mpc_mode.getName())
                 MPC.mpc_mode = MPC_random(baseContext)
             }
+            PlayMusicActivity.REPEAT -> {
+                Log.d(TAG, MPC.mpc_mode.getName())
+                MPC.mpc_mode.setLooping()
+            }
         }
 
         return START_NOT_STICKY

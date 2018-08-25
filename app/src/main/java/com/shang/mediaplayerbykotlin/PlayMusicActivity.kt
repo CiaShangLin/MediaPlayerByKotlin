@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.media_play_controller.*
 import kotlinx.android.synthetic.main.media_player.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 import org.jetbrains.anko.toast
+import java.text.SimpleDateFormat
 
 class PlayMusicActivity : AppCompatActivity() {
 
@@ -36,7 +37,7 @@ class PlayMusicActivity : AppCompatActivity() {
         val NEXT: String = "NEXT"
         val PREVIOUS: String = "PREVIOUS"
         val MODE: String = "MODE"
-
+        val REPEAT: String = "REPEAT"
         val CURRENT_TIME:String="CURRENT_TIME"
     }
 
@@ -107,10 +108,27 @@ class PlayMusicActivity : AppCompatActivity() {
             }
         }
 
-        nextBt.setOnClickListener {}
-        previousBt.setOnClickListener { }
-        repeatBt.setOnClickListener { }
-        randomBt.setOnClickListener { }
+        nextBt.setOnClickListener {
+            startService(Intent(this,MediaPlayerService::class.java).apply {
+                this.action= NEXT
+            })
+        }
+        previousBt.setOnClickListener {
+            startService(Intent(this,MediaPlayerService::class.java).apply {
+                this.action= PREVIOUS
+            })
+        }
+        repeatBt.setOnClickListener {
+            startService(Intent(this,MediaPlayerService::class.java).apply {
+                this.action= REPEAT
+            })
+            if(MPC.mediaPlayer!=null && MPC.mediaPlayer!!.isLooping){
+                repeatBt.setImageResource(R.drawable.ic_repeat_nofocus)
+            }else{
+                repeatBt.setImageResource(R.drawable.ic_repeat_focus)
+            }
+        }
+        randomBt.setOnClickListener {}
 
 
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -131,10 +149,7 @@ class PlayMusicActivity : AppCompatActivity() {
 
     fun getTimeFormat(duration:Int):String{
         var time = duration / 1000
-        var minute = time / 60
-        var second = time - minute * 60
-
-        return "$minute:$second"
+        return SimpleDateFormat("mm:ss").format(time)
     }
 
     override fun onStart() {

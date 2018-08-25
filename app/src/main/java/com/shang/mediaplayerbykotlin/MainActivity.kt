@@ -1,6 +1,9 @@
 package com.shang.mediaplayerbykotlin
 
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.PackageStats
+import android.media.MediaPlayer
 import android.os.*
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
@@ -20,6 +23,8 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 import java.io.File
+import java.util.jar.Manifest
+import kotlin.properties.Delegates
 
 
 class MainActivity : AppCompatActivity() {
@@ -60,6 +65,7 @@ class MainActivity : AppCompatActivity() {
         //耗時工作
         CheckFileRoom(this).execute()
 
+
         /*AsyncTask.execute {
             database = MusicDatabase.getMusicDatabase(this)
             initView()
@@ -70,12 +76,9 @@ class MainActivity : AppCompatActivity() {
 
     fun initView() {
 
-
-
         setSupportActionBar(toolbar)
         toolbar.title = "我的音樂"
         toolbar.setNavigationIcon(R.drawable.ic_navigation)
-
 
         val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name)
         drawerLayout.addDrawerListener(toggle)

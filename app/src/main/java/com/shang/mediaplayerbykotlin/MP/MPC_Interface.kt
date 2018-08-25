@@ -20,5 +20,7 @@ interface MPC_Interface{
     fun previous()
     fun release()
     fun reStart()
+    fun setLooping()
+    fun seekbar_move(time:Int)
     fun getName():String
 }

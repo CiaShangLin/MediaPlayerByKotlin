@@ -15,13 +15,20 @@ import java.util.logging.LogRecord
 
 class MPC_normal(var context: Context) : MPC_Interface {
 
-
-    var handler: android.os.Handler = android.os.Handler()
     var timer: Timer? = null
     var timerTask: TimerTask? = null
 
     override fun getName(): String {
         return "MPC_normal"
+    }
+
+    override fun seekbar_move(time:Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun setLooping() {
+        if (MPC.mediaPlayer != null)
+            MPC.mediaPlayer!!.isLooping = !MPC.mediaPlayer!!.isLooping
     }
 
     override fun reStart() {
@@ -49,11 +56,8 @@ class MPC_normal(var context: Context) : MPC_Interface {
 
     override fun next() {
         if (MPC.index < MPC.musicList.size - 1) {
-            if (MPC.mediaPlayer != null)
-                MPC.mediaPlayer!!.release()
-
+            release()
             MPC.index++
-            MPC.currentTime = 0
             start()
         } else {
             context.toast("已經是最後一首了")
@@ -62,10 +66,8 @@ class MPC_normal(var context: Context) : MPC_Interface {
 
     override fun previous() {
         if (MPC.index > 0) {
-            if (MPC.mediaPlayer != null)
-                MPC.mediaPlayer!!.release()
+            release()
             MPC.index--
-            MPC.currentTime = 0
             start()
         } else {
             context.toast("這是第一首")
@@ -74,10 +76,10 @@ class MPC_normal(var context: Context) : MPC_Interface {
 
     override fun release() {
         if (MPC.mediaPlayer != null) {
+            MPC.currentTime = 0
             MPC.mediaPlayer!!.release()
             MPC.mediaPlayer = null
         }
-
     }
 
     override fun start() {
@@ -93,33 +95,16 @@ class MPC_normal(var context: Context) : MPC_Interface {
                     it.start()
                     context.sendBroadcast(Intent().apply {
                         this.action = PlayMusicActivity.START
-
                         this.putExtra(MPC_Interface.NAME, MPC.musicList.get(MPC.index).name)
                         this.putExtra(MPC_Interface.DURATION, MPC!!.mediaPlayer!!.duration)
                     })
-
-                    if (timer == null) {
-                        timer = Timer(true)
-                        timerTask = object : TimerTask() {
-                            override fun run() {
-                                var intent = Intent().apply {
-                                    this.action = PlayMusicActivity.CURRENT_TIME
-                                    this.putExtra(MPC_Interface.CURRENT_TIME, MPC.mediaPlayer!!.currentPosition)
-                                }
-                                context.sendBroadcast(intent)
-                            }
-                        }
-                        timer?.scheduleAtFixedRate(timerTask, 0, 1000)
-                    }
+                    startTimer()
                 }
             }
 
             MPC.mediaPlayer!!.setOnCompletionListener {
-                timer?.cancel()
-                timer = null
-                timerTask = null
-                MPC.mediaPlayer!!.release()
-                MPC.mediaPlayer = null
+                stopTimer()
+                release()
                 next()
             }
         } else if (MPC.mediaPlayer!!.isPlaying) {
@@ -127,6 +112,28 @@ class MPC_normal(var context: Context) : MPC_Interface {
         } else {
             reStart()
         }
+    }
+
+    fun startTimer() {
+        if (timer == null) {
+            timer = Timer(true)
+            timerTask = object : TimerTask() {
+                override fun run() {
+                    var intent = Intent().apply {
+                        this.action = PlayMusicActivity.CURRENT_TIME
+                        this.putExtra(MPC_Interface.CURRENT_TIME, MPC.mediaPlayer!!.currentPosition)
+                    }
+                    context.sendBroadcast(intent)
+                }
+            }
+            timer?.scheduleAtFixedRate(timerTask, 0, 1000)
+        }
+    }
+
+    fun stopTimer() {
+        timer?.cancel()
+        timer = null
+        timerTask = null
     }
 
 

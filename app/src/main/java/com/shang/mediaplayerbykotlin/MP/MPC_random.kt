@@ -7,6 +7,13 @@ import android.media.MediaPlayer
  * Created by Shang on 2018/8/19.
  */
 class MPC_random(var context: Context): MPC_Interface {
+    override fun seekbar_move(time:Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun setLooping() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     override fun getName():String{
         return "MPC_random"
