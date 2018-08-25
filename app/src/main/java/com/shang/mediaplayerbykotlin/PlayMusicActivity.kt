@@ -15,15 +15,30 @@ import com.shang.mediaplayerbykotlin.MP.MPC
 import com.shang.mediaplayerbykotlin.MP.MediaPlayerService
 import kotlinx.android.synthetic.main.activity_play_music.*
 import kotlinx.android.synthetic.main.media_play_controller.*
+import org.jetbrains.anko.toast
 
 class PlayMusicActivity : AppCompatActivity() {
 
     val TAG = "PlayMusicActivity"
     lateinit var myReceiver: MyReceiver
 
+
+    /*廣播步驟
+    1.先new一個class繼承BroadcastReceiver()
+    2.去AndroidManifest.xml寫一個
+    <receiver android:name=".PlayMusicActivity$MyReceiver"
+    android:enabled="true">
+    <intent-filter>
+    <action android:name="@string/MyRecevier"></action>
+    </intent-filter>
+    </receiver>
+    3.在使用Receiver的class裡註冊廣播
+    4.記得要新增IntentFilter(getString(R.string.MyRecevier))
+    5.註銷廣播*/
+
     inner class MyReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
-            Log.d(TAG, intent.action)
+            Log.d(TAG, intent.action+" 123")
         }
     }
 

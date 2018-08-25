@@ -16,7 +16,9 @@ import com.shang.mediaplayerbykotlin.MP.MediaPlayerService
 import com.shang.mediaplayerbykotlin.Room.*
 import kotlinx.android.synthetic.main.drawer_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
+import org.jetbrains.anko.uiThread
 import java.io.File
 
 
@@ -37,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                 MusicAdapter.DATABASE_SUCCCESS -> {
                     MPC.musicList=msg.obj as MutableList<Music_Data_Entity>
                     recyclerview.layoutManager = LinearLayoutManager(this@MainActivity)
-                    recyclerview.adapter = MusicAdapter(this@MainActivity, msg.obj as MutableList<Music_Data_Entity>)
+                    recyclerview.adapter = MusicAdapter(this@MainActivity, MPC.musicList)
                     database = MusicDatabase.getMusicDatabase(this@MainActivity)
                     initView()
                 }
@@ -93,10 +95,10 @@ class MainActivity : AppCompatActivity() {
         nav_view.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.myMusic -> {
-                    AsyncTask.execute {
+                    doAsync {
                         var list = database.getMusic_Data_Dao().getAll()
-                        runOnUiThread {
-                            recyclerview.adapter = MusicAdapter(this, list)
+                        uiThread {
+                            recyclerview.adapter = MusicAdapter(it, list)
                         }
                     }
                 }
@@ -105,6 +107,7 @@ class MainActivity : AppCompatActivity() {
 
                 }
                 R.id.musicList -> {
+
                     AsyncTask.execute {
                         var playList = mutableListOf<Music_ListName_Entity>()
                         playList.addAll(database.getMusic_ListName_Dao().getAll())

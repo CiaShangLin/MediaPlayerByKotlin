@@ -1,6 +1,7 @@
 package com.shang.mediaplayerbykotlin.MP
 
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
@@ -19,6 +20,8 @@ class MediaPlayerService : Service() {
     }
 
 
+
+
     override fun onBind(intent: Intent?): IBinder {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -27,7 +30,7 @@ class MediaPlayerService : Service() {
         super.onCreate()
         Log.d(TAG, "onCreate")
 
-        //mpc_mode=MPC.mpc_mode
+        MPC.mpc_mode=MPC_normal(baseContext)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -36,19 +39,19 @@ class MediaPlayerService : Service() {
 
 
         when (intent!!.action) {
-            "START" ->{//MPC.mpc_mode.start(intent.getStringExtra("path"))
-            sendBroadcast(Intent().apply {
-                this.action=getString(R.string.MyRecevier)
-                this.putExtra("test",intent.getStringExtra("path"))
-            })
+            "START" -> {
+                MPC.mpc_mode.start(intent.getStringExtra("path"))
             }
             "STOP" -> MPC.mpc_mode.stop()
-            "RESTART" -> { }
+            "RESTART" -> {
+            }
             "NEXT" -> ""
             "PREVIOUS" -> ""
-            "RESET" -> { }
-            "MODE" ->{ Log.d(TAG, MPC.mpc_mode.getName())
-                         MPC.mpc_mode= MPC_random()
+            "RESET" -> {
+            }
+            "MODE" -> {
+                Log.d(TAG, MPC.mpc_mode.getName())
+                MPC.mpc_mode = MPC_random()
             }
         }
 

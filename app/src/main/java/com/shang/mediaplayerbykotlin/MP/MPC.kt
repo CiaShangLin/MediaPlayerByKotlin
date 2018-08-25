@@ -12,19 +12,14 @@ open class MPC {
 
     var v: Int = 0
 
-    object mpc
-
     companion object {
         val TAG = "MPC"
 
 
         lateinit var mediaPlayer: MediaPlayer
-
-        lateinit var context: Context
         var currentTime: Int = 0
         var index: Int = 0
-        var mpc_mode: MPC_Interface = MPC_normal()
-
+        lateinit var mpc_mode: MPC_Interface
         lateinit var musicList: MutableList<Music_Data_Entity>
 
     }

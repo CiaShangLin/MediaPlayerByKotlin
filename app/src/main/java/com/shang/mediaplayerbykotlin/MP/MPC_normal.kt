@@ -1,13 +1,16 @@
 package com.shang.mediaplayerbykotlin.MP
 
+import android.content.Context
+import android.content.Intent
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.util.Log
+import com.shang.mediaplayerbykotlin.R
 
 /**
  * Created by Shang on 2018/8/19.
  */
-class MPC_normal : MPC_Interface {
+class MPC_normal(var context: Context) : MPC_Interface {
 
     override fun getName():String{
         return "MPC_normal"
@@ -66,6 +69,14 @@ class MPC_normal : MPC_Interface {
         MPC.mediaPlayer.setOnCompletionListener {
             MPC.mediaPlayer.release()
         }
+
+
+        context.sendBroadcast(Intent().apply {
+            this.action=context.getString(R.string.MyRecevier)
+            this.putExtra(context.getString(R.string.MyRecevier),this.getStringExtra("path"))
+        })
+
     }
+
 
 }

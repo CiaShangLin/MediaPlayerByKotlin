@@ -24,10 +24,6 @@
         <service
             android:name=".MP.MediaPlayerService"
             android:exported="false">
-            <intent-filter>
-                <action android:name="test"></action>
-
-            </intent-filter>
 
         </service>
 
@@ -41,7 +37,6 @@
                 <action android:name="@string/MyRecevier"></action>
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>
