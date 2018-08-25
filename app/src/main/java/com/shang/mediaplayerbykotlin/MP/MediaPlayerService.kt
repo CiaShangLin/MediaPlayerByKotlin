@@ -51,7 +51,7 @@ class MediaPlayerService : Service() {
             }
             "MODE" -> {
                 Log.d(TAG, MPC.mpc_mode.getName())
-                MPC.mpc_mode = MPC_random()
+                MPC.mpc_mode = MPC_random(baseContext)
             }
         }
 
