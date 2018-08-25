@@ -19,9 +19,6 @@ class MediaPlayerService : Service() {
         val TAG = "MediaPlayerService"
     }
 
-
-
-
     override fun onBind(intent: Intent?): IBinder {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -30,20 +27,20 @@ class MediaPlayerService : Service() {
         super.onCreate()
         Log.d(TAG, "onCreate")
 
-        MPC.mpc_mode=MPC_normal(baseContext)
+        MPC.mpc_mode = MPC_normal(baseContext)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(TAG, "onStartCommand:" + startId)
 
-
-
         when (intent!!.action) {
-            "START" -> {
-                MPC.mpc_mode.start(intent.getStringExtra("path"))
+            PlayMusicActivity.START -> {
+                MPC.mpc_mode.start(intent.getStringExtra(MPC_Interface.PATH))
             }
-            "STOP" -> MPC.mpc_mode.stop()
-            "RESTART" -> {
+            PlayMusicActivity.STOP -> {
+                MPC.mpc_mode.stop()
+            }
+            PlayMusicActivity.RESTART -> {
             }
             "NEXT" -> ""
             "PREVIOUS" -> ""

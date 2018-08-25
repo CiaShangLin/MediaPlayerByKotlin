@@ -66,22 +66,7 @@ class MainActivity : AppCompatActivity() {
 
     fun initView() {
 
-        /*seekBar.progress = 0
-        seekBar.max = 100000
-        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
 
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                nameTv.text = seekBar?.progress.toString()
-            }
-
-        })*/
 
         setSupportActionBar(toolbar)
         toolbar.title = "我的音樂"

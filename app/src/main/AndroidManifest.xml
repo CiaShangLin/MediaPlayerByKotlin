@@ -34,7 +34,11 @@
         <receiver android:name=".PlayMusicActivity$MyReceiver"
             android:enabled="true">
             <intent-filter>
-                <action android:name="@string/MyRecevier"></action>
+                <action android:name="com.shang.mediaplayerbykotlin.START"></action>
+                <action android:name="com.shang.mediaplayerbykotlin.STOP"></action>
+                <action android:name="com.shang.mediaplayerbykotlin.RESTART"></action>
+                <action android:name="com.shang.mediaplayerbykotlin.RESET"></action>
+                <action android:name="com.shang.mediaplayerbykotlin.CURRENT_TIME"></action>
             </intent-filter>
         </receiver>
     </application>

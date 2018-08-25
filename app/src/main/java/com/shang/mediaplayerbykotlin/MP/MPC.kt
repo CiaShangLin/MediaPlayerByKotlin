@@ -10,11 +10,8 @@ import java.io.File
  */
 open class MPC {
 
-    var v: Int = 0
-
     companion object {
         val TAG = "MPC"
-
 
         lateinit var mediaPlayer: MediaPlayer
         var currentTime: Int = 0
@@ -23,4 +20,5 @@ open class MPC {
         lateinit var musicList: MutableList<Music_Data_Entity>
 
     }
+
 }

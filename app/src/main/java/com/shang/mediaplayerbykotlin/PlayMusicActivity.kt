@@ -10,17 +10,32 @@ import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.util.Log
 import android.view.MenuItem
+import android.widget.SeekBar
 import android.widget.Toast
 import com.shang.mediaplayerbykotlin.MP.MPC
+import com.shang.mediaplayerbykotlin.MP.MPC_Interface
 import com.shang.mediaplayerbykotlin.MP.MediaPlayerService
 import kotlinx.android.synthetic.main.activity_play_music.*
 import kotlinx.android.synthetic.main.media_play_controller.*
+import kotlinx.android.synthetic.main.media_player.*
 import org.jetbrains.anko.toast
 
 class PlayMusicActivity : AppCompatActivity() {
 
-    val TAG = "PlayMusicActivity"
+
     lateinit var myReceiver: MyReceiver
+
+    companion object {
+        val TAG = "PlayMusicActivity"
+        val START: String = "START"
+        val STOP: String = "STOP"
+        val RESET: String = "RESET"
+        val RESTART: String = "RESTART"
+        val NEXT: String = "NEXT"
+        val PREVIOUS: String = "PREVIOUS"
+        val MODE: String = "MODE"
+        val CURRENT_TIME:String="CURRENT_TIME"
+    }
 
 
     /*廣播步驟
@@ -38,13 +53,33 @@ class PlayMusicActivity : AppCompatActivity() {
 
     inner class MyReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
-            Log.d(TAG, intent.action+" 123")
+
+            when (intent.action) {
+                START -> {
+                    var duration = intent.getIntExtra(MPC_Interface.DURATION, 0)
+
+                    seekBar.progress = 0
+                    seekBar.max = duration
+                    var time = MPC.mediaPlayer.duration / 1000
+                    var minute = time / 60
+                    var second = time - minute * 60
+                    startTimeTv.text = "0:00"
+                    endTimeTv.text = "$minute:$second "
+
+                    nameTv.text = intent.getStringExtra(MPC_Interface.NAME)
+                }
+                CURRENT_TIME->{
+                    Log.d(TAG,intent.getIntExtra(MPC_Interface.CURRENT_TIME,0).toString())
+                    seekBar.progress=intent.getIntExtra(MPC_Interface.CURRENT_TIME,0)
+                }
+            }
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play_music)
+
 
 
         Log.d(TAG, "onCreate")
@@ -58,17 +93,42 @@ class PlayMusicActivity : AppCompatActivity() {
 
         playerBt.setOnClickListener {
             startService(Intent(this, MediaPlayerService::class.java).apply {
-                this.action = "START"
-                this.putExtra("path", MPC.musicList.get(MPC.index).path)
+                this.action = START
+                this.putExtra(MPC_Interface.PATH, MPC.musicList.get(MPC.index).path)
             })
         }
+
+        nextBt.setOnClickListener {}
+        previousBt.setOnClickListener { }
+        repeatBt.setOnClickListener { }
+        randomBt.setOnClickListener { }
+
+        seekBar.progress = 0
+        seekBar.max = 100000
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                //nameTv.text = seekBar?.progress.toString()
+            }
+
+        })
 
     }
 
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "onStart()")
-        registerReceiver(myReceiver, IntentFilter(getString(R.string.MyRecevier)))
+        var intentFilter=IntentFilter()
+        intentFilter.addAction(START)
+        intentFilter.addAction(CURRENT_TIME)
+        registerReceiver(myReceiver, intentFilter)
     }
 
     override fun onResume() {
