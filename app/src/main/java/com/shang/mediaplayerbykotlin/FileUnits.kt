@@ -60,8 +60,9 @@ class FileUnits {
                 var duration = uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.DURATION))
                 var path = uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.DATA))
                 var modified = uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED))
-                var picture=uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.ALBUM))
+                var picture = uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID))
 
+                //Log.d("FileUnits", "picture:"+picture)
 
                 entity.add(Music_Data_Entity().apply {
                     this.name = name
@@ -77,18 +78,19 @@ class FileUnits {
         }
 
         fun getPicture(albumId: String, context: Context): String {
+
             var cursorAlbum = context.contentResolver.query(
                     MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
                     arrayOf(MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART),
                     MediaStore.Audio.Albums._ID + "=" + albumId,
                     null, null)
+
             if (cursorAlbum != null && cursorAlbum.moveToFirst()) {
                 var albumCoverPath = cursorAlbum.getString(cursorAlbum.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART))
                 //var data = cursorAlbum.getString(cursorAlbum.getColumnIndex(MediaStore.Audio.Media.DATA));
-                cursorAlbum.close()
-                if (albumCoverPath != null ) {
+
+                if (albumCoverPath != null) {
                     Log.d("FileUnits", albumCoverPath)
-                    //Log.d("FileUnits", data )
                     return albumCoverPath
                 } else {
                     Log.d("FileUnits", "null")

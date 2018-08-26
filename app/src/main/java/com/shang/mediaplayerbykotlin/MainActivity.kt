@@ -135,7 +135,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
 
         R.id.search -> {
-            startActivity(Intent(this, PlayMusicActivity::class.java))
+
             true
         }
 

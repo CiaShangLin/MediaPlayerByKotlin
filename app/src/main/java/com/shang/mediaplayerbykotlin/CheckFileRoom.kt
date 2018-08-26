@@ -36,6 +36,7 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
         musicList = FileUnits.findAllMusicFromContentResolver(context)
         Log.d(TAG, "size:" + musicList.size)
 
+        ///storage/emulated/0/Android/data/com.android.providers.media/albumthumbs/1532109648631
         //picture:/storage/emulated/0/Android/data/com.android.providers.media/albumthumbs/1532109648631
         musicList.forEach {
             if (music_data_dao.find_FileByName(it.name) == null) {

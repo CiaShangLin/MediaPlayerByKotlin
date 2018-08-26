@@ -153,7 +153,8 @@ class PlayMusicActivity : AppCompatActivity() {
         }
 
         randomBt.setOnClickListener {
-            var bitmap=ThumbnailUtils.createVideoThumbnail(MPC.musicList.get(1).path, MediaStore.Images.Thumbnails.MINI_KIND)
+            toast(MPC.musicList.get(MPC.index).picture)
+            var bitmap=BitmapFactory.decodeFile("storage/emulated/0/Android/data/com.android.providers.media/albumthumbs/1532109648631")
             playmusicIg.setImageBitmap(bitmap)
 
         }
