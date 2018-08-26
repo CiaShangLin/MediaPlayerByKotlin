@@ -15,46 +15,88 @@ import java.util.logging.LogRecord
 
 class MPC_normal(var context: Context) : MPC_Interface {
 
+
     var timer: Timer? = null
     var timerTask: TimerTask? = null
+
 
     override fun getName(): String {
         return "MPC_normal"
     }
 
-    override fun seekbar_move(time:Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun setLooping() {
-        if (MPC.mediaPlayer != null)
-            MPC.mediaPlayer!!.isLooping = !MPC.mediaPlayer!!.isLooping
-    }
-
-    override fun reStart() {
-        if (MPC.mediaPlayer != null) {
-            MPC.mediaPlayer!!.seekTo(MPC.currentTime)
-            MPC.mediaPlayer!!.start()
+    override fun play() {
+        if (MPC.mediaPlayer == null) {
+            start()
+        } else if (MPC.mediaPlayer!!.isPlaying) {
+            pause()
+        } else {
+            reStart()
         }
-        Log.d(MPC.TAG, "reStart()")
     }
 
-    override fun stop() {
+    override fun start() {
+        Log.d(MPC.TAG, "start()")
+
+        MPC.mediaPlayer = MediaPlayer()
+        MPC.mediaPlayer!!.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        MPC.mediaPlayer!!.setDataSource(MPC.musicList.get(MPC.index).path)
+        MPC.mediaPlayer!!.prepare()
+        MPC.mediaPlayer!!.setOnPreparedListener {
+            if (it != null) {
+                it.start()
+                context.sendBroadcast(Intent().apply {
+                    this.action = PlayMusicActivity.START
+                    this.putExtra(MPC_Interface.NAME, MPC.musicList.get(MPC.index).name)
+                    this.putExtra(MPC_Interface.DURATION, MPC!!.mediaPlayer!!.duration)
+                })
+                startTimer()
+            }
+        }
+
+        MPC.mediaPlayer!!.setOnCompletionListener {
+            stopTimer()
+            release()
+            next()
+        }
+
+        context.sendBroadcast(Intent().apply {
+            action = PlayMusicActivity.START
+        })
+
+    }
+
+
+    override fun pause() {
+        Log.d(MPC.TAG, "pause()")
         if (MPC.mediaPlayer != null && MPC!!.mediaPlayer!!.isPlaying) {
             MPC.currentTime = MPC!!.mediaPlayer!!.currentPosition
             MPC!!.mediaPlayer!!.pause()
         }
-        Log.d(MPC.TAG, "pause()")
+
+
+        stopTimer()
+
+        context.sendBroadcast(Intent().apply {
+            action = PlayMusicActivity.PAUSE
+        })
     }
 
-    override fun reset() {
-        if (MPC.mediaPlayer != null && MPC!!.mediaPlayer!!.isPlaying) {
-            MPC.mediaPlayer!!.reset()
-            MPC.currentTime = 0
+    override fun reStart() {
+        Log.d(MPC.TAG, "reStart()")
+        if (MPC.mediaPlayer != null) {
+            MPC.mediaPlayer!!.seekTo(MPC.currentTime)
+            MPC.mediaPlayer!!.start()
+            startTimer()
+            context.sendBroadcast(Intent().apply {
+                action = PlayMusicActivity.RESTART
+            })
         }
+
     }
+
 
     override fun next() {
+        Log.d(MPC.TAG, "next()")
         if (MPC.index < MPC.musicList.size - 1) {
             release()
             MPC.index++
@@ -62,6 +104,11 @@ class MPC_normal(var context: Context) : MPC_Interface {
         } else {
             context.toast("已經是最後一首了")
         }
+    }
+
+
+    override fun next(index: Int) {   //插播
+
     }
 
     override fun previous() {
@@ -74,47 +121,28 @@ class MPC_normal(var context: Context) : MPC_Interface {
         }
     }
 
+
+    override fun seekbar_move(time: Int) {
+
+    }
+
+    override fun setLooping() {
+        if (MPC.mediaPlayer != null)
+            MPC.mediaPlayer!!.isLooping = !MPC.mediaPlayer!!.isLooping
+    }
+
     override fun release() {
+        Log.d(MPC.TAG, "release()")
         if (MPC.mediaPlayer != null) {
             MPC.currentTime = 0
             MPC.mediaPlayer!!.release()
             MPC.mediaPlayer = null
         }
-    }
-
-    override fun start() {
-        Log.d("MPC", MPC.currentTime.toString() + " " + (MPC.mediaPlayer == null).toString())
-
-        if (MPC.currentTime == 0 && MPC.mediaPlayer == null) {
-            MPC.mediaPlayer = MediaPlayer()
-            MPC.mediaPlayer!!.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            MPC.mediaPlayer!!.setDataSource(MPC.musicList.get(MPC.index).path)
-            MPC.mediaPlayer!!.prepare()
-            MPC.mediaPlayer!!.setOnPreparedListener {
-                if (it != null) {
-                    it.start()
-                    context.sendBroadcast(Intent().apply {
-                        this.action = PlayMusicActivity.START
-                        this.putExtra(MPC_Interface.NAME, MPC.musicList.get(MPC.index).name)
-                        this.putExtra(MPC_Interface.DURATION, MPC!!.mediaPlayer!!.duration)
-                    })
-                    startTimer()
-                }
-            }
-
-            MPC.mediaPlayer!!.setOnCompletionListener {
-                stopTimer()
-                release()
-                next()
-            }
-        } else if (MPC.mediaPlayer!!.isPlaying) {
-            stop()
-        } else {
-            reStart()
-        }
+        stopTimer()
     }
 
     fun startTimer() {
+        Log.d(MPC.TAG, "startTimer()")
         if (timer == null) {
             timer = Timer(true)
             timerTask = object : TimerTask() {
@@ -131,6 +159,7 @@ class MPC_normal(var context: Context) : MPC_Interface {
     }
 
     fun stopTimer() {
+        Log.d(MPC.TAG, "stopTimer()")
         timer?.cancel()
         timer = null
         timerTask = null

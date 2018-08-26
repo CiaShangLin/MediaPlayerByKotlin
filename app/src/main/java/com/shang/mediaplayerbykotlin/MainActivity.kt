@@ -66,6 +66,7 @@ class MainActivity : AppCompatActivity() {
         CheckFileRoom(this).execute()
 
 
+
         /*AsyncTask.execute {
             database = MusicDatabase.getMusicDatabase(this)
             initView()

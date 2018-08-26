@@ -34,11 +34,14 @@ class MediaPlayerService : Service() {
         Log.d(TAG, "onStartCommand:" + startId)
 
         when (intent!!.action) {
+            PlayMusicActivity.PLAY -> {
+                MPC.mpc_mode.play()
+            }
             PlayMusicActivity.START -> {
                 MPC.mpc_mode.start()
             }
-            PlayMusicActivity.STOP -> {
-                MPC.mpc_mode.stop()
+            PlayMusicActivity.PAUSE -> {
+                MPC.mpc_mode.pause()
             }
             PlayMusicActivity.RESTART -> {
                 MPC.mpc_mode.reStart()
@@ -49,12 +52,9 @@ class MediaPlayerService : Service() {
             PlayMusicActivity.PREVIOUS -> {
                 MPC.mpc_mode.previous()
             }
-            PlayMusicActivity.RESET -> {
-                MPC.mpc_mode.reset()
-            }
             PlayMusicActivity.MODE -> {
                 Log.d(TAG, MPC.mpc_mode.getName())
-                MPC.mpc_mode = MPC_random(baseContext)
+                //MPC.mpc_mode = MPC_random(baseContext)
             }
             PlayMusicActivity.REPEAT -> {
                 Log.d(TAG, MPC.mpc_mode.getName())

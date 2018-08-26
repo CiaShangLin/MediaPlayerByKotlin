@@ -5,6 +5,7 @@ package com.shang.mediaplayerbykotlin.MP
  */
 interface MPC_Interface{
 
+    //intent傳遞資料用
     companion object {
         val CURRENT_TIME="CURRENT_TIME"
         val PATH:String="PATH"
@@ -13,10 +14,11 @@ interface MPC_Interface{
     }
 
 
+    fun play()
     fun start()
-    fun stop()
-    fun reset()
+    fun pause()
     fun next()
+    fun next(index:Int)
     fun previous()
     fun release()
     fun reStart()

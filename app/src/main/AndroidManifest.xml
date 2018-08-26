@@ -35,8 +35,7 @@
             android:enabled="true">
             <intent-filter>
                 <action android:name="com.shang.mediaplayerbykotlin.START"></action>
-                <action android:name="com.shang.mediaplayerbykotlin.STOP"></action>
-                <action android:name="com.shang.mediaplayerbykotlin.RESET"></action>
+                <action android:name="com.shang.mediaplayerbykotlin.PAUSE"></action>
                 <action android:name="com.shang.mediaplayerbykotlin.RESTART"></action>
                 <action android:name="com.shang.mediaplayerbykotlin.NEXT"></action>
                 <action android:name="com.shang.mediaplayerbykotlin.PREVIOUS"></action>

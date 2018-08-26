@@ -28,11 +28,12 @@ class PlayMusicActivity : AppCompatActivity() {
 
     lateinit var myReceiver: MyReceiver
 
+    //Service用 廣播用
     companion object {
         val TAG = "PlayMusicActivity"
+        val PLAY:String="PLAY"
         val START: String = "START"
-        val STOP: String = "STOP"
-        val RESET: String = "RESET"
+        val PAUSE: String = "PAUSE"
         val RESTART: String = "RESTART"
         val NEXT: String = "NEXT"
         val PREVIOUS: String = "PREVIOUS"
@@ -61,17 +62,27 @@ class PlayMusicActivity : AppCompatActivity() {
             when (intent.action) {
                 START -> {
                     var duration = intent.getIntExtra(MPC_Interface.DURATION, 0)
-
                     seekBar.progress = 0
                     seekBar.max = duration
+
                     startTimeTv.text = "0:00"
                     endTimeTv.text = getTimeFormat(duration)
                     nameTv.text = intent.getStringExtra(MPC_Interface.NAME)
+
                     playmusicIg.setImageBitmap(BitmapFactory.decodeFile(MPC.musicList.get(MPC.index).picture))
 
+                    playerBt.setImageResource(R.drawable.ic_pause)
                 }
+
+                PAUSE->{
+                    playerBt.setImageResource(R.drawable.ic_play)
+                }
+
+                RESTART->{
+                    playerBt.setImageResource(R.drawable.ic_pause)
+                }
+
                 CURRENT_TIME->{
-                    Log.d(TAG,intent.getIntExtra(MPC_Interface.CURRENT_TIME,0).toString())
                     var duration:Int=intent.getIntExtra(MPC_Interface.CURRENT_TIME,0)
                     seekBar.progress=duration
                     startTimeTv.text=getTimeFormat(duration)
@@ -98,14 +109,8 @@ class PlayMusicActivity : AppCompatActivity() {
 
         playerBt.setOnClickListener {
             startService(Intent(this, MediaPlayerService::class.java).apply {
-                this.action = START
-                this.putExtra(MPC_Interface.PATH, MPC.musicList.get(MPC.index).path)
+                this.action = PLAY
             })
-            if(MPC.mediaPlayer==null || MPC.mediaPlayer!!.isPlaying){
-                playerBt.setImageResource(R.drawable.ic_pause)
-            }else{
-                playerBt.setImageResource(R.drawable.ic_play)
-            }
         }
 
         nextBt.setOnClickListener {
@@ -113,11 +118,13 @@ class PlayMusicActivity : AppCompatActivity() {
                 this.action= NEXT
             })
         }
+
         previousBt.setOnClickListener {
             startService(Intent(this,MediaPlayerService::class.java).apply {
                 this.action= PREVIOUS
             })
         }
+
         repeatBt.setOnClickListener {
             startService(Intent(this,MediaPlayerService::class.java).apply {
                 this.action= REPEAT
@@ -128,6 +135,7 @@ class PlayMusicActivity : AppCompatActivity() {
                 repeatBt.setImageResource(R.drawable.ic_repeat_focus)
             }
         }
+
         randomBt.setOnClickListener {}
 
 
@@ -148,31 +156,27 @@ class PlayMusicActivity : AppCompatActivity() {
     }
 
     fun getTimeFormat(duration:Int):String{
-        var time = duration / 1000
-        return SimpleDateFormat("mm:ss").format(time)
+        var time = duration
+        var str= SimpleDateFormat("mm:ss").format(time)
+        Log.d(TAG,time.toString())
+        return str
     }
 
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "onStart()")
         var intentFilter=IntentFilter().apply {
+            this.addAction(PLAY)
             this.addAction(START)
-            this.addAction(STOP)
+            this.addAction(PAUSE)
             this.addAction(NEXT)
             this.addAction(PREVIOUS)
-            this.addAction(RESET)
             this.addAction(RESTART)
             this.addAction(MODE)
             this.addAction(CURRENT_TIME)
         }
         registerReceiver(myReceiver, intentFilter)
     }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d(TAG, "onResume")
-    }
-
 
     override fun onDestroy() {
         super.onDestroy()
