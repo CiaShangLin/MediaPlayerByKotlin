@@ -4,10 +4,12 @@ import android.content.Context
 import android.database.Cursor
 import android.media.MediaMetadata
 import android.media.MediaPlayer
+import android.media.ThumbnailUtils
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Environment
 import android.provider.MediaStore
+import android.provider.MediaStore.Images.Thumbnails.MINI_KIND
 import android.util.Log
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import java.io.File
@@ -58,13 +60,15 @@ class FileUnits {
                 var duration = uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.DURATION))
                 var path = uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.DATA))
                 var modified = uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED))
+                var picture2=uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID))
+
                 entity.add(Music_Data_Entity().apply {
                     this.name = name
                     this.path = path
                     this.duration = duration.toLong()
                     this.modified = modified.toLong()
                     this.favorite = false
-                    this.picture = uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID))
+                    this.picture = picture2
                 })
 
             }
@@ -72,7 +76,6 @@ class FileUnits {
         }
 
         fun getPicture(albumId: String, context: Context): String {
-
             var cursorAlbum = context.contentResolver.query(
                     MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
                     arrayOf(MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART),
@@ -82,8 +85,9 @@ class FileUnits {
                 var albumCoverPath = cursorAlbum.getString(cursorAlbum.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
                 //var data = cursorAlbum.getString(cursorAlbum.getColumnIndex(MediaStore.Audio.Media.DATA));
 
-                if (albumCoverPath != null) {
+                if (albumCoverPath != null ) {
                     Log.d("FileUnits", albumCoverPath)
+                    //Log.d("FileUnits", data )
                     return albumCoverPath
                 } else {
                     Log.d("FileUnits", "null")

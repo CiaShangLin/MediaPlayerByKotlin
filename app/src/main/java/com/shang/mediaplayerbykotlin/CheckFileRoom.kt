@@ -41,10 +41,12 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
         musicList = FileUnits.findAllMusicFromContentResolver(context)
         Log.d(TAG, "size:" + musicList.size)
 
+        //picture:/storage/emulated/0/Android/data/com.android.providers.media/albumthumbs/1532109648631
         musicList.forEach {
             if (music_data_dao.find_FileByName(it.name) == null) {
                 try {
                     it.picture=FileUnits.getPicture(it.picture,context)
+                    Log.d(TAG,"picture:"+it.picture)
                     music_data_dao.insert(it)
                 } catch (e: SQLiteConstraintException) {
                     Log.d(TAG, "已有這首:" + it.name)

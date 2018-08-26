@@ -6,8 +6,10 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.BitmapFactory
 import android.location.LocationManager
+import android.media.ThumbnailUtils
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.v4.content.LocalBroadcastManager
 import android.util.Log
 import android.view.MenuItem
@@ -72,6 +74,7 @@ class PlayMusicActivity : AppCompatActivity() {
 
                     playmusicIg.setImageBitmap(BitmapFactory.decodeFile(MPC.musicList.get(MPC.index).picture))
 
+                    Log.d(TAG,"picture "+MPC.musicList.get(MPC.index).picture)
                     playerBt.setImageResource(R.drawable.ic_pause)
                 }
 
@@ -135,7 +138,11 @@ class PlayMusicActivity : AppCompatActivity() {
             }
         }
 
-        randomBt.setOnClickListener {}
+        randomBt.setOnClickListener {
+            var bitmap=ThumbnailUtils.createVideoThumbnail(MPC.musicList.get(1).path, MediaStore.Images.Thumbnails.MINI_KIND)
+            playmusicIg.setImageBitmap(bitmap)
+
+        }
 
 
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
