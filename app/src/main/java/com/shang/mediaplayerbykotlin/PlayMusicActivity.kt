@@ -42,6 +42,8 @@ class PlayMusicActivity : AppCompatActivity() {
         val MODE: String = "MODE"
         val REPEAT: String = "REPEAT"
         val INSERT: String = "INSERT"
+        val SEEKBAR_MOVE:String="SEEKBAR_MOVE"
+        val LOOPING:String="LOOPING"
         val CURRENT_TIME:String="CURRENT_TIME"
     }
 
@@ -84,6 +86,18 @@ class PlayMusicActivity : AppCompatActivity() {
 
                 RESTART->{
                     playerBt.setImageResource(R.drawable.ic_pause)
+                }
+
+                NEXT->{
+                    toast("最後一首了")
+                }
+
+                PREVIOUS->{
+                    toast("已經是第一首")
+                }
+
+                LOOPING->{
+                    toast(intent.getStringExtra("status"))
                 }
 
                 CURRENT_TIME->{
@@ -155,7 +169,10 @@ class PlayMusicActivity : AppCompatActivity() {
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                //nameTv.text = seekBar?.progress.toString()
+                startService(Intent(this@PlayMusicActivity,MediaPlayerService::class.java).apply {
+                    this.action= SEEKBAR_MOVE
+                    this.putExtra(SEEKBAR_MOVE,seekBar!!.progress)
+                })
             }
 
         })
@@ -177,10 +194,7 @@ class PlayMusicActivity : AppCompatActivity() {
     }
 
     fun getTimeFormat(duration:Int):String{
-        var time = duration
-        var str= SimpleDateFormat("mm:ss").format(time)
-        Log.d(TAG,time.toString())
-        return str
+        return SimpleDateFormat("mm:ss").format(duration)
     }
 
     override fun onStart() {
@@ -194,12 +208,11 @@ class PlayMusicActivity : AppCompatActivity() {
             this.addAction(PREVIOUS)
             this.addAction(RESTART)
             this.addAction(MODE)
+            this.addAction(LOOPING)
             this.addAction(CURRENT_TIME)
         }
         registerReceiver(myReceiver, intentFilter)
     }
-
-
 
     override fun onDestroy() {
         super.onDestroy()

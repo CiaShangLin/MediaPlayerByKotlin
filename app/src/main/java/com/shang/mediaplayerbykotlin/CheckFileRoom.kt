@@ -2,19 +2,14 @@ package com.shang.mediaplayerbykotlin
 
 import android.content.Context
 import android.database.sqlite.SQLiteConstraintException
-import android.media.MediaMetadataRetriever
-import android.media.MediaPlayer
-import android.net.Uri
 import android.os.AsyncTask
-import android.os.Environment
 import android.os.Message
 import android.util.Log
+import com.shang.mediaplayerbykotlin.Adapter.MusicAdapter
 import com.shang.mediaplayerbykotlin.Room.MusicDatabase
 
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Dao
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
-import java.io.File
-import java.sql.SQLClientInfoException
 
 class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
 

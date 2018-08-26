@@ -2,31 +2,27 @@ package com.shang.mediaplayerbykotlin
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.pm.PackageStats
-import android.media.MediaPlayer
 import android.os.*
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
+import com.shang.mediaplayerbykotlin.Adapter.MusicAdapter
+import com.shang.mediaplayerbykotlin.Adapter.PlayListAdapter
 import com.shang.mediaplayerbykotlin.MP.MPC
-import com.shang.mediaplayerbykotlin.MP.MediaPlayerService
 import com.shang.mediaplayerbykotlin.Room.*
 import kotlinx.android.synthetic.main.drawer_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 import java.io.File
-import java.util.jar.Manifest
-import kotlin.properties.Delegates
 
 
 class MainActivity : AppCompatActivity() {
@@ -48,9 +44,6 @@ class MainActivity : AppCompatActivity() {
                     MPC.musicList.sortByDescending {
                         it.modified
                     }
-                    recyclerview.layoutManager = LinearLayoutManager(this@MainActivity)
-                    recyclerview.adapter = MusicAdapter(this@MainActivity, MPC.musicList)
-
                     database = MusicDatabase.getMusicDatabase(this@MainActivity)
                     initView()
                 }
@@ -131,10 +124,8 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        /*AsyncTask.execute {
-            recyclerview.layoutManager = LinearLayoutManager(this@MainActivity)
-            recyclerview.adapter = MusicAdapter(this@MainActivity, database.getMusic_Data_Dao().getAll())
-        }*/
+        recyclerview.layoutManager = LinearLayoutManager(this@MainActivity)
+        recyclerview.adapter = MusicAdapter(this@MainActivity, MPC.musicList)
 
     }
 
@@ -234,8 +225,20 @@ class MainActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
+        var flag=true
         if(requestCode==1){
-            CheckFileRoom(this).execute()
+            grantResults.forEach {
+                if(it!=PackageManager.PERMISSION_GRANTED){
+                    flag=false
+                }
+            }
+
+            if(flag){
+                CheckFileRoom(this).execute()
+            }else{
+                AlertDialog.Builder(this).setMessage("滾").show()
+            }
+
         }
     }
 }

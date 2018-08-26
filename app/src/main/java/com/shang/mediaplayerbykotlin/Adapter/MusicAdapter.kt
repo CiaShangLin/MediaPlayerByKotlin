@@ -1,18 +1,15 @@
-package com.shang.mediaplayerbykotlin
+package com.shang.mediaplayerbykotlin.Adapter
 
-import android.app.AlertDialog
-import android.app.FragmentManager
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.support.v7.widget.RecyclerView
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import android.widget.Toast
+import com.shang.mediaplayerbykotlin.FileUnits
+import com.shang.mediaplayerbykotlin.PlayMusicActivity
+import com.shang.mediaplayerbykotlin.R
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import kotlinx.android.synthetic.main.music_item.view.*
 
@@ -39,8 +36,8 @@ class MusicAdapter(var context: Context, var musicList: MutableList<Music_Data_E
 
                 popupMenu.setOnMenuItemClickListener {
                     when(it.itemId){
-                        R.id.more_play->{}
-                        R.id.more_add->{}
+                        R.id.more_play ->{}
+                        R.id.more_add ->{}
                     }
                     true
                 }
@@ -48,7 +45,7 @@ class MusicAdapter(var context: Context, var musicList: MutableList<Music_Data_E
             }
 
             holder.itemView.setOnClickListener {
-                context.startActivity(Intent(context,PlayMusicActivity::class.java).apply {
+                context.startActivity(Intent(context, PlayMusicActivity::class.java).apply {
                     this.putExtra("index",position)
                 })
             }
@@ -60,7 +57,7 @@ class MusicAdapter(var context: Context, var musicList: MutableList<Music_Data_E
     }
 
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): MusicAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         var view = LayoutInflater.from(parent?.context).inflate(R.layout.music_item, parent, false)
 
         return ViewHolder(view)

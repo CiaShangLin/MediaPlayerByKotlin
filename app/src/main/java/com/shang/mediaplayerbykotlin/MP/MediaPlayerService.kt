@@ -54,7 +54,7 @@ class MediaPlayerService : Service() {
             }
             PlayMusicActivity.MODE -> {
                 Log.d(TAG, MPC.mpc_mode.getName())
-                //MPC.mpc_mode = MPC_random(baseContext)
+                MPC.mpc_mode = MPC_random(baseContext)
             }
             PlayMusicActivity.REPEAT -> {
                 MPC.mpc_mode.setLooping()
@@ -62,6 +62,10 @@ class MediaPlayerService : Service() {
 
             PlayMusicActivity.INSERT->{
                 MPC.mpc_mode.insert()
+            }
+
+            PlayMusicActivity.SEEKBAR_MOVE->{
+                MPC.mpc_mode.seekbar_move(intent.getIntExtra( PlayMusicActivity.SEEKBAR_MOVE,0))
             }
         }
 

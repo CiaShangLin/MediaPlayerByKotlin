@@ -4,20 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.media.MediaPlayer
-import android.os.HandlerThread
 import android.util.Log
+import com.shang.mediaplayerbykotlin.MP.MPC.Companion.stopTimer
 import com.shang.mediaplayerbykotlin.PlayMusicActivity
+import org.jetbrains.anko.runOnUiThread
 import org.jetbrains.anko.toast
-import java.util.*
-import java.util.logging.Handler
-import java.util.logging.LogRecord
 
 
 class MPC_normal(var context: Context) : MPC_Interface {
-
-
-    var timer: Timer? = null
-    var timerTask: TimerTask? = null
 
 
     override fun getName(): String {
@@ -49,7 +43,7 @@ class MPC_normal(var context: Context) : MPC_Interface {
                     this.putExtra(MPC_Interface.NAME, MPC.musicList.get(MPC.index).name)
                     this.putExtra(MPC_Interface.DURATION, MPC!!.mediaPlayer!!.duration)
                 })
-                startTimer()
+                MPC.startTimer(context)
             }
         }
 
@@ -86,7 +80,7 @@ class MPC_normal(var context: Context) : MPC_Interface {
         if (MPC.mediaPlayer != null) {
             MPC.mediaPlayer!!.seekTo(MPC.currentTime)
             MPC.mediaPlayer!!.start()
-            startTimer()
+            MPC.startTimer(context)
             context.sendBroadcast(Intent().apply {
                 action = PlayMusicActivity.RESTART
             })
@@ -101,8 +95,10 @@ class MPC_normal(var context: Context) : MPC_Interface {
             release()
             MPC.index++
             start()
-        } else {
-            context.toast("已經是最後一首了")
+        } else { //發出廣播 做UI顯示
+            context.sendBroadcast(Intent().apply {
+                this.action = PlayMusicActivity.NEXT
+            })
         }
     }
 
@@ -117,20 +113,37 @@ class MPC_normal(var context: Context) : MPC_Interface {
             release()
             MPC.index--
             start()
-        } else {
-            context.toast("這是第一首")
+        } else {   //發出廣播 做UI顯示
+            context.sendBroadcast(Intent().apply {
+                action = PlayMusicActivity.PREVIOUS
+            })
         }
     }
 
 
     override fun seekbar_move(time: Int) {
+        if (MPC.mediaPlayer != null) {
+            MPC.currentTime = time
+            MPC.mediaPlayer!!.seekTo(time)
+        }
 
     }
 
     override fun setLooping() {
-        if (MPC.mediaPlayer != null)
+        //setOnCompletionListener 不會啟動
+        if (MPC.mediaPlayer != null) {
+            var status = if (MPC.mediaPlayer!!.isLooping) "單曲循環播放關閉" else "單曲循環播放開啟"
+
             MPC.mediaPlayer!!.isLooping = !MPC.mediaPlayer!!.isLooping
+
+            context.sendBroadcast(Intent().apply {
+                action=PlayMusicActivity.LOOPING
+                putExtra("status",status)
+            })
+
+        }
     }
+
 
     override fun release() {
         Log.d(MPC.TAG, "release()")
@@ -139,32 +152,9 @@ class MPC_normal(var context: Context) : MPC_Interface {
             MPC.mediaPlayer!!.release()
             MPC.mediaPlayer = null
         }
-        stopTimer()
-    }
-
-    fun startTimer() {
-        Log.d(MPC.TAG, "startTimer()")
-        if (timer == null) {
-            timer = Timer(true)
-            timerTask = object : TimerTask() {
-                override fun run() {
-                    var intent = Intent().apply {
-                        this.action = PlayMusicActivity.CURRENT_TIME
-                        this.putExtra(MPC_Interface.CURRENT_TIME, MPC.mediaPlayer!!.currentPosition)
-                    }
-                    context.sendBroadcast(intent)
-                }
-            }
-            timer?.scheduleAtFixedRate(timerTask, 0, 1000)
-        }
-    }
-
-    fun stopTimer() {
-        Log.d(MPC.TAG, "stopTimer()")
-        timer?.cancel()
-        timer = null
-        timerTask = null
+        MPC.stopTimer()
     }
 
 
 }
+

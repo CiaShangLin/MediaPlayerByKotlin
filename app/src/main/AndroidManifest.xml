@@ -40,6 +40,7 @@
                 <action android:name="com.shang.mediaplayerbykotlin.NEXT"></action>
                 <action android:name="com.shang.mediaplayerbykotlin.PREVIOUS"></action>
                 <action android:name="com.shang.mediaplayerbykotlin.MODE"></action>
+                <action android:name="com.shang.mediaplayerbykotlin.LOOPING"></action>
                 <action android:name="com.shang.mediaplayerbykotlin.CURRENT_TIME"></action>
             </intent-filter>
         </receiver>

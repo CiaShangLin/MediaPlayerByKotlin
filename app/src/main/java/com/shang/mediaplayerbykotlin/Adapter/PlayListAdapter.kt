@@ -1,10 +1,8 @@
-package com.shang.mediaplayerbykotlin
+package com.shang.mediaplayerbykotlin.Adapter
 
 import android.app.AlertDialog
-import android.arch.persistence.room.Database
 import android.content.Context
 import android.content.DialogInterface
-import android.opengl.Visibility
 import android.os.AsyncTask
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -12,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
+import com.shang.mediaplayerbykotlin.R
 import com.shang.mediaplayerbykotlin.Room.MusicDatabase
 import com.shang.mediaplayerbykotlin.Room.Music_ListName_Entity
 import kotlinx.android.synthetic.main.input_edittext.view.*
@@ -90,7 +89,7 @@ class PlayListAdapter(var context: Context, var playList: MutableList<Music_List
 
                 popupMenu.setOnMenuItemClickListener {
                     when(it.itemId){
-                        R.id.playListDelete->{
+                        R.id.playListDelete ->{
                             AsyncTask.execute {
                                 database.getMusic_ListName_Dao().delete(Music_ListName_Entity().apply {
                                     this.id=playList.get(position).id
@@ -103,7 +102,7 @@ class PlayListAdapter(var context: Context, var playList: MutableList<Music_List
                                 }
                             }
                         }
-                        R.id.playListUpdate->{
+                        R.id.playListUpdate ->{
                             var view=LayoutInflater.from(context).inflate(R.layout.input_edittext,null)
                             view.playListEt.setText(playList.get(position).tableName.toString())
                             AlertDialog.Builder(context)

@@ -60,7 +60,8 @@ class FileUnits {
                 var duration = uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.DURATION))
                 var path = uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.DATA))
                 var modified = uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED))
-                var picture2=uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID))
+                var picture=uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.ALBUM))
+
 
                 entity.add(Music_Data_Entity().apply {
                     this.name = name
@@ -68,7 +69,7 @@ class FileUnits {
                     this.duration = duration.toLong()
                     this.modified = modified.toLong()
                     this.favorite = false
-                    this.picture = picture2
+                    this.picture = picture
                 })
 
             }
@@ -82,9 +83,9 @@ class FileUnits {
                     MediaStore.Audio.Albums._ID + "=" + albumId,
                     null, null)
             if (cursorAlbum != null && cursorAlbum.moveToFirst()) {
-                var albumCoverPath = cursorAlbum.getString(cursorAlbum.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
+                var albumCoverPath = cursorAlbum.getString(cursorAlbum.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART))
                 //var data = cursorAlbum.getString(cursorAlbum.getColumnIndex(MediaStore.Audio.Media.DATA));
-
+                cursorAlbum.close()
                 if (albumCoverPath != null ) {
                     Log.d("FileUnits", albumCoverPath)
                     //Log.d("FileUnits", data )
@@ -93,6 +94,7 @@ class FileUnits {
                     Log.d("FileUnits", "null")
                 }
             }
+
             return ""
         }
 
