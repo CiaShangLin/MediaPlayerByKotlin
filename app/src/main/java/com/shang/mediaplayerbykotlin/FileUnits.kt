@@ -28,6 +28,7 @@ class FileUnits {
             return SimpleDateFormat("mm:ss").format(time)
         }
 
+
         //取得所有Music底下的音樂檔
         fun findAllMusic(path: File) {
             try {
@@ -63,15 +64,15 @@ class FileUnits {
                     this.duration = duration.toLong()
                     this.modified = modified.toLong()
                     this.favorite = false
-                    this.picture = getPicture(uri, context)
+                    this.picture = uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID))
                 })
 
             }
             return entity
         }
 
-        fun getPicture(cursor: Cursor, context: Context): String {
-            var albumId = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID))
+        fun getPicture(albumId: String, context: Context): String {
+
             var cursorAlbum = context.contentResolver.query(
                     MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
                     arrayOf(MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART),

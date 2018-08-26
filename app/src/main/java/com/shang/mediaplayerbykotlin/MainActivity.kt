@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG,"onCreate")
 
         //耗時工作
-        CheckFileRoom(this).execute()
+        //CheckFileRoom(this).execute()
 
         var readPermission=ContextCompat.checkSelfPermission(this,android.Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED
         var writePermission=ContextCompat.checkSelfPermission(this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED

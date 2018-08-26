@@ -21,9 +21,8 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
     val TAG = "CheckFileRoom"
     lateinit var database: MusicDatabase
     lateinit var music_data_dao: Music_Data_Dao
-    var mediaMata: MediaMetadataRetriever = MediaMetadataRetriever()
     lateinit var musicList: MutableList<Music_Data_Entity>
-    lateinit var dataList: MutableList<Music_Data_Entity>
+
 
     var start: Long = 0
 
@@ -41,20 +40,11 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
 
         musicList = FileUnits.findAllMusicFromContentResolver(context)
         Log.d(TAG, "size:" + musicList.size)
-        /*musicList.sortByDescending {
-            it.modified
-        }
-        for (i in musicList.indices) {
-            Log.d(TAG, "name:" + musicList.get(i).name)
-            Log.d(TAG, "duration:" + musicList.get(i).duration)
-            Log.d(TAG, "path:" + musicList.get(i).path)
-            Log.d(TAG, "modified:" + musicList.get(i).modified)
-            Log.d(TAG, "favorite:" + musicList.get(i).favorite)
-        }*/
 
         musicList.forEach {
             if (music_data_dao.find_FileByName(it.name) == null) {
                 try {
+                    it.picture=FileUnits.getPicture(it.picture,context)
                     music_data_dao.insert(it)
                 } catch (e: SQLiteConstraintException) {
                     Log.d(TAG, "已有這首:" + it.name)
