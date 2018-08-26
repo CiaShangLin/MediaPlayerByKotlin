@@ -57,8 +57,11 @@ class MediaPlayerService : Service() {
                 //MPC.mpc_mode = MPC_random(baseContext)
             }
             PlayMusicActivity.REPEAT -> {
-                Log.d(TAG, MPC.mpc_mode.getName())
                 MPC.mpc_mode.setLooping()
+            }
+
+            PlayMusicActivity.INSERT->{
+                MPC.mpc_mode.insert()
             }
         }
 

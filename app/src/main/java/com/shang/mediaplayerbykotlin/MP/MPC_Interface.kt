@@ -11,6 +11,7 @@ interface MPC_Interface{
         val PATH:String="PATH"
         val NAME:String="NAME"
         val DURATION: String = "DURATION"
+        val INDEX:String="INDEX"
     }
 
 
@@ -18,7 +19,7 @@ interface MPC_Interface{
     fun start()
     fun pause()
     fun next()
-    fun next(index:Int)
+    fun insert()
     fun previous()
     fun release()
     fun reStart()

@@ -107,8 +107,9 @@ class MPC_normal(var context: Context) : MPC_Interface {
     }
 
 
-    override fun next(index: Int) {   //插播
-
+    override fun insert() {   //插播
+        release()
+        start()
     }
 
     override fun previous() {

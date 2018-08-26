@@ -5,6 +5,8 @@ import android.content.pm.PackageManager
 import android.content.pm.PackageStats
 import android.media.MediaPlayer
 import android.os.*
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -64,6 +66,18 @@ class MainActivity : AppCompatActivity() {
 
         //耗時工作
         CheckFileRoom(this).execute()
+
+        var readPermission=ContextCompat.checkSelfPermission(this,android.Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED
+        var writePermission=ContextCompat.checkSelfPermission(this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED
+
+
+        if(!readPermission && !writePermission){
+            ActivityCompat.requestPermissions(this,
+                    arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE),1)
+        }else{
+            CheckFileRoom(this).execute()
+        }
 
 
 
@@ -215,6 +229,14 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG,"onDestroy()")
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if(requestCode==1){
+            CheckFileRoom(this).execute()
+        }
     }
 }
 

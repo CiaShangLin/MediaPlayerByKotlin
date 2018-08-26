@@ -39,6 +39,7 @@ class PlayMusicActivity : AppCompatActivity() {
         val PREVIOUS: String = "PREVIOUS"
         val MODE: String = "MODE"
         val REPEAT: String = "REPEAT"
+        val INSERT: String = "INSERT"
         val CURRENT_TIME:String="CURRENT_TIME"
     }
 
@@ -98,8 +99,6 @@ class PlayMusicActivity : AppCompatActivity() {
 
         Log.d(TAG, "onCreate")
 
-        MPC.index=intent.getIntExtra("index",0)
-
         myReceiver = MyReceiver()
 
         play_music_bar.setNavigationIcon(R.drawable.ic_back)
@@ -153,6 +152,21 @@ class PlayMusicActivity : AppCompatActivity() {
             }
 
         })
+
+        if(MPC.mediaPlayer==null){
+            Log.d(TAG,"正常播放")
+            MPC.index=intent.getIntExtra("index",0)
+            startService(Intent(this, MediaPlayerService::class.java).apply {
+                this.action = PLAY
+            })
+        }else{
+            Log.d(TAG,"插播")
+            MPC.index=intent.getIntExtra("index",0)
+            startService(Intent(this, MediaPlayerService::class.java).apply {
+                this.action = INSERT
+            })
+        }
+
     }
 
     fun getTimeFormat(duration:Int):String{
@@ -177,6 +191,8 @@ class PlayMusicActivity : AppCompatActivity() {
         }
         registerReceiver(myReceiver, intentFilter)
     }
+
+
 
     override fun onDestroy() {
         super.onDestroy()
