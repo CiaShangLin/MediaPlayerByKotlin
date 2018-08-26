@@ -14,7 +14,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
-import com.shang.mediaplayerbykotlin.Adapter.MusicAdapter
+import com.shang.mediaplayerbykotlin.Adapter.MainMusicAdapter
 import com.shang.mediaplayerbykotlin.Adapter.PlayListAdapter
 import com.shang.mediaplayerbykotlin.MP.MPC
 import com.shang.mediaplayerbykotlin.Room.*
@@ -39,8 +39,8 @@ class MainActivity : AppCompatActivity() {
             super.handleMessage(msg)
 
             when (msg?.what) {
-                MusicAdapter.DATABASE_SUCCCESS -> {
-                    MPC.musicList=msg.obj as MutableList<Music_Data_Entity>
+                MainMusicAdapter.DATABASE_SUCCCESS -> {
+                    MPC.musicList = msg.obj as MutableList<Music_Data_Entity>
                     MPC.musicList.sortByDescending {
                         it.modified
                     }
@@ -55,30 +55,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Log.d(TAG,"onCreate")
+        Log.d(TAG, "onCreate")
 
         //耗時工作
         //CheckFileRoom(this).execute()
 
-        var readPermission=ContextCompat.checkSelfPermission(this,android.Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED
-        var writePermission=ContextCompat.checkSelfPermission(this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED
+        var readPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+        var writePermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
 
 
-        if(readPermission && writePermission){
+        if (readPermission && writePermission) {
             ActivityCompat.requestPermissions(this,
                     arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE),1)
-        }else{
+                            android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+        } else {
             CheckFileRoom(this).execute()
         }
-
-
-
-        /*AsyncTask.execute {
-            database = MusicDatabase.getMusicDatabase(this)
-            initView()
-        }*/
-
 
     }
 
@@ -93,12 +85,14 @@ class MainActivity : AppCompatActivity() {
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener {
+            drawerLayout.closeDrawers()
             when (it.itemId) {
+
                 R.id.myMusic -> {
                     doAsync {
                         var list = database.getMusic_Data_Dao().getAll()
                         uiThread {
-                            recyclerview.adapter = MusicAdapter(it, list)
+                            recyclerview.adapter = MainMusicAdapter(it, list)
                         }
                     }
                 }
@@ -108,24 +102,28 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.musicList -> {
 
-                    AsyncTask.execute {
+                    doAsync {
                         var playList = mutableListOf<Music_ListName_Entity>()
                         playList.addAll(database.getMusic_ListName_Dao().getAll())
-                        runOnUiThread {
-                            recyclerview.adapter = PlayListAdapter(this, playList)
+                        uiThread {
+                            recyclerview.adapter = PlayListAdapter(this@MainActivity, playList)
                         }
+                    }
+                    AsyncTask.execute {
+
                     }
                 }
                 R.id.timer -> {
 
                 }
             }
-            drawerLayout.closeDrawers()
+
             true
         }
 
         recyclerview.layoutManager = LinearLayoutManager(this@MainActivity)
-        recyclerview.adapter = MusicAdapter(this@MainActivity, MPC.musicList)
+        recyclerview.setHasFixedSize(true)
+        recyclerview.adapter = MainMusicAdapter(this@MainActivity, MPC.musicList)
 
     }
 
@@ -137,7 +135,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
 
         R.id.search -> {
-            startActivity(Intent(this,PlayMusicActivity::class.java))
+            startActivity(Intent(this, PlayMusicActivity::class.java))
             true
         }
 
@@ -209,33 +207,33 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        Log.d(TAG,"onResume()")
+        Log.d(TAG, "onResume()")
     }
 
     override fun onStop() {
         super.onStop()
-        Log.d(TAG,"onStop()")
+        Log.d(TAG, "onStop()")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d(TAG,"onDestroy()")
+        Log.d(TAG, "onDestroy()")
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        var flag=true
-        if(requestCode==1){
+        var flag = true
+        if (requestCode == 1) {
             grantResults.forEach {
-                if(it!=PackageManager.PERMISSION_GRANTED){
-                    flag=false
+                if (it != PackageManager.PERMISSION_GRANTED) {
+                    flag = false
                 }
             }
 
-            if(flag){
+            if (flag) {
                 CheckFileRoom(this).execute()
-            }else{
+            } else {
                 AlertDialog.Builder(this).setMessage("滾").show()
             }
 
