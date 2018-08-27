@@ -1,6 +1,5 @@
 package com.shang.mediaplayerbykotlin
 
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.*
 import android.support.v4.app.ActivityCompat
@@ -14,8 +13,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
-import com.shang.mediaplayerbykotlin.Adapter.MainMusicAdapter
-import com.shang.mediaplayerbykotlin.Adapter.PlayListAdapter
+import com.shang.mediaplayerbykotlin.Adapter.MusicDataAdapter
+import com.shang.mediaplayerbykotlin.Adapter.PlayListNameAdapter
 import com.shang.mediaplayerbykotlin.MP.MPC
 import com.shang.mediaplayerbykotlin.Room.*
 import kotlinx.android.synthetic.main.drawer_layout.*
@@ -39,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             super.handleMessage(msg)
 
             when (msg?.what) {
-                MainMusicAdapter.DATABASE_SUCCCESS -> {
+                MusicDataAdapter.DATABASE_SUCCCESS -> {
                     MPC.musicList = msg.obj as MutableList<Music_Data_Entity>
                     MPC.musicList.sortByDescending {
                         it.modified
@@ -50,7 +49,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-    var start:Long=0
+
+    var start: Long = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -60,7 +61,7 @@ class MainActivity : AppCompatActivity() {
         var readPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
         var writePermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
 
-        start=System.currentTimeMillis()
+        start = System.currentTimeMillis()
 
         if (readPermission && writePermission) {
             ActivityCompat.requestPermissions(this,
@@ -73,7 +74,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun initView() {
-
 
 
         setSupportActionBar(toolbar)
@@ -91,18 +91,19 @@ class MainActivity : AppCompatActivity() {
                 R.id.myMusic -> {
                     doAsync {
                         var list = database.getMusic_Data_Dao().getAll()
+
+                        MPC.musicList = list
                         uiThread {
-                            recyclerview.adapter = MainMusicAdapter(it, list)
+                            recyclerview.adapter = MusicDataAdapter(this@MainActivity, list)
                         }
                     }
                 }
                 R.id.favorite -> {
                     doAsync {
                         database.getMusic_ListData_Dao().getAll_ListData().forEach {
-                            Log.d(TAG,it.table_id.toString()+" "+it.musicPath)
+                            Log.d(TAG, it.table_id.toString() + " " + it.musicPath)
                         }
                     }
-
                 }
                 R.id.musicList -> {
 
@@ -110,7 +111,7 @@ class MainActivity : AppCompatActivity() {
                         var playList = mutableListOf<Music_ListName_Entity>()
                         playList.addAll(database.getMusic_ListName_Dao().getAll())
                         uiThread {
-                            recyclerview.adapter = PlayListAdapter(this@MainActivity, playList)
+                            recyclerview.adapter = PlayListNameAdapter(this@MainActivity, playList)
                         }
                     }
                     AsyncTask.execute {
@@ -127,9 +128,9 @@ class MainActivity : AppCompatActivity() {
 
         recyclerview.layoutManager = LinearLayoutManager(this@MainActivity)
         recyclerview.setHasFixedSize(true)
-        recyclerview.adapter = MainMusicAdapter(this@MainActivity, MPC.musicList)
+        recyclerview.adapter = MusicDataAdapter(this@MainActivity, MPC.musicList)
 
-        Log.d(TAG,((System.currentTimeMillis()-start)/1000.0).toString())
+        Log.d(TAG, ((System.currentTimeMillis() - start) / 1000.0).toString())
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

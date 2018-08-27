@@ -2,12 +2,10 @@ package com.shang.mediaplayerbykotlin
 
 import android.content.Context
 import android.database.sqlite.SQLiteConstraintException
-import android.media.ThumbnailUtils
 import android.os.AsyncTask
 import android.os.Message
-import android.provider.MediaStore
 import android.util.Log
-import com.shang.mediaplayerbykotlin.Adapter.MainMusicAdapter
+import com.shang.mediaplayerbykotlin.Adapter.MusicDataAdapter
 import com.shang.mediaplayerbykotlin.Room.MusicDatabase
 
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Dao
@@ -76,7 +74,7 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
         Log.d(TAG, "finish:" + (System.currentTimeMillis() - start) / 1000.0)
 
         (context as MainActivity).handler.sendMessage(Message().apply {
-            this.what = MainMusicAdapter.DATABASE_SUCCCESS
+            this.what = MusicDataAdapter.DATABASE_SUCCCESS
             this.obj = musicList
         })
 

@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.os.AsyncTask
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -22,14 +21,14 @@ import com.shang.mediaplayerbykotlin.Room.MusicDatabase
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import com.shang.mediaplayerbykotlin.Room.Music_ListData_Entity
 import com.shang.mediaplayerbykotlin.Room.Music_ListName_Entity
-import kotlinx.android.synthetic.main.music_item.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
 /**
  * Created by Shang on 2018/8/21.
  */
-class MainMusicAdapter(var context: Context, var musicList: MutableList<Music_Data_Entity>) : RecyclerView.Adapter<MainMusicAdapter.ViewHolder>() {
+class MusicDataAdapter(var context: Context, var musicList: MutableList<Music_Data_Entity>) : RecyclerView.Adapter<MusicDataAdapter.ViewHolder>() {
+
 
     lateinit var database: MusicDatabase
 
@@ -80,12 +79,12 @@ class MainMusicAdapter(var context: Context, var musicList: MutableList<Music_Da
 
     }
 
-
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        var view = LayoutInflater.from(parent?.context).inflate(R.layout.music_item, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): MusicDataAdapter.ViewHolder {
+        var view = LayoutInflater.from(parent?.context).inflate(R.layout.music_data_item, parent, false)
 
         return ViewHolder(view)
     }
+
 
     override fun getItemCount(): Int {
         return musicList.size
@@ -102,11 +101,12 @@ class MainMusicAdapter(var context: Context, var musicList: MutableList<Music_Da
     }
 
     fun addDialog(array: Array<String>, playListName: MutableList<Music_ListName_Entity>,position:Int) {
-        AlertDialog.Builder(context,android.R.style.Theme_Holo_Light_Dialog)
+        AlertDialog.Builder(context,android.R.style.Theme_Material_Dialog)
                 .setTitle("加入至播放清單")
                 .setItems(array, DialogInterface.OnClickListener { dialog, which ->
                     doAsync {
-                        //Log.d("Music",playListName.get(which).id.toString()+" "+musicList.get(position).path)
+                        Log.d("Music",playListName.get(which).id.toString()+" "+musicList.get(position).path)
+
                         database.getMusic_ListData_Dao().insert(Music_ListData_Entity().apply {
                             this.musicPath=musicList.get(position).path
                             this.table_id=playListName.get(which).id

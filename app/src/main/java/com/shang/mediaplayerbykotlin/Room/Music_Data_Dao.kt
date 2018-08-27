@@ -15,9 +15,11 @@ interface Music_Data_Dao {
     @Query("select * from " + Music_Data_Entity.TABLE_NAME + " where name= :fileName ")
     fun find_FileByName(fileName: String):Music_Data_Entity
 
-
     @Query("select name from "+Music_Data_Entity.TABLE_NAME)
     fun findAllName():MutableList<String>
+
+    @Query("select * from "+Music_Data_Entity.TABLE_NAME+" where path=:path")
+    fun findListData(path:String):Music_Data_Entity
 
 
     //vararg
