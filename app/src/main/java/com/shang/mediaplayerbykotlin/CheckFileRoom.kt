@@ -48,7 +48,7 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
         musicList.forEach {
             if (music_data_dao.find_FileByName(it.name) == null) {
                 try {
-                    it.picture=FileUnits.getPicture(it.picture,context)  //這樣是為了不要每次去提取資料 就先取得圖片 太花時間了
+                    //it.picture=FileUnits.getPicture(it.picture,context)  //這樣是為了不要每次去提取資料 就先取得圖片 太花時間了
                     music_data_dao.insert(it)
                 } catch (e: SQLiteConstraintException) {
                     Log.d(TAG, "已有這首:" + it.name)

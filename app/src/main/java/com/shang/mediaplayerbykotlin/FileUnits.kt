@@ -23,7 +23,7 @@ class FileUnits {
 
     companion object {
 
-        val TAG="FileUnits"
+        val TAG = "FileUnits"
         var musicList = mutableListOf<File>()
 
         //最後修改時間轉成時間格式
@@ -62,8 +62,7 @@ class FileUnits {
                 var path = uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.DATA))
                 var modified = uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED))
                 var picture = uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID))
-
-                Log.d(TAG, "picture:"+picture)
+                //Log.d(TAG,"pic "+picture+" "+path)
 
                 entity.add(Music_Data_Entity().apply {
                     this.name = name
@@ -73,33 +72,41 @@ class FileUnits {
                     this.favorite = false
                     this.picture = picture
                 })
-
             }
+            Log.d(TAG, "1:" + entity.size.toString())
+            getPicture(entity, "", context)
             return entity
         }
 
-        fun getPicture(albumId: String, context: Context): String {
+        fun getPicture(entity: MutableList<Music_Data_Entity>, albumId: String, context: Context): String {
+
+            var start = System.currentTimeMillis()
+
 
             var cursorAlbum = context.contentResolver.query(
                     MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
                     arrayOf(MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART),
-                    MediaStore.Audio.Albums._ID + "=" + albumId,
-                    null, null)
+                    null, null, null)
+
+            Log.d(TAG, cursorAlbum.count.toString())
+
+            cursorAlbum.moveToFirst()
+            do {
+                var index = cursorAlbum.getString(cursorAlbum.getColumnIndexOrThrow(MediaStore.Audio.Albums._ID))
+                var str = cursorAlbum.getString(cursorAlbum.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM_ART))
+                if (str != null)
+                    for(it in entity.iterator()){
+                        if(it.picture==index){
+                            it.picture=str
+                            break
+                        }
+                    }
+            } while (cursorAlbum.moveToNext())
 
 
-            if (cursorAlbum != null && cursorAlbum.moveToFirst()) {
-                var albumCoverPath = cursorAlbum.getString(cursorAlbum.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART))
-                //var data = cursorAlbum.getString(cursorAlbum.getColumnIndex(MediaStore.Audio.Media.DATA));
+            Log.d(TAG, "2:" + entity.size.toString())
+            Log.d(TAG, ((System.currentTimeMillis() - start) / 1000.0).toString())
 
-                if (albumCoverPath != null) {
-                    Log.d(TAG, albumCoverPath)
-                    cursorAlbum.close()
-                    return albumCoverPath
-                } else {
-                    Log.d(TAG, "null")
-                }
-            }
-            cursorAlbum.close()
             return ""
         }
 
