@@ -23,6 +23,7 @@ class FileUnits {
 
     companion object {
 
+        val TAG="FileUnits"
         var musicList = mutableListOf<File>()
 
         //最後修改時間轉成時間格式
@@ -62,7 +63,7 @@ class FileUnits {
                 var modified = uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED))
                 var picture = uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID))
 
-                //Log.d("FileUnits", "picture:"+picture)
+                Log.d(TAG, "picture:"+picture)
 
                 entity.add(Music_Data_Entity().apply {
                     this.name = name
@@ -85,18 +86,20 @@ class FileUnits {
                     MediaStore.Audio.Albums._ID + "=" + albumId,
                     null, null)
 
+
             if (cursorAlbum != null && cursorAlbum.moveToFirst()) {
                 var albumCoverPath = cursorAlbum.getString(cursorAlbum.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART))
                 //var data = cursorAlbum.getString(cursorAlbum.getColumnIndex(MediaStore.Audio.Media.DATA));
 
                 if (albumCoverPath != null) {
-                    Log.d("FileUnits", albumCoverPath)
+                    Log.d(TAG, albumCoverPath)
+                    cursorAlbum.close()
                     return albumCoverPath
                 } else {
-                    Log.d("FileUnits", "null")
+                    Log.d(TAG, "null")
                 }
             }
-
+            cursorAlbum.close()
             return ""
         }
 

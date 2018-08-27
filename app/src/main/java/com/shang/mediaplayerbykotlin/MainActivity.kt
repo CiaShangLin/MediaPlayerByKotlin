@@ -50,19 +50,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
+    var start:Long=0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         Log.d(TAG, "onCreate")
 
-        //耗時工作
-        //CheckFileRoom(this).execute()
-
         var readPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
         var writePermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
 
+        start=System.currentTimeMillis()
 
         if (readPermission && writePermission) {
             ActivityCompat.requestPermissions(this,
@@ -75,6 +73,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun initView() {
+
+
 
         setSupportActionBar(toolbar)
         toolbar.title = "我的音樂"
@@ -97,7 +97,11 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 R.id.favorite -> {
-
+                    doAsync {
+                        database.getMusic_ListData_Dao().getAll_ListData().forEach {
+                            Log.d(TAG,it.table_id.toString()+" "+it.musicPath)
+                        }
+                    }
 
                 }
                 R.id.musicList -> {
@@ -125,6 +129,7 @@ class MainActivity : AppCompatActivity() {
         recyclerview.setHasFixedSize(true)
         recyclerview.adapter = MainMusicAdapter(this@MainActivity, MPC.musicList)
 
+        Log.d(TAG,((System.currentTimeMillis()-start)/1000.0).toString())
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

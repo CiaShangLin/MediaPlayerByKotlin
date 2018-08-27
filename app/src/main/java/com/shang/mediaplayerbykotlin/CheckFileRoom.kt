@@ -2,8 +2,10 @@ package com.shang.mediaplayerbykotlin
 
 import android.content.Context
 import android.database.sqlite.SQLiteConstraintException
+import android.media.ThumbnailUtils
 import android.os.AsyncTask
 import android.os.Message
+import android.provider.MediaStore
 import android.util.Log
 import com.shang.mediaplayerbykotlin.Adapter.MainMusicAdapter
 import com.shang.mediaplayerbykotlin.Room.MusicDatabase

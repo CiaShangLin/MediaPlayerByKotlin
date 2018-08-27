@@ -4,15 +4,9 @@
 
     <group>
         <item
-            android:id="@+id/more_play"
-            android:title="播放"
-            app:showAsAction="always" />
-
-
-        <item
             android:id="@+id/more_add"
             android:title="加入至播放清單"
             app:showAsAction="always" />
-
     </group>
+
 </menu>

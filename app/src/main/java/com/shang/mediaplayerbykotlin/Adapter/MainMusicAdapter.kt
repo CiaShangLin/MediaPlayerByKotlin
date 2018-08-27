@@ -1,29 +1,46 @@
 package com.shang.mediaplayerbykotlin.Adapter
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.os.AsyncTask
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.TextView
+import android.widget.Toast
 import com.shang.mediaplayerbykotlin.FileUnits
 import com.shang.mediaplayerbykotlin.PlayMusicActivity
 import com.shang.mediaplayerbykotlin.R
+import com.shang.mediaplayerbykotlin.Room.MusicDatabase
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
+import com.shang.mediaplayerbykotlin.Room.Music_ListData_Entity
+import com.shang.mediaplayerbykotlin.Room.Music_ListName_Entity
 import kotlinx.android.synthetic.main.music_item.view.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 /**
  * Created by Shang on 2018/8/21.
  */
 class MainMusicAdapter(var context: Context, var musicList: MutableList<Music_Data_Entity>) : RecyclerView.Adapter<MainMusicAdapter.ViewHolder>() {
 
+    lateinit var database: MusicDatabase
+
+    init {
+        database = MusicDatabase.getMusicDatabase(context)
+    }
+
     companion object {
         val DATABASE_SUCCCESS = 1
     }
+
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
@@ -38,9 +55,14 @@ class MainMusicAdapter(var context: Context, var musicList: MutableList<Music_Da
 
             popupMenu.setOnMenuItemClickListener {
                 when (it.itemId) {
-                    R.id.more_play -> {
-                    }
                     R.id.more_add -> {
+                        doAsync {
+                            var playListName = database.getMusic_ListName_Dao().getAll()
+                            var array = database.getMusic_ListName_Dao().getAllTableName()
+                            uiThread {
+                                addDialog(array, playListName,position)
+                            }
+                        }
                     }
                 }
                 true
@@ -55,7 +77,6 @@ class MainMusicAdapter(var context: Context, var musicList: MutableList<Music_Da
         }
 
         holder.itemView.setTag(position)
-
 
     }
 
@@ -73,11 +94,29 @@ class MainMusicAdapter(var context: Context, var musicList: MutableList<Music_Da
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        val title=view.findViewById<TextView>(R.id.title)
-        val time=view.findViewById<TextView>(R.id.time)
-        val moreBt=view.findViewById<ImageButton>(R.id.moreBt)
-        val cardview=view.findViewById<CardView>(R.id.cardview)
+        val title = view.findViewById<TextView>(R.id.title)
+        val time = view.findViewById<TextView>(R.id.time)
+        val moreBt = view.findViewById<ImageButton>(R.id.moreBt)
+        val cardview = view.findViewById<CardView>(R.id.cardview)
 
+    }
+
+    fun addDialog(array: Array<String>, playListName: MutableList<Music_ListName_Entity>,position:Int) {
+        AlertDialog.Builder(context,android.R.style.Theme_Holo_Light_Dialog)
+                .setTitle("加入至播放清單")
+                .setItems(array, DialogInterface.OnClickListener { dialog, which ->
+                    doAsync {
+                        //Log.d("Music",playListName.get(which).id.toString()+" "+musicList.get(position).path)
+                        database.getMusic_ListData_Dao().insert(Music_ListData_Entity().apply {
+                            this.musicPath=musicList.get(position).path
+                            this.table_id=playListName.get(which).id
+                        })
+                        uiThread {
+                            Toast.makeText(context,"新增至"+array[which],Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                })
+                .show()
     }
 
 }

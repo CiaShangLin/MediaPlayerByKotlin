@@ -12,6 +12,9 @@ interface Music_ListName_Dao {
     @Query("select * from " + Music_ListName_Entity.TABLE_NAME)
     fun getAll(): MutableList<Music_ListName_Entity>
 
+    @Query("select tableName from " + Music_ListName_Entity.TABLE_NAME)
+    fun getAllTableName(): Array<String>
+
     @Insert
     fun insert(musicList:Music_ListName_Entity)
 
