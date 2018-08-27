@@ -35,6 +35,10 @@ class PlayListActivity : AppCompatActivity() {
                 var from = viewHolder!!.adapterPosition
                 val to = target!!.adapterPosition
 
+                var data=adapter.musicList.removeAt(from)
+                adapter.musicList.add(to,data)
+                adapter.notifyItemMoved(from,to)
+
                 return true
             }
 
