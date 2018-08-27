@@ -74,9 +74,17 @@ class PlayMusicActivity : AppCompatActivity() {
                     endTimeTv.text = getTimeFormat(duration)
                     nameTv.text = intent.getStringExtra(MPC_Interface.NAME)
 
-                    playmusicIg.setImageBitmap(BitmapFactory.decodeFile(MPC.musicList.get(MPC.index).picture))
+                    var bitmap=BitmapFactory.decodeFile(MPC.musicList.get(MPC.index).picture)
+                    if(bitmap==null){
+                        playmusicIg.setImageResource(R.drawable.ic_music)
+                    }else{
+                        playmusicIg.setImageBitmap(bitmap)
+                    }
 
                     Log.d(TAG,"picture "+MPC.musicList.get(MPC.index).picture)
+                    //Log.d(TAG,"${bitmap.width} ${bitmap.height}")
+
+
                     playerBt.setImageResource(R.drawable.ic_pause)
                 }
 
@@ -153,9 +161,7 @@ class PlayMusicActivity : AppCompatActivity() {
         }
 
         randomBt.setOnClickListener {
-            toast(MPC.musicList.get(MPC.index).picture)
-            var bitmap=BitmapFactory.decodeFile("storage/emulated/0/Android/data/com.android.providers.media/albumthumbs/1532109648631")
-            playmusicIg.setImageBitmap(bitmap)
+
 
         }
 

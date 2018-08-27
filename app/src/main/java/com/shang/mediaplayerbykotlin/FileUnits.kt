@@ -62,7 +62,6 @@ class FileUnits {
                 var path = uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.DATA))
                 var modified = uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED))
                 var picture = uri.getString(uri.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID))
-                //Log.d(TAG,"pic "+picture+" "+path)
 
                 entity.add(Music_Data_Entity().apply {
                     this.name = name
@@ -73,40 +72,49 @@ class FileUnits {
                     this.picture = picture
                 })
             }
-            Log.d(TAG, "1:" + entity.size.toString())
-            getPicture(entity, "", context)
+
             return entity
         }
 
-        fun getPicture(entity: MutableList<Music_Data_Entity>, albumId: String, context: Context): String {
-
-            var start = System.currentTimeMillis()
-
-
+        fun getPicture(entity: MutableList<Music_Data_Entity>, context: Context):MutableList<Music_Data_Entity>{
             var cursorAlbum = context.contentResolver.query(
                     MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
                     arrayOf(MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART),
                     null, null, null)
 
-            Log.d(TAG, cursorAlbum.count.toString())
+            cursorAlbum.moveToFirst()
+            do {
+                var index = cursorAlbum.getString(cursorAlbum.getColumnIndexOrThrow(MediaStore.Audio.Albums._ID))
+                var str = cursorAlbum.getString(cursorAlbum.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM_ART))
+                if (str != null){
+                    for (it in entity.iterator()) {
+                        if (it.picture == index) {
+                            it.picture = str
+                            break
+                        }
+                    }
+                }
+            } while (cursorAlbum.moveToNext())
+
+            return entity
+        }
+
+        fun getOnePicture(picture:String, context: Context):String {
+            var cursorAlbum = context.contentResolver.query(
+                    MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
+                    arrayOf(MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART),
+                    null, null, null)
 
             cursorAlbum.moveToFirst()
             do {
                 var index = cursorAlbum.getString(cursorAlbum.getColumnIndexOrThrow(MediaStore.Audio.Albums._ID))
                 var str = cursorAlbum.getString(cursorAlbum.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM_ART))
-                if (str != null)
-                    for(it in entity.iterator()){
-                        if(it.picture==index){
-                            it.picture=str
-                            break
-                        }
+                if (str != null){
+                    if(picture==index){
+                        return str
                     }
+                }
             } while (cursorAlbum.moveToNext())
-
-
-            Log.d(TAG, "2:" + entity.size.toString())
-            Log.d(TAG, ((System.currentTimeMillis() - start) / 1000.0).toString())
-
             return ""
         }
 

@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity() {
 
             when (msg?.what) {
                 MusicDataAdapter.DATABASE_SUCCCESS -> {
+
                     MPC.musicList = msg.obj as MutableList<Music_Data_Entity>
                     MPC.musicList.sortByDescending {
                         it.modified
