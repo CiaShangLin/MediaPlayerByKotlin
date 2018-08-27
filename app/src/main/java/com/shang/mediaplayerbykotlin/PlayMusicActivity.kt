@@ -81,10 +81,6 @@ class PlayMusicActivity : AppCompatActivity() {
                         playmusicIg.setImageBitmap(bitmap)
                     }
 
-                    Log.d(TAG,"picture "+MPC.musicList.get(MPC.index).picture)
-                    //Log.d(TAG,"${bitmap.width} ${bitmap.height}")
-
-
                     playerBt.setImageResource(R.drawable.ic_pause)
                 }
 

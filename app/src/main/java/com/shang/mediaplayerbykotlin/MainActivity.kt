@@ -107,16 +107,12 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 R.id.musicList -> {
-
                     doAsync {
                         var playList = mutableListOf<Music_ListName_Entity>()
                         playList.addAll(database.getMusic_ListName_Dao().getAll())
                         uiThread {
                             recyclerview.adapter = PlayListNameAdapter(this@MainActivity, playList)
                         }
-                    }
-                    AsyncTask.execute {
-
                     }
                 }
                 R.id.timer -> {

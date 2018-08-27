@@ -24,13 +24,16 @@ import org.jetbrains.anko.runOnUiThread
 /**
  * Created by Shang on 2018/8/23.
  */
-class PlayListNameAdapter(var context: Context, var playList: MutableList<Music_ListName_Entity>) : RecyclerView.Adapter<PlayListNameAdapter.ViewHolder>() {
+class PlayListNameAdapter(var context: Context, var playList: MutableList<Music_ListName_Entity>) :
+        RecyclerView.Adapter<PlayListNameAdapter.ViewHolder>() {
+
 
     lateinit var database: MusicDatabase
 
     init {
         database = MusicDatabase.getMusicDatabase(context)
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): PlayListNameAdapter.ViewHolder {
         var view = LayoutInflater.from(context).inflate(R.layout.play_list_name_item, parent, false)
@@ -141,7 +144,7 @@ class PlayListNameAdapter(var context: Context, var playList: MutableList<Music_
                     temp.forEach {
                         musicList.add(database.getMusic_Data_Dao().findListData(it.musicPath))
                     }
-                    MPC.musicList =musicList
+                    MPC.musicList = musicList
                     context.startActivity(Intent(context, PlayListActivity::class.java))
                 }
             }
