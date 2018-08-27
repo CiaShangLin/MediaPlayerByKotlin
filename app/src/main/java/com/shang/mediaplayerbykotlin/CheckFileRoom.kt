@@ -1,5 +1,6 @@
 package com.shang.mediaplayerbykotlin
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.database.sqlite.SQLiteConstraintException
 import android.os.AsyncTask
@@ -10,6 +11,7 @@ import com.shang.mediaplayerbykotlin.Room.MusicDatabase
 
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Dao
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
+import kotlinx.android.synthetic.main.music_data_item.*
 
 class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
 
@@ -19,12 +21,15 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
     var beforeMap: MutableMap<String, Music_Data_Entity> = mutableMapOf()
     lateinit var musicList: MutableList<Music_Data_Entity>
 
-
     var start: Long = 0
 
     override fun onPreExecute() {
         super.onPreExecute()
         start = System.currentTimeMillis()
+    }
+
+    override fun onProgressUpdate(vararg values: Void?) {
+        super.onProgressUpdate(*values)
 
     }
 
@@ -33,46 +38,42 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
         //資料庫
         database = MusicDatabase.getMusicDatabase(context)
         music_data_dao = database.getMusic_Data_Dao()
+
         //轉成MAP
         music_data_dao.getAll().forEach {
             beforeMap.put(it.path, it)
         }
 
+        //取得手機所有音檔
         musicList = FileUnits.findAllMusicFromContentResolver(context)
         Log.d(TAG, "size:" + musicList.size)
 
+
         if (beforeMap.size == 0) {
             Log.d(TAG, "第一次載入")
-            musicList = FileUnits.getPicture(musicList, context)
-            Log.d(TAG,musicList.get(0).picture)
+            musicList = FileUnits.getPicture(musicList, context)  //一次取得所有圖片
             musicList.forEach {
                 if (music_data_dao.find_FileByName(it.name) == null) {
-                    try {
-                        music_data_dao.insert(it)
-                        Log.d(TAG, "新增這首:" + it.name)
-                    } catch (e: SQLiteConstraintException) {
-                        Log.d(TAG, "已有這首:" + it.name)
-                    }
+                    music_data_dao.insert(it)
+                    Log.d(TAG, "新增這首:" + it.name)
                 }
             }
         } else {
             Log.d(TAG, "檢查載入")
             musicList.forEach {
                 if (music_data_dao.find_FileByName(it.name) == null) {
-                    try {
-                        //這樣是為了不要每次去提取資料 就先取得圖片 太花時間了
-                        FileUnits.getOnePicture(it.picture, context)
-                        music_data_dao.insert(it)
-                        Log.d(TAG, "新增這首:" + it.name)
-                    } catch (e: SQLiteConstraintException) {
-                        Log.d(TAG, "已有這首:" + it.name)
-                    }
+                    //這樣是為了不要每次去提取資料 就先取得圖片 太花時間了
+                    FileUnits.getOnePicture(it.picture, context)
+                    music_data_dao.insert(it)
+                    Log.d(TAG, "新增這首:" + it.name)
                 } else {
                     beforeMap.remove(it.path)
                 }
             }
         }
 
+
+        //手機端刪除 但是資料庫還在 所以要刪除
         for (it in beforeMap.iterator()) {
             database.getMusic_Data_Dao().delete(Music_Data_Entity().apply {
                 this.path = it.key
@@ -80,7 +81,7 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
             Log.d(TAG, "刪除:" + it.key)
         }
 
-        musicList=database.getMusic_Data_Dao().getAll()
+        musicList = database.getMusic_Data_Dao().getAll()
 
 
         return true
@@ -93,7 +94,7 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
 
         (context as MainActivity).handler.sendMessage(Message().apply {
             this.what = MusicDataAdapter.DATABASE_SUCCCESS
-            this.obj=musicList
+            this.obj = musicList
         })
 
         //insert不管有沒有 6秒

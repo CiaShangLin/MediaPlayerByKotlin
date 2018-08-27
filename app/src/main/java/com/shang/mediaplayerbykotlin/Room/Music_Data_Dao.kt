@@ -23,7 +23,7 @@ interface Music_Data_Dao {
 
 
     //vararg
-    @Insert()
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(musicEntity: Music_Data_Entity)
 
     @Update()
