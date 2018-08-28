@@ -82,19 +82,22 @@ class FileUnits {
                     arrayOf(MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART),
                     null, null, null)
 
-            cursorAlbum.moveToFirst()
-            do {
-                var index = cursorAlbum.getString(cursorAlbum.getColumnIndexOrThrow(MediaStore.Audio.Albums._ID))
-                var str = cursorAlbum.getString(cursorAlbum.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM_ART))
-                if (str != null){
-                    for (it in entity.iterator()) {
-                        if (it.picture == index) {
-                            it.picture = str
-                            break
+            if(cursorAlbum!=null && cursorAlbum.count!=0){
+                cursorAlbum.moveToFirst()
+                do {
+                    var index = cursorAlbum.getString(cursorAlbum.getColumnIndexOrThrow(MediaStore.Audio.Albums._ID))
+                    var str = cursorAlbum.getString(cursorAlbum.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM_ART))
+                    if (str != null){
+                        for (it in entity.iterator()) {
+                            if (it.picture == index) {
+                                it.picture = str
+                                break
+                            }
                         }
                     }
-                }
-            } while (cursorAlbum.moveToNext())
+                } while (cursorAlbum.moveToNext())
+            }
+
 
             return entity
         }
@@ -105,6 +108,7 @@ class FileUnits {
                     arrayOf(MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART),
                     null, null, null)
 
+            if(cursorAlbum!=null && cursorAlbum.count!=0)
             cursorAlbum.moveToFirst()
             do {
                 var index = cursorAlbum.getString(cursorAlbum.getColumnIndexOrThrow(MediaStore.Audio.Albums._ID))

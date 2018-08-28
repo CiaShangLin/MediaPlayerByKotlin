@@ -27,14 +27,14 @@ class Notification {
             val channel_ID = "com.shang.mediaplayerbykotlin"
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                notificationBuilder = Notification.Builder(context, channel_ID)
-                notificationChannel = NotificationChannel(channel_ID, "Test", NotificationManager.IMPORTANCE_HIGH)
+
+                notificationChannel = NotificationChannel(channel_ID, "Test", NotificationManager.IMPORTANCE_DEFAULT)
                 notificationChannel.enableLights(true)
                 notificationChannel.lightColor = Color.GREEN
                 notificationChannel.enableVibration(false)
                 notificationManager.createNotificationChannel(notificationChannel)
 
-                notificationBuilder = Notification.Builder(context).apply {
+                notificationBuilder = Notification.Builder(context, channel_ID).apply {
                     this.setContentTitle("Title")
                     this.setContentText("TEST")
                     this.setSmallIcon(R.drawable.ic_favorite)
