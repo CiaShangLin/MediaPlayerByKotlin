@@ -1,18 +1,23 @@
 package com.shang.mediaplayerbykotlin
 
+import android.app.NotificationManager
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.*
 import android.support.v4.app.ActivityCompat
+import android.support.v4.app.NotificationCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
+import android.widget.RemoteViews
 import com.shang.mediaplayerbykotlin.Adapter.MusicDataAdapter
 import com.shang.mediaplayerbykotlin.Adapter.PlayListNameAdapter
 import com.shang.mediaplayerbykotlin.MP.MPC
@@ -116,6 +121,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 R.id.timer -> {
+                    Notification.showNotication(this@MainActivity)
 
                 }
             }
@@ -139,15 +145,6 @@ class MainActivity : AppCompatActivity() {
 
         R.id.search -> {
 
-            var temp= mutableListOf<Int>(0,1,2,3,4)
-            temp.forEach {
-                Log.d(TAG,it.toString())
-            }
-            var t=temp.removeAt(2)
-            temp.add(4,t)
-            temp.forEach {
-                Log.d(TAG,it.toString())
-            }
             true
         }
 

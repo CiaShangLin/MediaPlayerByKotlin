@@ -58,7 +58,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_favorite" />
+                app:srcCompat="@drawable/ic_list_move" />
 
             <ImageButton
                 android:id="@+id/dataMore"

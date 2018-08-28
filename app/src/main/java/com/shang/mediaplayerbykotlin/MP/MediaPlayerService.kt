@@ -67,6 +67,8 @@ class MediaPlayerService : Service() {
             PlayMusicActivity.SEEKBAR_MOVE->{
                 MPC.mpc_mode.seekbar_move(intent.getIntExtra( PlayMusicActivity.SEEKBAR_MOVE,0))
             }
+
+
         }
 
         return START_NOT_STICKY
