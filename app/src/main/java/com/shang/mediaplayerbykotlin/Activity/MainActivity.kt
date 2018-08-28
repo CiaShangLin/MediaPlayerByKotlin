@@ -1,5 +1,6 @@
 package com.shang.mediaplayerbykotlin.Activity
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.*
 import android.support.v4.app.ActivityCompat
@@ -18,6 +19,7 @@ import com.shang.mediaplayerbykotlin.Adapter.MusicDataAdapter
 import com.shang.mediaplayerbykotlin.Adapter.PlayListNameAdapter
 import com.shang.mediaplayerbykotlin.CheckFileRoom
 import com.shang.mediaplayerbykotlin.MP.MPC
+import com.shang.mediaplayerbykotlin.MP.MediaPlayerService
 import com.shang.mediaplayerbykotlin.Notification
 import com.shang.mediaplayerbykotlin.R
 import com.shang.mediaplayerbykotlin.Room.*
@@ -115,8 +117,11 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 R.id.timer -> {
-                    Notification.showNotication(this@MainActivity)
-
+                    Handler().postDelayed(Runnable {
+                        startService(Intent(this,MediaPlayerService::class.java).apply {
+                            this.action=PlayMusicActivity.PAUSE
+                        })
+                    },40*60*1000)
                 }
             }
 
@@ -178,19 +183,19 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
 
-                    doAsync {
-                        database.getSetting_Dao().update(Setting_Entity().apply {
-                            this.name = Setting_Entity.key
-                            this.sort_mode = mode
-                            this.sort_type = type
-                        })
-                        MPC.sort(mode, type)
-                        uiThread {
-                            adapter.notifyDataSetChanged()
+                    launch(CommonPool){
+                        doAsync {
+                            database.getSetting_Dao().update(Setting_Entity().apply {
+                                this.name = Setting_Entity.key
+                                this.sort_mode = mode
+                                this.sort_type = type
+                            })
+                            MPC.sort(mode, type)
+                            uiThread {
+                                adapter.notifyDataSetChanged()
+                            }
                         }
                     }
-
-
                     true
                 }
 
