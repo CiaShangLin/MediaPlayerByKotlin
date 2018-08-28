@@ -1,6 +1,8 @@
 package com.shang.mediaplayerbykotlin.Adapter
 
 import android.content.Context
+import android.content.Intent
+import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +11,8 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import com.shang.mediaplayerbykotlin.FileUnits
+import com.shang.mediaplayerbykotlin.MP.MPC_Interface
+import com.shang.mediaplayerbykotlin.PlayMusicActivity
 import com.shang.mediaplayerbykotlin.R
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import kotlinx.android.synthetic.main.play_list_data_item.view.*
@@ -31,6 +35,11 @@ class PlayListDataAdapter(var context: Context, var musicList: MutableList<Music
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.dataTitle.text=musicList.get(position).name
         holder.dataTime.text= FileUnits.lastModifiedToSimpleDateFormat(musicList.get(position).duration)
+        holder.dataCardview.setOnClickListener{
+            context.startActivity(Intent(context, PlayMusicActivity::class.java).apply {
+                this.putExtra(MPC_Interface.INDEX, position)
+            })
+        }
 
     }
 
@@ -40,5 +49,6 @@ class PlayListDataAdapter(var context: Context, var musicList: MutableList<Music
         val dataTime = view.findViewById<TextView>(R.id.dataTime)
         val dataIg = view.findViewById<ImageView>(R.id.dataIg)
         val dataMore=view.findViewById<ImageButton>(R.id.dataMore)
+        val dataCardview=view.findViewById<CardView>(R.id.dataCardview)
     }
 }

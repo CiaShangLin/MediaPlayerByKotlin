@@ -1,6 +1,7 @@
 package com.shang.mediaplayerbykotlin.Room
 
 import android.arch.persistence.room.*
+import org.jetbrains.annotations.NotNull
 
 /**
  * Created by Shang on 2018/8/16.
@@ -31,4 +32,7 @@ class Music_ListData_Entity {
 
     @ColumnInfo(name="table_id")
     var table_id:Long=0
+
+    @ColumnInfo(name="position")
+    var position:Int=0
 }

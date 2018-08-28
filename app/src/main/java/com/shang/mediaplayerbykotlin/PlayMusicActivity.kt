@@ -188,7 +188,7 @@ class PlayMusicActivity : AppCompatActivity() {
             })
         }else{
             Log.d(TAG,"插播")
-            MPC.index=intent.getIntExtra("index",0)
+            MPC.index=intent.getIntExtra(MPC_Interface.INDEX,0)
             startService(Intent(this, MediaPlayerService::class.java).apply {
                 this.action = INSERT
             })

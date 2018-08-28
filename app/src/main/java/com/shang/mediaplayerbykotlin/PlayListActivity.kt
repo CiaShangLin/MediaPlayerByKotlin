@@ -40,7 +40,7 @@ class PlayListActivity : AppCompatActivity() {
 
     }
 
-    fun initView(){
+    fun initView() {
         var adapter = PlayListDataAdapter(this, MPC.musicList)
         play_list_recyc.layoutManager = LinearLayoutManager(this)
         play_list_recyc.adapter = adapter
@@ -55,13 +55,14 @@ class PlayListActivity : AppCompatActivity() {
                 var data = adapter.musicList.removeAt(from)
                 adapter.musicList.add(to, data)
                 adapter.notifyItemMoved(from, to)
+                MPC.musicList = adapter.musicList
 
                 AsyncTask.execute {
-
+                    update(from, to)
                 }
 
                 MPC.musicList.forEach {
-                    Log.d(TAG, it.name + " " + it.path + " " + it.modified)
+                    Log.d(TAG, "MPC:" + it.name)
                 }
 
                 return true
@@ -78,17 +79,16 @@ class PlayListActivity : AppCompatActivity() {
     }
 
     fun changeData() {
-        doAsync{
+        doAsync {
             playListName_id = intent.getLongExtra("ID", 0)
             DataList = database.getMusic_ListData_Dao().getListDataFromListName(playListName_id)
+            update(0, 0)
+
             var musicList = mutableListOf<Music_Data_Entity>()
             DataList.forEach {
                 musicList.add(database.getMusic_Data_Dao().findListData(it.musicPath))
             }
             MPC.musicList = musicList
-            MPC.musicList.forEach {
-                Log.d(TAG, it.name + " " + it.path + " " + it.modified)
-            }
 
             uiThread {
                 initView()
@@ -96,7 +96,20 @@ class PlayListActivity : AppCompatActivity() {
         }
     }
 
-    fun update() {
+    fun update(from: Int, to: Int) {
+        var temp = DataList.removeAt(from)
+        DataList.add(to, temp)
+
+        for (i in DataList.indices) {
+            database.getMusic_ListData_Dao().update(DataList.get(i).apply {
+                this.position = i
+            })
+        }
+
+        DataList.forEach {
+            Log.d(TAG, "DataList:  " + it.musicPath + " " + it.position)
+        }
+
 
     }
 

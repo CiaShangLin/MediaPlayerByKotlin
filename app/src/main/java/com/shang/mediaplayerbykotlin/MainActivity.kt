@@ -139,6 +139,15 @@ class MainActivity : AppCompatActivity() {
 
         R.id.search -> {
 
+            var temp= mutableListOf<Int>(0,1,2,3,4)
+            temp.forEach {
+                Log.d(TAG,it.toString())
+            }
+            var t=temp.removeAt(2)
+            temp.add(4,t)
+            temp.forEach {
+                Log.d(TAG,it.toString())
+            }
             true
         }
 

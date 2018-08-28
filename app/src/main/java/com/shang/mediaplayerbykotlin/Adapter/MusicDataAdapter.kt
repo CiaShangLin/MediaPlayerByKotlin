@@ -15,6 +15,7 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import com.shang.mediaplayerbykotlin.FileUnits
+import com.shang.mediaplayerbykotlin.MP.MPC_Interface
 import com.shang.mediaplayerbykotlin.PlayMusicActivity
 import com.shang.mediaplayerbykotlin.R
 import com.shang.mediaplayerbykotlin.Room.MusicDatabase
@@ -71,7 +72,7 @@ class MusicDataAdapter(var context: Context, var musicList: MutableList<Music_Da
 
         holder.cardview.setOnClickListener {
             context.startActivity(Intent(context, PlayMusicActivity::class.java).apply {
-                this.putExtra("index", position)
+                this.putExtra(MPC_Interface.INDEX, position)
             })
         }
 
