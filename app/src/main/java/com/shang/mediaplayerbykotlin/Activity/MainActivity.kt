@@ -23,7 +23,9 @@ import com.shang.mediaplayerbykotlin.R
 import com.shang.mediaplayerbykotlin.Room.*
 import kotlinx.android.synthetic.main.drawer_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
+import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.custom.async
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
@@ -58,6 +60,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         Log.d(TAG, "onCreate")
+
 
         initView()
 
@@ -186,6 +189,7 @@ class MainActivity : AppCompatActivity() {
                             adapter.notifyDataSetChanged()
                         }
                     }
+
 
                     true
                 }
