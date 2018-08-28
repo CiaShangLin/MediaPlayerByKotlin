@@ -139,13 +139,10 @@ class PlayListNameAdapter(var context: Context, var playList: MutableList<Music_
 
             holder.itemView.setOnClickListener {
                 AsyncTask.execute {
-                    var temp = database.getMusic_ListData_Dao().getListDataFromListName(playList.get(position).id)
-                    var musicList = mutableListOf<Music_Data_Entity>()
-                    temp.forEach {
-                        musicList.add(database.getMusic_Data_Dao().findListData(it.musicPath))
-                    }
-                    MPC.musicList = musicList
-                    context.startActivity(Intent(context, PlayListActivity::class.java))
+
+                    context.startActivity(Intent(context, PlayListActivity::class.java).apply {
+                        this.putExtra("ID",playList.get(position).id)
+                    })
                 }
             }
         }
