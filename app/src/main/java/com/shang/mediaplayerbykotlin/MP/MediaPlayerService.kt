@@ -1,13 +1,10 @@
 package com.shang.mediaplayerbykotlin.MP
 
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
-import com.shang.mediaplayerbykotlin.MainActivity
-import com.shang.mediaplayerbykotlin.PlayMusicActivity
-import com.shang.mediaplayerbykotlin.R
+import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
 
 
 /**

@@ -11,11 +11,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
-import com.shang.mediaplayerbykotlin.MP.MPC
-import com.shang.mediaplayerbykotlin.PlayListActivity
+import com.shang.mediaplayerbykotlin.Activity.PlayListActivity
 import com.shang.mediaplayerbykotlin.R
 import com.shang.mediaplayerbykotlin.Room.MusicDatabase
-import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import com.shang.mediaplayerbykotlin.Room.Music_ListName_Entity
 import kotlinx.android.synthetic.main.input_edittext.view.*
 import kotlinx.android.synthetic.main.play_list_name_item.view.*

@@ -1,17 +1,17 @@
 package com.shang.mediaplayerbykotlin
 
-import android.app.ProgressDialog
 import android.content.Context
-import android.database.sqlite.SQLiteConstraintException
 import android.os.AsyncTask
 import android.os.Message
 import android.util.Log
+import com.shang.mediaplayerbykotlin.Activity.MainActivity
 import com.shang.mediaplayerbykotlin.Adapter.MusicDataAdapter
+import com.shang.mediaplayerbykotlin.MP.MPC
 import com.shang.mediaplayerbykotlin.Room.MusicDatabase
 
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Dao
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
-import kotlinx.android.synthetic.main.music_data_item.*
+import com.shang.mediaplayerbykotlin.Room.Setting_Entity
 
 class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
 
@@ -20,6 +20,7 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
     lateinit var music_data_dao: Music_Data_Dao
     var beforeMap: MutableMap<String, Music_Data_Entity> = mutableMapOf()
     lateinit var musicList: MutableList<Music_Data_Entity>
+    lateinit var setting_entity: Setting_Entity
 
     var start: Long = 0
 
@@ -30,7 +31,6 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
 
     override fun onProgressUpdate(vararg values: Void?) {
         super.onProgressUpdate(*values)
-
     }
 
     override fun doInBackground(vararg params: Void?): Boolean {
@@ -83,6 +83,7 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
 
         musicList = database.getMusic_Data_Dao().getAll()
 
+        insertSetting()  //插入設定
 
         return true
     }
@@ -91,15 +92,24 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
         super.onPostExecute(result)
 
         Log.d(TAG, "finish:" + (System.currentTimeMillis() - start) / 1000.0)
-
+        Log.d(TAG, "setting:" + setting_entity.sort_mode+" "+setting_entity.sort_type)
+        MPC.musicList = musicList
+        MPC.sort(setting_entity.sort_mode,setting_entity.sort_type)
         (context as MainActivity).handler.sendMessage(Message().apply {
             this.what = MusicDataAdapter.DATABASE_SUCCCESS
-            this.obj = musicList
         })
 
         //insert不管有沒有 6秒
         //先query 5秒
         //不做取圖片1.186秒  取徒占了大份的時間
+    }
+
+    fun insertSetting() {
+        database.getSetting_Dao().insertSetting(Setting_Entity().apply {
+            this.name = Setting_Entity.key
+        })
+
+        setting_entity=database.getSetting_Dao().getSetting()
     }
 
 }

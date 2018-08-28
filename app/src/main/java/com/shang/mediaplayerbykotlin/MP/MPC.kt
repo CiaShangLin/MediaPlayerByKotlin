@@ -4,9 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.util.Log
-import com.shang.mediaplayerbykotlin.PlayMusicActivity
+import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
-import java.io.File
 import java.util.*
 
 /**
@@ -17,7 +16,7 @@ open class MPC {
     companion object {
         val TAG = "MPC"
 
-        var mediaPlayer: MediaPlayer ?= null
+        var mediaPlayer: MediaPlayer? = null
         var currentTime: Int = 0
         var index: Int = 0
         lateinit var mpc_mode: MPC_Interface
@@ -25,7 +24,36 @@ open class MPC {
         var timer: Timer? = null
         var timerTask: TimerTask? = null
 
-        fun startTimer(context:Context) {
+        // 1=修改日期 2=名稱長度 3=時間長度
+        fun sort(mode: Boolean, type: Int) {
+            if (mode) {   //升序
+                when (type) {
+                    1 -> {
+                        musicList.sortByDescending { it.modified }
+                    }
+                    2 -> {
+                        musicList.sortByDescending { it.name.length }
+                    }
+                    3 -> {
+                        musicList.sortByDescending { it.duration }
+                    }
+                }
+            } else {      //降序
+                when (type) {
+                    1 -> {
+                        musicList.sortedBy { it.modified }
+                    }
+                    2 -> {
+                        musicList.sortBy { it.name.length }
+                    }
+                    3 -> {
+                        musicList.sortBy { it.duration }
+                    }
+                }
+            }
+        }
+
+        fun startTimer(context: Context) {
             Log.d(MPC.TAG, "startTimer()")
             if (timer == null) {
                 timer = Timer(true)

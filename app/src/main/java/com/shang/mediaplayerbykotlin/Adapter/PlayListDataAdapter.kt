@@ -12,11 +12,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.shang.mediaplayerbykotlin.FileUnits
 import com.shang.mediaplayerbykotlin.MP.MPC_Interface
-import com.shang.mediaplayerbykotlin.PlayMusicActivity
+import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
 import com.shang.mediaplayerbykotlin.R
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
-import kotlinx.android.synthetic.main.play_list_data_item.view.*
-import org.jetbrains.anko.find
 
 /**
  * Created by Shang on 2018/8/26.

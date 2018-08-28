@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.shang.mediaplayerbykotlin.PlayMusicActivity">
+    tools:context="com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/play_music_bar"

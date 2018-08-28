@@ -8,8 +8,8 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
-import android.support.v7.app.NotificationCompat
 import android.widget.RemoteViews
+import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
 import com.shang.mediaplayerbykotlin.MP.MediaPlayerService
 
 /**
@@ -28,15 +28,14 @@ class Notification {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-                notificationChannel = NotificationChannel(channel_ID, "Test", NotificationManager.IMPORTANCE_DEFAULT)
+                notificationChannel = NotificationChannel(channel_ID, "Test", NotificationManager.IMPORTANCE_LOW)
                 notificationChannel.enableLights(true)
                 notificationChannel.lightColor = Color.GREEN
                 notificationChannel.enableVibration(false)
                 notificationManager.createNotificationChannel(notificationChannel)
 
                 notificationBuilder = Notification.Builder(context, channel_ID).apply {
-                    this.setContentTitle("Title")
-                    this.setContentText("TEST")
+                    this.setContent(getRemoteViews(context))
                     this.setSmallIcon(R.drawable.ic_favorite)
                     this.setLargeIcon(android.graphics.BitmapFactory.decodeResource(context.resources, R.drawable.ic_music))
                 }
@@ -52,25 +51,20 @@ class Notification {
 
 
             notificationManager.notify(123, notificationBuilder.build())
-            /* var remote= RemoteViews(context.packageName,R.layout.remote_view_layout)
-                     remote.setImageViewResource(R.id.remoteIg,R.drawable.ic_music)
-                     remote.setImageViewResource(R.id.remotePreBt,R.drawable.ic_previous)
-                     remote.setImageViewResource(R.id.remotePlayBt,R.drawable.ic_remote_play)
-                     remote.setImageViewResource(R.id.remoteNextBt,R.drawable.ic_next)
-                     remote.setImageViewResource(R.id.remoteCancelBt,R.drawable.ic_cancel)
-                     remote.setTextViewText(R.id.remoteNameTv,"Song Name")
-                     remote.setTextViewText(R.id.remoteTimeTv,"03:14")
 
-                     remote.setOnClickPendingIntent(R.id.remoteCancelBt, getPendingIntent(context))
+        }
 
-                     var notification= NotificationCompat.Builder(context).apply {
-                         this.setSmallIcon(R.drawable.ic_music)
-                         this.setContent(remote)
-                     }.build()
+        fun getRemoteViews(context: Context): RemoteViews {
+            var remote= RemoteViews(context.packageName,R.layout.remote_view_layout)
+            remote.setImageViewResource(R.id.remoteIg,R.drawable.ic_music)
+            remote.setImageViewResource(R.id.remotePreBt,R.drawable.ic_previous)
+            remote.setImageViewResource(R.id.remotePlayBt,R.drawable.ic_remote_play)
+            remote.setImageViewResource(R.id.remoteNextBt,R.drawable.ic_next)
+            remote.setImageViewResource(R.id.remoteCancelBt,R.drawable.ic_cancel)
+            remote.setTextViewText(R.id.remoteNameTv,"Song Name")
+            remote.setTextViewText(R.id.remoteTimeTv,"03:14")
 
-                     val no=context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                     no.notify(ID,notification)*/
-
+            return remote
         }
 
         fun getPendingIntent(context: Context): PendingIntent {

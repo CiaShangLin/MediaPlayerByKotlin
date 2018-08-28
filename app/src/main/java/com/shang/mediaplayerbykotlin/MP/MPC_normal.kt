@@ -6,9 +6,7 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.util.Log
 import com.shang.mediaplayerbykotlin.MP.MPC.Companion.stopTimer
-import com.shang.mediaplayerbykotlin.PlayMusicActivity
-import org.jetbrains.anko.runOnUiThread
-import org.jetbrains.anko.toast
+import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
 
 
 class MPC_normal(var context: Context) : MPC_Interface {
@@ -137,7 +135,7 @@ class MPC_normal(var context: Context) : MPC_Interface {
             MPC.mediaPlayer!!.isLooping = !MPC.mediaPlayer!!.isLooping
 
             context.sendBroadcast(Intent().apply {
-                action=PlayMusicActivity.LOOPING
+                action= PlayMusicActivity.LOOPING
                 putExtra("status",status)
             })
 

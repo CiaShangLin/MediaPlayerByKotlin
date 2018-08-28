@@ -1,11 +1,8 @@
-package com.shang.mediaplayerbykotlin
+package com.shang.mediaplayerbykotlin.Activity
 
-import android.app.NotificationManager
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.*
 import android.support.v4.app.ActivityCompat
-import android.support.v4.app.NotificationCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
@@ -17,26 +14,29 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
-import android.widget.RemoteViews
 import com.shang.mediaplayerbykotlin.Adapter.MusicDataAdapter
 import com.shang.mediaplayerbykotlin.Adapter.PlayListNameAdapter
+import com.shang.mediaplayerbykotlin.CheckFileRoom
 import com.shang.mediaplayerbykotlin.MP.MPC
+import com.shang.mediaplayerbykotlin.Notification
+import com.shang.mediaplayerbykotlin.R
 import com.shang.mediaplayerbykotlin.Room.*
 import kotlinx.android.synthetic.main.drawer_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
+import kotlinx.coroutines.experimental.async
+import org.jetbrains.anko.custom.async
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 import java.io.File
 
 
 class MainActivity : AppCompatActivity() {
 
-
     val TAG = "Music"
 
     lateinit var database: MusicDatabase
-    lateinit var file: MutableList<File>
-
+    lateinit var adapter: MusicDataAdapter
 
     var handler = object : Handler() {
         override fun handleMessage(msg: Message?) {
@@ -44,19 +44,14 @@ class MainActivity : AppCompatActivity() {
 
             when (msg?.what) {
                 MusicDataAdapter.DATABASE_SUCCCESS -> {
-
-                    MPC.musicList = msg.obj as MutableList<Music_Data_Entity>
-                    MPC.musicList.sortByDescending {
-                        it.modified
-                    }
                     database = MusicDatabase.getMusicDatabase(this@MainActivity)
-                    initView()
+
+                    adapter = MusicDataAdapter(this@MainActivity, MPC.musicList)
+                    recyclerview.adapter = adapter
                 }
             }
         }
     }
-
-    var start: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,10 +59,10 @@ class MainActivity : AppCompatActivity() {
 
         Log.d(TAG, "onCreate")
 
+        initView()
+
         var readPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
         var writePermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-
-        start = System.currentTimeMillis()
 
         if (readPermission && writePermission) {
             ActivityCompat.requestPermissions(this,
@@ -77,10 +72,10 @@ class MainActivity : AppCompatActivity() {
             CheckFileRoom(this).execute()
         }
 
+
     }
 
     fun initView() {
-
 
         setSupportActionBar(toolbar)
         toolbar.title = "我的音樂"
@@ -105,11 +100,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 R.id.favorite -> {
-                    doAsync {
-                        database.getMusic_ListData_Dao().getAll_ListData().forEach {
-                            Log.d(TAG, it.table_id.toString() + " " + it.musicPath)
-                        }
-                    }
+
                 }
                 R.id.musicList -> {
                     doAsync {
@@ -131,9 +122,7 @@ class MainActivity : AppCompatActivity() {
 
         recyclerview.layoutManager = LinearLayoutManager(this@MainActivity)
         recyclerview.setHasFixedSize(true)
-        recyclerview.adapter = MusicDataAdapter(this@MainActivity, MPC.musicList)
 
-        Log.d(TAG, ((System.currentTimeMillis() - start) / 1000.0).toString())
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -158,11 +147,6 @@ class MainActivity : AppCompatActivity() {
             AsyncTask.execute {
                 var settingDao = database.getSetting_Dao()
                 var settingEntity = settingDao.getSetting()
-
-                if (settingEntity == null) {  //第一次使用
-                    settingDao.insertSetting(Setting_Entity())
-                    settingEntity = settingDao.getSetting()
-                }
 
                 var mode: Boolean = settingEntity.sort_mode
                 var type: Int = settingEntity.sort_type
@@ -191,13 +175,18 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
 
-                    AsyncTask.execute {
+                    doAsync {
                         database.getSetting_Dao().update(Setting_Entity().apply {
                             this.name = Setting_Entity.key
                             this.sort_mode = mode
                             this.sort_type = type
                         })
+                        MPC.sort(mode, type)
+                        uiThread {
+                            adapter.notifyDataSetChanged()
+                        }
                     }
+
                     true
                 }
 
@@ -211,22 +200,6 @@ class MainActivity : AppCompatActivity() {
         else -> {
             super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        Log.d(TAG, "onResume()")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d(TAG, "onStop()")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(TAG, "onDestroy()")
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -248,6 +221,7 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
+
 }
 
 

@@ -1,8 +1,7 @@
-package com.shang.mediaplayerbykotlin
+package com.shang.mediaplayerbykotlin.Activity
 
 import android.os.AsyncTask
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -10,7 +9,7 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
 import com.shang.mediaplayerbykotlin.Adapter.PlayListDataAdapter
 import com.shang.mediaplayerbykotlin.MP.MPC
-import com.shang.mediaplayerbykotlin.MP.MPC_normal
+import com.shang.mediaplayerbykotlin.R
 import com.shang.mediaplayerbykotlin.Room.MusicDatabase
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import com.shang.mediaplayerbykotlin.Room.Music_ListData_Entity

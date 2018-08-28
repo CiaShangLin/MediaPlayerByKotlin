@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".Activity.MainActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,25 +26,25 @@
             android:name=".MP.MediaPlayerService"
             android:exported="false"></service>
 
-        <activity android:name=".PlayMusicActivity"></activity>
+        <activity android:name=".Activity.PlayMusicActivity"></activity>
 
         <receiver
-            android:name=".PlayMusicActivity$MyReceiver"
+            android:name=".Activity.PlayMusicActivity$MyReceiver"
             android:enabled="true">
             <intent-filter>
-                <action android:name="com.shang.mediaplayerbykotlin.START" />
-                <action android:name="com.shang.mediaplayerbykotlin.PAUSE" />
-                <action android:name="com.shang.mediaplayerbykotlin.RESTART" />
-                <action android:name="com.shang.mediaplayerbykotlin.NEXT" />
-                <action android:name="com.shang.mediaplayerbykotlin.PREVIOUS" />
-                <action android:name="com.shang.mediaplayerbykotlin.MODE" />
-                <action android:name="com.shang.mediaplayerbykotlin.LOOPING" />
-                <action android:name="com.shang.mediaplayerbykotlin.CURRENT_TIME" />
+                <action android:name="com.shang.mediaplayerbykotlin.Activity.START" />
+                <action android:name="com.shang.mediaplayerbykotlin.Activity.PAUSE" />
+                <action android:name="com.shang.mediaplayerbykotlin.Activity.RESTART" />
+                <action android:name="com.shang.mediaplayerbykotlin.Activity.NEXT" />
+                <action android:name="com.shang.mediaplayerbykotlin.Activity.PREVIOUS" />
+                <action android:name="com.shang.mediaplayerbykotlin.Activity.MODE" />
+                <action android:name="com.shang.mediaplayerbykotlin.Activity.LOOPING" />
+                <action android:name="com.shang.mediaplayerbykotlin.Activity.CURRENT_TIME" />
             </intent-filter>
         </receiver>
 
         <activity
-            android:name=".PlayListActivity"
+            android:name=".Activity.PlayListActivity"
             android:label="@string/title_activity_play_list"
             android:theme="@style/AppTheme"></activity>
     </application>
