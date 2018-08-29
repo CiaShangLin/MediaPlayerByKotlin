@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageButton
+        android:id="@+id/simpleBt"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_play" />
+
+    <ImageView
+        android:id="@+id/simpleIg"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_music" />
+
+    <TextView
+        android:id="@+id/simpleTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="MusicTitle"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/simpleBt"
+        app:layout_constraintStart_toEndOf="@+id/simpleIg"
+        app:layout_constraintTop_toTopOf="@+id/simpleIg" />
+
+    <TextView
+        android:id="@+id/simpleTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MusicTime"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/simpleTitle"
+        app:layout_constraintTop_toBottomOf="@+id/simpleTitle" />
+</android.support.constraint.ConstraintLayout>

@@ -1,6 +1,9 @@
 package com.shang.mediaplayerbykotlin.Activity
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.*
 import android.support.v4.app.ActivityCompat
@@ -10,22 +13,24 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 
 import android.support.v7.widget.LinearLayoutManager
+import android.text.format.DateFormat.getTimeFormat
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
+import com.shang.mediaplayerbykotlin.*
 import com.shang.mediaplayerbykotlin.Adapter.MusicDataAdapter
 import com.shang.mediaplayerbykotlin.Adapter.PlayListDataAdapter
 import com.shang.mediaplayerbykotlin.Adapter.PlayListNameAdapter
-import com.shang.mediaplayerbykotlin.CheckFileRoom
 import com.shang.mediaplayerbykotlin.MP.MPC
+import com.shang.mediaplayerbykotlin.MP.MPC_Interface
 import com.shang.mediaplayerbykotlin.MP.MediaPlayerService
-import com.shang.mediaplayerbykotlin.Notification
-import com.shang.mediaplayerbykotlin.R
 import com.shang.mediaplayerbykotlin.Room.*
-import com.shang.mediaplayerbykotlin.TimerDialog
 import kotlinx.android.synthetic.main.drawer_layout.*
+import kotlinx.android.synthetic.main.media_play_controller.*
+import kotlinx.android.synthetic.main.media_player.*
+import kotlinx.android.synthetic.main.simple_controller_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
@@ -58,6 +63,28 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    var broadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            when (intent!!.action) {
+                PlayMusicActivity.START -> {
+                    simpleBt.setImageResource(R.drawable.ic_pause)
+
+                    simpleTitle.text = intent.getStringExtra(MPC_Interface.NAME)
+                    simpleTime.text = FileUnits.lastModifiedToSimpleDateFormat(intent.getIntExtra(MPC_Interface.DURATION, 0).toLong())
+
+                }
+                PlayMusicActivity.PAUSE -> {
+                    simpleBt.setImageResource(R.drawable.ic_play)
+                }
+                PlayMusicActivity.RESTART -> {
+                    simpleBt.setImageResource(R.drawable.ic_pause)
+                }
+
+            }
+        }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -123,8 +150,8 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 R.id.timer -> {
-                    var timerDialog=TimerDialog()
-                    timerDialog.show(fragmentManager,"TimerDialog")
+                    var timerDialog = TimerDialog()
+                    timerDialog.show(fragmentManager, "TimerDialog")
                 }
             }
 
@@ -133,6 +160,12 @@ class MainActivity : AppCompatActivity() {
 
         recyclerview.layoutManager = LinearLayoutManager(this@MainActivity)
         recyclerview.setHasFixedSize(true)
+
+        simpleBt.setOnClickListener {
+            startService(Intent(this, MediaPlayerService::class.java).apply {
+                this.action = PlayMusicActivity.PLAY
+            })
+        }
 
     }
 
@@ -235,6 +268,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        var intentFilter = IntentFilter().apply {
+            this.addAction(PlayMusicActivity.START)
+            this.addAction(PlayMusicActivity.PAUSE)
+            this.addAction(PlayMusicActivity.RESTART)
+        }
+        registerReceiver(broadcastReceiver, intentFilter)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        unregisterReceiver(broadcastReceiver)
+    }
 }
 
 

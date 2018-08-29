@@ -65,7 +65,6 @@ class MPC_normal(var context: Context) : MPC_Interface {
             MPC!!.mediaPlayer!!.pause()
         }
 
-
         stopTimer()
 
         context.sendBroadcast(Intent().apply {
@@ -83,7 +82,6 @@ class MPC_normal(var context: Context) : MPC_Interface {
                 action = PlayMusicActivity.RESTART
             })
         }
-
     }
 
 

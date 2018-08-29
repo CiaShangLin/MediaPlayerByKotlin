@@ -24,7 +24,7 @@
                 android:id="@+id/play_list_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:title="title"></android.support.v7.widget.Toolbar>
+                app:title="播放清單"></android.support.v7.widget.Toolbar>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/faker"
@@ -37,20 +37,13 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbarSize="20dp"
-        android:scrollbarStyle="insideOverlay"
-        android:scrollbars="vertical"
-        app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
         <android.support.v7.widget.RecyclerView
+            app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"
             android:id="@+id/play_list_recyc"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"
-
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -63,6 +56,5 @@
         </android.support.v7.widget.RecyclerView>
 
 
-    </android.support.v4.widget.NestedScrollView>
 
 </android.support.design.widget.CoordinatorLayout>

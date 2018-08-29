@@ -117,6 +117,20 @@ class PlayMusicActivity : AppCompatActivity() {
 
         myReceiver = MyReceiver()
 
+        if(MPC.mediaPlayer==null){
+            Log.d(TAG,"正常播放")
+            MPC.index=intent.getIntExtra(MPC_Interface.INDEX,0)
+            startService(Intent(this, MediaPlayerService::class.java).apply {
+                this.action = PLAY
+            })
+        }else{
+            Log.d(TAG,"插播")
+            MPC.index=intent.getIntExtra(MPC_Interface.INDEX,0)
+            startService(Intent(this, MediaPlayerService::class.java).apply {
+                this.action = INSERT
+            })
+        }
+
         play_music_bar.setNavigationIcon(R.drawable.ic_back)
         play_music_bar.title = ""
         setSupportActionBar(play_music_bar)
@@ -175,19 +189,6 @@ class PlayMusicActivity : AppCompatActivity() {
 
         })
 
-        if(MPC.mediaPlayer==null){
-            Log.d(TAG,"正常播放")
-            MPC.index=intent.getIntExtra(MPC_Interface.INDEX,0)
-            startService(Intent(this, MediaPlayerService::class.java).apply {
-                this.action = PLAY
-            })
-        }else{
-            Log.d(TAG,"插播")
-            MPC.index=intent.getIntExtra(MPC_Interface.INDEX,0)
-            startService(Intent(this, MediaPlayerService::class.java).apply {
-                this.action = INSERT
-            })
-        }
 
     }
 
