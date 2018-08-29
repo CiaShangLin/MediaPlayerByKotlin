@@ -1,9 +1,6 @@
 package com.shang.mediaplayerbykotlin.Room
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
-import android.arch.persistence.room.Update
+import android.arch.persistence.room.*
 
 @Dao
 interface Music_ListData_Dao {
@@ -22,5 +19,8 @@ interface Music_ListData_Dao {
 
     @Update
     fun update(musicListData:Music_ListData_Entity)
+
+    @Delete
+    fun delete(musicListData:Music_ListData_Entity)
 
 }

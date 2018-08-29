@@ -12,6 +12,7 @@ interface MPC_Interface{
         val NAME:String="NAME"
         val DURATION: String = "DURATION"
         val INDEX:String="INDEX"
+        val ID:String="ID"
     }
 
 

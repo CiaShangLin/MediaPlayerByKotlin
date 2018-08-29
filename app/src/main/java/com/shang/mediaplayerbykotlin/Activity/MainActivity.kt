@@ -25,9 +25,8 @@ import com.shang.mediaplayerbykotlin.R
 import com.shang.mediaplayerbykotlin.Room.*
 import kotlinx.android.synthetic.main.drawer_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.android.UI
 import org.jetbrains.anko.custom.async
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
@@ -53,6 +52,8 @@ class MainActivity : AppCompatActivity() {
                     adapter = MusicDataAdapter(this@MainActivity, MPC.musicList)
                     recyclerview.adapter = adapter
                 }
+
+
             }
         }
     }
@@ -97,10 +98,12 @@ class MainActivity : AppCompatActivity() {
                 R.id.myMusic -> {
                     doAsync {
                         var list = database.getMusic_Data_Dao().getAll()
+                        var setting=database.getSetting_Dao().getSetting()
 
                         MPC.musicList = list
+                        MPC.sort(setting.sort_mode,setting.sort_type)
                         uiThread {
-                            recyclerview.adapter = MusicDataAdapter(this@MainActivity, list)
+                            recyclerview.adapter = MusicDataAdapter(this@MainActivity, MPC.musicList)
                         }
                     }
                 }
@@ -183,19 +186,20 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
 
-                    launch(CommonPool){
-                        doAsync {
-                            database.getSetting_Dao().update(Setting_Entity().apply {
-                                this.name = Setting_Entity.key
-                                this.sort_mode = mode
-                                this.sort_type = type
-                            })
-                            MPC.sort(mode, type)
-                            uiThread {
-                                adapter.notifyDataSetChanged()
-                            }
+                    doAsync {
+
+                        database.getSetting_Dao().update(Setting_Entity().apply {
+                            this.name = Setting_Entity.key
+                            this.sort_mode = mode
+                            this.sort_type = type
+                        })
+
+                        MPC.sort(mode, type)
+                        uiThread {
+                            adapter.notifyDataSetChanged()
                         }
                     }
+
                     true
                 }
 

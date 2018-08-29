@@ -9,6 +9,7 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
 import com.shang.mediaplayerbykotlin.Adapter.PlayListDataAdapter
 import com.shang.mediaplayerbykotlin.MP.MPC
+import com.shang.mediaplayerbykotlin.MP.MPC_Interface
 import com.shang.mediaplayerbykotlin.R
 import com.shang.mediaplayerbykotlin.Room.MusicDatabase
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
@@ -29,7 +30,11 @@ class PlayListActivity : AppCompatActivity() {
 
 
     lateinit var DataList: MutableList<Music_ListData_Entity>
-    var playListName_id: Long = 0
+
+    companion object {
+        var playListName_id: Long = 0
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,7 +84,7 @@ class PlayListActivity : AppCompatActivity() {
 
     fun changeData() {
         doAsync {
-            playListName_id = intent.getLongExtra("ID", 0)
+            playListName_id = intent.getLongExtra(MPC_Interface.ID, 0)
             DataList = database.getMusic_ListData_Dao().getListDataFromListName(playListName_id)
             update(0, 0)
 
@@ -108,8 +113,6 @@ class PlayListActivity : AppCompatActivity() {
         DataList.forEach {
             Log.d(TAG, "DataList:  " + it.musicPath + " " + it.position)
         }
-
-
     }
 
 }

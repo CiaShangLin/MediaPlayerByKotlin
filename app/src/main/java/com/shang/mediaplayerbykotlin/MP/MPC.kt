@@ -26,6 +26,7 @@ open class MPC {
 
         // 1=修改日期 2=名稱長度 3=時間長度
         fun sort(mode: Boolean, type: Int) {
+            var s=System.currentTimeMillis()
             if (mode) {   //升序
                 when (type) {
                     1 -> {
@@ -51,6 +52,7 @@ open class MPC {
                     }
                 }
             }
+            Log.d(TAG,((System.currentTimeMillis()-s)/1000.0).toString())
         }
 
         fun startTimer(context: Context) {
