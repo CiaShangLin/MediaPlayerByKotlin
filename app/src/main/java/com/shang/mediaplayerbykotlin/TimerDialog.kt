@@ -43,9 +43,11 @@ class TimerDialog : DialogFragment() {
 
         timerStartBt.setOnClickListener {
             try {
-                var timer = (timerHoursEt.text.toString().toInt() * 60
-                        + timerMinuteEt.text.toString().toInt() * 60
-                        + timerSecondEt.text.toString().toInt()) * 1000
+                var hours = if (timerHoursEt.text.toString() == "") 0 else timerHoursEt.text.toString().toInt() * 60 * 60
+                var minute = if (timerMinuteEt.text.toString() == "") 0 else timerMinuteEt.text.toString().toInt() * 60
+                var second = if (timerSecondEt.text.toString() == "") 0 else timerSecondEt.text.toString().toInt()
+                var timer = (hours + minute + second) * 1000
+
                 handler.postDelayed(runnable, timer.toLong())
                 toast("設置完成")
                 dismiss()
