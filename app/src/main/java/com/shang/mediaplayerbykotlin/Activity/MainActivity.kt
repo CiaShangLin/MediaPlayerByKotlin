@@ -38,7 +38,9 @@ class MainActivity : AppCompatActivity() {
 
     val TAG = "Music"
 
-    lateinit var database: MusicDatabase
+    val database: MusicDatabase by lazy{
+        MusicDatabase.getMusicDatabase(this)
+    }
     lateinit var adapter: MusicDataAdapter
 
     var handler = object : Handler() {
@@ -47,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
             when (msg?.what) {
                 MusicDataAdapter.DATABASE_SUCCCESS -> {
-                    database = MusicDatabase.getMusicDatabase(this@MainActivity)
+
 
                     adapter = MusicDataAdapter(this@MainActivity, MPC.musicList)
                     recyclerview.adapter = adapter

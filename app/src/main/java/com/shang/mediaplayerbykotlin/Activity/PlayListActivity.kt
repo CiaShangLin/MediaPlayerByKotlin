@@ -59,16 +59,15 @@ class PlayListActivity : AppCompatActivity() {
                 var data = adapter.musicList.removeAt(from)
                 adapter.musicList.add(to, data)
                 adapter.notifyItemMoved(from, to)
-                MPC.musicList = adapter.musicList
 
-                AsyncTask.execute {
+
+                doAsync {
                     update(from, to)
+                    MPC.musicList = adapter.musicList
+                    uiThread {
+                        adapter.notifyDataSetChanged()
+                    }
                 }
-
-                MPC.musicList.forEach {
-                    Log.d(TAG, "MPC:" + it.name)
-                }
-
                 return true
             }
 
