@@ -16,6 +16,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
 import com.shang.mediaplayerbykotlin.Adapter.MusicDataAdapter
+import com.shang.mediaplayerbykotlin.Adapter.PlayListDataAdapter
 import com.shang.mediaplayerbykotlin.Adapter.PlayListNameAdapter
 import com.shang.mediaplayerbykotlin.CheckFileRoom
 import com.shang.mediaplayerbykotlin.MP.MPC
@@ -23,6 +24,7 @@ import com.shang.mediaplayerbykotlin.MP.MediaPlayerService
 import com.shang.mediaplayerbykotlin.Notification
 import com.shang.mediaplayerbykotlin.R
 import com.shang.mediaplayerbykotlin.Room.*
+import com.shang.mediaplayerbykotlin.TimerDialog
 import kotlinx.android.synthetic.main.drawer_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 import kotlinx.coroutines.experimental.*
@@ -38,10 +40,12 @@ class MainActivity : AppCompatActivity() {
 
     val TAG = "Music"
 
-    val database: MusicDatabase by lazy{
+    val database: MusicDatabase by lazy {
         MusicDatabase.getMusicDatabase(this)
     }
-    lateinit var adapter: MusicDataAdapter
+
+    lateinit var adapterMain: MusicDataAdapter
+    lateinit var adapterListName: PlayListNameAdapter
 
     var handler = object : Handler() {
         override fun handleMessage(msg: Message?) {
@@ -49,13 +53,9 @@ class MainActivity : AppCompatActivity() {
 
             when (msg?.what) {
                 MusicDataAdapter.DATABASE_SUCCCESS -> {
-
-
-                    adapter = MusicDataAdapter(this@MainActivity, MPC.musicList)
-                    recyclerview.adapter = adapter
+                    adapterMain = MusicDataAdapter(this@MainActivity, MPC.musicList)
+                    recyclerview.adapter = adapterMain
                 }
-
-
             }
         }
     }
@@ -100,12 +100,12 @@ class MainActivity : AppCompatActivity() {
                 R.id.myMusic -> {
                     doAsync {
                         var list = database.getMusic_Data_Dao().getAll()
-                        var setting=database.getSetting_Dao().getSetting()
+                        var setting = database.getSetting_Dao().getSetting()
 
                         MPC.musicList = list
-                        MPC.sort(setting.sort_mode,setting.sort_type)
+                        MPC.sort(setting.sort_mode, setting.sort_type)
                         uiThread {
-                            recyclerview.adapter = MusicDataAdapter(this@MainActivity, MPC.musicList)
+                            recyclerview.adapter = adapterMain
                         }
                     }
                 }
@@ -117,16 +117,14 @@ class MainActivity : AppCompatActivity() {
                         var playList = mutableListOf<Music_ListName_Entity>()
                         playList.addAll(database.getMusic_ListName_Dao().getAll())
                         uiThread {
-                            recyclerview.adapter = PlayListNameAdapter(this@MainActivity, playList)
+                            adapterListName = PlayListNameAdapter(this@MainActivity, playList)
+                            recyclerview.adapter = adapterListName
                         }
                     }
                 }
                 R.id.timer -> {
-                    Handler().postDelayed(Runnable {
-                        startService(Intent(this,MediaPlayerService::class.java).apply {
-                            this.action=PlayMusicActivity.PAUSE
-                        })
-                    },40*60*1000)
+                    var timerDialog=TimerDialog()
+                    timerDialog.show(fragmentManager,"TimerDialog")
                 }
             }
 
@@ -157,7 +155,8 @@ class MainActivity : AppCompatActivity() {
             var inf = popupMenu.menuInflater
             inf.inflate(R.menu.sort_menu, popupMenu.menu)
 
-            AsyncTask.execute {
+
+            doAsync {
                 var settingDao = database.getSetting_Dao()
                 var settingEntity = settingDao.getSetting()
 
@@ -188,27 +187,26 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
 
-                    doAsync {
+                    database.getSetting_Dao().update(Setting_Entity().apply {
+                        this.name = Setting_Entity.key
+                        this.sort_mode = mode
+                        this.sort_type = type
+                    })
 
-                        database.getSetting_Dao().update(Setting_Entity().apply {
-                            this.name = Setting_Entity.key
-                            this.sort_mode = mode
-                            this.sort_type = type
-                        })
+                    MPC.sort(mode, type)
 
-                        MPC.sort(mode, type)
-                        uiThread {
-                            adapter.notifyDataSetChanged()
-                        }
-                    }
+                    adapterMain.notifyDataSetChanged()
+
 
                     true
                 }
 
-                runOnUiThread {
+                uiThread {
                     popupMenu.show()
                 }
+
             }
+
             true
         }
 
