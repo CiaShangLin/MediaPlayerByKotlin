@@ -10,8 +10,8 @@
 
     <ImageButton
         android:id="@+id/playerBt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -21,7 +21,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_play"
+        app:srcCompat="@drawable/ic_play_button"
         tools:ignore="VectorDrawableCompat" />
 
     <ImageButton
