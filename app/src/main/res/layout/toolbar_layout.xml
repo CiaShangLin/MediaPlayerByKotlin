@@ -41,7 +41,7 @@
                     app:title="我的音樂"></android.support.v7.widget.Toolbar>
 
                 <include
-                    layout="@layout/simple_controller_layout"
+                    layout="@layout/small_controller_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 

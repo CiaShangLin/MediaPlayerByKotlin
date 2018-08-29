@@ -80,7 +80,7 @@ class PlayMusicActivity : AppCompatActivity() {
                 }
 
                 PAUSE ->{
-                    playerBt.setImageResource(R.drawable.ic_play)
+                    playerBt.setImageResource(R.drawable.ic_play_button)
                 }
 
                 RESTART ->{

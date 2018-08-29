@@ -28,7 +28,7 @@ class Notification {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-                notificationChannel = NotificationChannel(channel_ID, "Test", NotificationManager.IMPORTANCE_LOW)
+                notificationChannel = NotificationChannel(channel_ID, "Test", NotificationManager.IMPORTANCE_MIN)
                 notificationChannel.enableLights(true)
                 notificationChannel.lightColor = Color.GREEN
                 notificationChannel.enableVibration(false)
@@ -62,14 +62,13 @@ class Notification {
             remote.setImageViewResource(R.id.remoteNextBt,R.drawable.ic_next)
             remote.setImageViewResource(R.id.remoteCancelBt,R.drawable.ic_cancel)
             remote.setTextViewText(R.id.remoteNameTv,"Song Name")
-            remote.setTextViewText(R.id.remoteTimeTv,"03:14")
 
             return remote
         }
 
         fun getPendingIntent(context: Context): PendingIntent {
             var intent = Intent(context, MediaPlayerService::class.java).apply {
-                this.action = PlayMusicActivity.PAUSE
+                this.action = PlayMusicActivity.PLAY
             }
             var pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
             return pendingIntent

@@ -18,31 +18,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/remoteTimeTv"
+        android:layout_marginStart="13dp"
+        android:layout_toEndOf="@+id/remoteIg"
         android:ellipsize="end"
         android:singleLine="true"
         android:text="歌名"
         android:textColor="@android:color/white"
-        android:textSize="14sp" />
-
-    <TextView
-        android:id="@+id/remoteTimeTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/remoteNameTv"
-        android:layout_marginStart="18dp"
-        android:layout_toEndOf="@+id/remoteIg"
-        android:text="03:14"
-        android:textColor="@android:color/white"
-        android:textSize="12sp" />
+        android:textSize="18sp" />
 
     <ImageButton
         android:id="@+id/remotePreBt"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:layout_alignBottom="@+id/remoteIg"
-        android:layout_alignStart="@+id/remoteTimeTv"
-        android:layout_marginBottom="2dp"
+        android:layout_alignBottom="@+id/remoteNextBt"
+        android:layout_alignStart="@+id/remoteNameTv"
         android:background="@android:color/transparent"
         app:srcCompat="@drawable/ic_previous" />
 
@@ -51,10 +40,10 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="2dp"
-        android:layout_marginStart="88dp"
-        android:layout_toEndOf="@+id/remoteTimeTv"
+        android:layout_marginStart="109dp"
+        android:layout_toEndOf="@+id/remoteNameTv"
         android:background="@android:color/transparent"
+        android:scaleType="fitXY"
         app:srcCompat="@drawable/ic_remote_play" />
 
     <ImageButton

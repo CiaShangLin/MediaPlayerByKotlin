@@ -30,7 +30,7 @@ import com.shang.mediaplayerbykotlin.Room.*
 import kotlinx.android.synthetic.main.drawer_layout.*
 import kotlinx.android.synthetic.main.media_play_controller.*
 import kotlinx.android.synthetic.main.media_player.*
-import kotlinx.android.synthetic.main.simple_controller_layout.*
+import kotlinx.android.synthetic.main.small_controller_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
@@ -69,17 +69,17 @@ class MainActivity : AppCompatActivity() {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent!!.action) {
                 PlayMusicActivity.START -> {
-                    simpleBt.setImageResource(R.drawable.ic_pause)
+                    simpleBt.setImageResource(R.drawable.ic_remote_pause)
 
                     simpleTitle.text = intent.getStringExtra(MPC_Interface.NAME)
                     simpleTime.text = FileUnits.lastModifiedToSimpleDateFormat(intent.getIntExtra(MPC_Interface.DURATION, 0).toLong())
 
                 }
                 PlayMusicActivity.PAUSE -> {
-                    simpleBt.setImageResource(R.drawable.ic_play)
+                    simpleBt.setImageResource(R.drawable.ic_remote_play)
                 }
                 PlayMusicActivity.RESTART -> {
-                    simpleBt.setImageResource(R.drawable.ic_pause)
+                    simpleBt.setImageResource(R.drawable.ic_remote_pause)
                 }
 
             }
@@ -133,11 +133,13 @@ class MainActivity : AppCompatActivity() {
                         MPC.sort(setting.sort_mode, setting.sort_type)
                         uiThread {
                             recyclerview.adapter = adapterMain
+
                         }
                     }
                 }
                 R.id.favorite -> {
 
+                    Notification.showNotication(this)
                 }
                 R.id.musicList -> {
                     doAsync {
