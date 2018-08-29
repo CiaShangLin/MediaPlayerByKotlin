@@ -18,6 +18,7 @@ import com.shang.mediaplayerbykotlin.Room.Music_ListData_Entity
 import kotlinx.android.synthetic.main.activity_play_list.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import java.util.*
 
 class PlayListActivity : AppCompatActivity() {
 
@@ -56,6 +57,17 @@ class PlayListActivity : AppCompatActivity() {
                 var from = viewHolder!!.adapterPosition
                 val to = target!!.adapterPosition
 
+                if(from < to ){
+
+                    for(i in from..to-1){
+                        Collections.swap(adapter.musicList,i,i+1)
+
+                    }
+                }else{
+                    for (i in from downTo to + 1) {
+                        Collections.swap(adapter.musicList, i, i - 1)
+                    }
+                }
                 var data = adapter.musicList.removeAt(from)
                 adapter.musicList.add(to, data)
                 adapter.notifyItemMoved(from, to)
@@ -64,9 +76,6 @@ class PlayListActivity : AppCompatActivity() {
                 doAsync {
                     update(from, to)
                     MPC.musicList = adapter.musicList
-                    uiThread {
-                        adapter.notifyDataSetChanged()
-                    }
                 }
                 return true
             }
