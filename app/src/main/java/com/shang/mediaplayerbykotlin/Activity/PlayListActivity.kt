@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
+import android.view.MenuItem
 import com.shang.mediaplayerbykotlin.Adapter.PlayListDataAdapter
 import com.shang.mediaplayerbykotlin.MP.MPC
 import com.shang.mediaplayerbykotlin.MP.MPC_Interface
@@ -16,6 +17,7 @@ import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import com.shang.mediaplayerbykotlin.Room.Music_ListData_Entity
 
 import kotlinx.android.synthetic.main.activity_play_list.*
+import kotlinx.android.synthetic.main.activity_play_music.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.util.*
@@ -46,6 +48,12 @@ class PlayListActivity : AppCompatActivity() {
     }
 
     fun initView() {
+
+        setSupportActionBar(play_list_toolbar)
+        play_list_toolbar.title="播放清單"
+        play_list_toolbar.setNavigationIcon(R.drawable.ic_back)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
         var adapter = PlayListDataAdapter(this, MPC.musicList)
         play_list_recyc.layoutManager = LinearLayoutManager(this)
         play_list_recyc.adapter = adapter
@@ -123,4 +131,12 @@ class PlayListActivity : AppCompatActivity() {
         }
     }
 
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.getItemId()) {
+            android.R.id.home -> finish()
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }
