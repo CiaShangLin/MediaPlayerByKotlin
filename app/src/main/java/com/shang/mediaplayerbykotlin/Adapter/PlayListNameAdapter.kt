@@ -4,7 +4,10 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
 import android.os.AsyncTask
+import android.os.Build
+import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -21,9 +24,7 @@ import com.shang.mediaplayerbykotlin.Room.MusicDatabase
 import com.shang.mediaplayerbykotlin.Room.Music_ListName_Entity
 import kotlinx.android.synthetic.main.input_edittext.view.*
 import kotlinx.android.synthetic.main.play_list_name_item.view.*
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.runOnUiThread
-import org.jetbrains.anko.uiThread
+import org.jetbrains.anko.*
 
 /**
  * Created by Shang on 2018/8/23.
@@ -54,6 +55,7 @@ class PlayListNameAdapter(var context: Context, var playList: MutableList<Music_
             holder.playListTv.visibility = View.INVISIBLE
             holder.playListBt.visibility = View.INVISIBLE
             holder.playListAddBt.visibility = View.VISIBLE
+            holder.playListCon.setBackgroundColor(context.resources.getColor(R.color.tra))
 
             holder.playListAddBt.setOnClickListener {
                 addPlayListDialog()
@@ -63,6 +65,8 @@ class PlayListNameAdapter(var context: Context, var playList: MutableList<Music_
             holder.playListTv.visibility = View.VISIBLE
             holder.playListBt.visibility = View.VISIBLE
             holder.playListAddBt.visibility = View.INVISIBLE
+            holder.playListCon.setBackgroundColor(context.resources.getColor(R.color.colorAcc))
+
 
             holder.playListTv.text = playList.get(position).tableName
             holder.playListBt.setOnClickListener {
@@ -88,6 +92,8 @@ class PlayListNameAdapter(var context: Context, var playList: MutableList<Music_
         val playListAddBt = view.findViewById<ImageButton>(R.id.playListAddBt)
 
         val playListCardView = view.findViewById<CardView>(R.id.playListCardView)
+
+        val playListCon=view.findViewById<ConstraintLayout>(R.id.playListCon)
 
     }
 

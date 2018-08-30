@@ -1,5 +1,6 @@
 package com.shang.mediaplayerbykotlin.Activity
 
+import android.app.ProgressDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -20,6 +21,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
+import android.widget.ProgressBar
 import com.shang.mediaplayerbykotlin.*
 import com.shang.mediaplayerbykotlin.Adapter.MusicDataAdapter
 import com.shang.mediaplayerbykotlin.Adapter.PlayListDataAdapter
@@ -32,11 +34,13 @@ import kotlinx.android.synthetic.main.activity_play_music.*
 import kotlinx.android.synthetic.main.drawer_layout.*
 import kotlinx.android.synthetic.main.media_play_controller.*
 import kotlinx.android.synthetic.main.media_player.*
+import kotlinx.android.synthetic.main.music_data_item.*
 import kotlinx.android.synthetic.main.small_controller_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
 import org.jetbrains.anko.custom.async
+import org.jetbrains.anko.custom.style
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
@@ -53,6 +57,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var adapterMain: MusicDataAdapter
     lateinit var adapterListName: PlayListNameAdapter
+
 
     var handler = object : Handler() {
         override fun handleMessage(msg: Message?) {
@@ -76,10 +81,10 @@ class MainActivity : AppCompatActivity() {
                     simpleTitle.text = intent.getStringExtra(MPC_Interface.NAME)
                     simpleTime.text = FileUnits.lastModifiedToSimpleDateFormat(intent.getIntExtra(MPC_Interface.DURATION, 0).toLong())
 
-                    var bitmap= BitmapFactory.decodeFile(MPC.musicList.get(MPC.index).picture)
-                    if(bitmap==null){
+                    var bitmap = BitmapFactory.decodeFile(MPC.musicList.get(MPC.index).picture)
+                    if (bitmap == null) {
                         simpleIg.setImageResource(R.drawable.ic_music)
-                    }else{
+                    } else {
                         simpleIg.setImageBitmap(bitmap)
                     }
                 }
@@ -141,7 +146,6 @@ class MainActivity : AppCompatActivity() {
                         MPC.sort(setting.sort_mode, setting.sort_type)
                         uiThread {
                             recyclerview.adapter = adapterMain
-
                         }
                     }
                 }
@@ -230,17 +234,20 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
 
-                    database.getSetting_Dao().update(Setting_Entity().apply {
-                        this.name = Setting_Entity.key
-                        this.sort_mode = mode
-                        this.sort_type = type
-                    })
+                    doAsync {
+                        database.getSetting_Dao().update(Setting_Entity().apply {
+                            this.name = Setting_Entity.key
+                            this.sort_mode = mode
+                            this.sort_type = type
+                        })
 
-                    MPC.sort(mode, type)
+                        MPC.sort(mode, type)
+                        Log.d(TAG,"sort")
+                        uiThread {
 
-                    adapterMain.notifyDataSetChanged()
-
-
+                            adapterMain.notifyDataSetChanged()
+                        }
+                    }
                     true
                 }
 

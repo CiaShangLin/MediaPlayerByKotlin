@@ -250,6 +250,11 @@ class PlayMusicActivity : AppCompatActivity() {
         registerReceiver(myReceiver, intentFilter)
     }
 
+    override fun onResume() {
+        super.onResume()
+        play_music_bar.title = ""
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG, "onDestroy()")

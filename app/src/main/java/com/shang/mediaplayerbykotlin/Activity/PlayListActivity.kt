@@ -52,7 +52,9 @@ class PlayListActivity : AppCompatActivity() {
         setSupportActionBar(play_list_toolbar)
         play_list_toolbar.title="播放清單"
         play_list_toolbar.setNavigationIcon(R.drawable.ic_back)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        play_list_toolbar.setNavigationOnClickListener{
+            finish()
+        }
 
         var adapter = PlayListDataAdapter(this, MPC.musicList)
         play_list_recyc.layoutManager = LinearLayoutManager(this)
@@ -133,10 +135,4 @@ class PlayListActivity : AppCompatActivity() {
 
 
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.getItemId()) {
-            android.R.id.home -> finish()
-        }
-        return super.onOptionsItemSelected(item)
-    }
 }

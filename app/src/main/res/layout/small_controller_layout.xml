@@ -40,6 +40,7 @@
         android:ellipsize="end"
         android:singleLine="true"
         android:text="MusicTitle"
+        android:textColor="@color/white"
         android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@+id/simpleBt"
         app:layout_constraintStart_toEndOf="@+id/simpleIg"
@@ -50,6 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="MusicTime"
+        android:textColor="@color/white"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="@+id/simpleTitle"
         app:layout_constraintTop_toBottomOf="@+id/simpleTitle" />
