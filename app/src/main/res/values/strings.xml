@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MediaPlayerByKotlin</string>
+    <string name="app_name">Kt播放器</string>
 
     <string name="MyRecevier">MyRecevier</string>
     <string name="title_activity_play_list">PlayListActivity</string>

@@ -40,7 +40,6 @@
                 <action android:name="com.shang.mediaplayerbykotlin.Activity.MODE" />
                 <action android:name="com.shang.mediaplayerbykotlin.Activity.LOOPING" />
                 <action android:name="com.shang.mediaplayerbykotlin.Activity.CURRENT_TIME" />
-                <action android:name="com.shang.mediaplayerbykotlin.Activity.RANDOM" />
             </intent-filter>
         </receiver>
 

@@ -144,7 +144,7 @@ class MPC_random(var context: Context) : MPC_Interface {
 
             context.sendBroadcast(Intent().apply {
                 action = PlayMusicActivity.LOOPING
-                putExtra("status", status)
+                putExtra(MPC_Interface.STATUS, status)
             })
 
         }

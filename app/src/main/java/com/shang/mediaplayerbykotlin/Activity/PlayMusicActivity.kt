@@ -12,11 +12,14 @@ import android.view.MenuItem
 import android.widget.SeekBar
 import com.shang.mediaplayerbykotlin.MP.MPC
 import com.shang.mediaplayerbykotlin.MP.MPC_Interface
+import com.shang.mediaplayerbykotlin.MP.MPC_normal
 import com.shang.mediaplayerbykotlin.MP.MediaPlayerService
+import com.shang.mediaplayerbykotlin.Notification
 import com.shang.mediaplayerbykotlin.R
 import kotlinx.android.synthetic.main.activity_play_music.*
 import kotlinx.android.synthetic.main.media_play_controller.*
 import kotlinx.android.synthetic.main.media_player.*
+import org.jetbrains.anko.contentView
 import org.jetbrains.anko.toast
 import java.text.SimpleDateFormat
 
@@ -40,7 +43,7 @@ class PlayMusicActivity : AppCompatActivity() {
         val SEEKBAR_MOVE:String="SEEKBAR_MOVE"
         val LOOPING:String="LOOPING"
         val CURRENT_TIME:String="CURRENT_TIME"
-        val RANDOM:String="RANDOM"
+
     }
 
 
@@ -63,12 +66,15 @@ class PlayMusicActivity : AppCompatActivity() {
             when (intent.action) {
                 START -> {
                     var duration = intent.getIntExtra(MPC_Interface.DURATION, 0)
+                    var name=intent.getStringExtra(MPC_Interface.NAME)
+
+
                     seekBar.progress = 0
                     seekBar.max = duration
 
                     startTimeTv.text = "0:00"
                     endTimeTv.text = getTimeFormat(duration)
-                    nameTv.text = intent.getStringExtra(MPC_Interface.NAME)
+                    nameTv.text = name
 
                     var bitmap=BitmapFactory.decodeFile(MPC.musicList.get(MPC.index).picture)
                     if(bitmap==null){
@@ -78,6 +84,8 @@ class PlayMusicActivity : AppCompatActivity() {
                     }
 
                     playerBt.setImageResource(R.drawable.ic_pause)
+
+                    Notification.showNotication(this@PlayMusicActivity,name)
                 }
 
                 PAUSE ->{
@@ -86,6 +94,7 @@ class PlayMusicActivity : AppCompatActivity() {
 
                 RESTART ->{
                     playerBt.setImageResource(R.drawable.ic_pause)
+
                 }
 
                 NEXT ->{
@@ -106,12 +115,14 @@ class PlayMusicActivity : AppCompatActivity() {
                     startTimeTv.text=getTimeFormat(duration)
                 }
 
-                RANDOM->{
-                    var status=intent.getBooleanExtra(RANDOM,false)
+                MODE->{
+                    var status=intent.getBooleanExtra(MODE,false)
                     if(status){
                         randomBt.setImageResource(R.drawable.ic_random_focus)
+                        toast("隨機模式打開")
                     }else{
                         randomBt.setImageResource(R.drawable.ic_random_nofocus)
+                        toast("隨機模式關閉")
                     }
                 }
 
@@ -177,9 +188,20 @@ class PlayMusicActivity : AppCompatActivity() {
         }
 
         randomBt.setOnClickListener {
-
-
+            startService(Intent(this,MediaPlayerService::class.java).apply {
+                this.action= MODE
+            })
         }
+        try{
+            if(MPC.mpc_mode is MPC_normal){
+                randomBt.setImageResource(R.drawable.ic_random_nofocus)
+            }else{
+                randomBt.setImageResource(R.drawable.ic_random_focus)
+            }
+        }catch (e:Exception){  //會噴出未定義錯誤
+            randomBt.setImageResource(R.drawable.ic_random_nofocus)
+        }
+
 
 
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -220,7 +242,7 @@ class PlayMusicActivity : AppCompatActivity() {
             this.addAction(MODE)
             this.addAction(LOOPING)
             this.addAction(CURRENT_TIME)
-            this.addAction(RANDOM)
+
         }
         registerReceiver(myReceiver, intentFilter)
     }

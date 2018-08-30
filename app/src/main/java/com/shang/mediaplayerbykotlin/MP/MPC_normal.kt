@@ -51,10 +51,6 @@ class MPC_normal(var context: Context) : MPC_Interface {
             next()
         }
 
-        context.sendBroadcast(Intent().apply {
-            action = PlayMusicActivity.START
-        })
-
     }
 
 

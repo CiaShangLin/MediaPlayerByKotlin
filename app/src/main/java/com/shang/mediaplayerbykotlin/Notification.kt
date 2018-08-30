@@ -10,6 +10,7 @@ import android.graphics.Color
 import android.os.Build
 import android.widget.RemoteViews
 import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
+import com.shang.mediaplayerbykotlin.MP.MPC
 import com.shang.mediaplayerbykotlin.MP.MediaPlayerService
 
 /**
@@ -28,7 +29,7 @@ class Notification {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-                notificationChannel = NotificationChannel(channel_ID, "Test", NotificationManager.IMPORTANCE_MIN)
+                notificationChannel = NotificationChannel(channel_ID, "Kt播放器", NotificationManager.IMPORTANCE_MIN)
                 notificationChannel.enableLights(true)
                 notificationChannel.lightColor = Color.GREEN
                 notificationChannel.enableVibration(false)
@@ -44,12 +45,12 @@ class Notification {
                 notificationBuilder = Notification.Builder(context).apply {
                     this.setContent(getRemoteViews(context,name))
                     this.setSmallIcon(R.drawable.ic_music)
-
                 }
             }
 
 
-            notificationManager.notify(123, notificationBuilder.build())
+            notificationManager.notify(ID, notificationBuilder.build())
+
 
         }
 
@@ -57,10 +58,16 @@ class Notification {
             var remote= RemoteViews(context.packageName,R.layout.remote_view_layout)
             remote.setImageViewResource(R.id.remoteIg,R.drawable.ic_music)
             remote.setImageViewResource(R.id.remotePreBt,R.drawable.ic_previous)
-            remote.setImageViewResource(R.id.remotePlayBt,R.drawable.ic_remote_play)
+            if(MPC.mediaPlayer!=null && MPC.mediaPlayer!!.isPlaying){
+                remote.setImageViewResource(R.id.remotePlayBt,R.drawable.ic_remote_pause)
+            }else{
+                remote.setImageViewResource(R.id.remotePlayBt,R.drawable.ic_remote_play)
+            }
+
             remote.setImageViewResource(R.id.remoteNextBt,R.drawable.ic_next)
             remote.setImageViewResource(R.id.remoteCancelBt,R.drawable.ic_cancel)
             remote.setTextViewText(R.id.remoteNameTv,name)
+            remote.setOnClickPendingIntent(R.id.remotePlayBt, getPendingIntent(context))
 
             return remote
         }
@@ -69,6 +76,7 @@ class Notification {
             var intent = Intent(context, MediaPlayerService::class.java).apply {
                 this.action = PlayMusicActivity.PLAY
             }
+
             var pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
             return pendingIntent
         }

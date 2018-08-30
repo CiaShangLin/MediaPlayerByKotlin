@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="64dp"
+    android:layout_height="94dp"
     android:background="@android:color/black">
 
     <ImageView
@@ -11,6 +11,7 @@
         android:layout_height="64dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:scaleType="fitXY"
         app:srcCompat="@drawable/ic_music" />
 
     <TextView
@@ -20,6 +21,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="13dp"
         android:layout_toEndOf="@+id/remoteIg"
+        android:layout_toStartOf="@+id/remoteNextBt"
         android:ellipsize="end"
         android:singleLine="true"
         android:text="歌名"
@@ -41,7 +43,7 @@
         android:layout_height="24dp"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="109dp"
-        android:layout_toEndOf="@+id/remoteNameTv"
+        android:layout_toEndOf="@+id/remotePreBt"
         android:background="@android:color/transparent"
         android:scaleType="fitXY"
         app:srcCompat="@drawable/ic_remote_play" />
@@ -50,10 +52,9 @@
         android:id="@+id/remoteNextBt"
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/remotePlayBt"
-        android:layout_marginBottom="2dp"
-        android:layout_marginEnd="12dp"
+        android:layout_marginEnd="16dp"
         android:background="@android:color/transparent"
         app:srcCompat="@drawable/ic_next" />
 

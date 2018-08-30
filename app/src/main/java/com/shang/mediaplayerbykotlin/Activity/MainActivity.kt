@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.os.*
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -27,6 +28,7 @@ import com.shang.mediaplayerbykotlin.MP.MPC
 import com.shang.mediaplayerbykotlin.MP.MPC_Interface
 import com.shang.mediaplayerbykotlin.MP.MediaPlayerService
 import com.shang.mediaplayerbykotlin.Room.*
+import kotlinx.android.synthetic.main.activity_play_music.*
 import kotlinx.android.synthetic.main.drawer_layout.*
 import kotlinx.android.synthetic.main.media_play_controller.*
 import kotlinx.android.synthetic.main.media_player.*
@@ -74,6 +76,12 @@ class MainActivity : AppCompatActivity() {
                     simpleTitle.text = intent.getStringExtra(MPC_Interface.NAME)
                     simpleTime.text = FileUnits.lastModifiedToSimpleDateFormat(intent.getIntExtra(MPC_Interface.DURATION, 0).toLong())
 
+                    var bitmap= BitmapFactory.decodeFile(MPC.musicList.get(MPC.index).picture)
+                    if(bitmap==null){
+                        simpleIg.setImageResource(R.drawable.ic_music)
+                    }else{
+                        simpleIg.setImageBitmap(bitmap)
+                    }
                 }
                 PlayMusicActivity.PAUSE -> {
                     simpleBt.setImageResource(R.drawable.ic_remote_play)
@@ -139,7 +147,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.favorite -> {
 
-                    Notification.showNotication(this)
+                    Notification.showNotication(this,MPC.musicList.get(MPC.index).name)
                 }
                 R.id.musicList -> {
                     doAsync {
