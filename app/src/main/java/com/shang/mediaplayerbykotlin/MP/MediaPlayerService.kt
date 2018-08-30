@@ -51,7 +51,19 @@ class MediaPlayerService : Service() {
             }
             PlayMusicActivity.MODE -> {
                 Log.d(TAG, MPC.mpc_mode.getName())
-                MPC.mpc_mode = MPC_random(baseContext)
+                var status:Boolean
+                if(MPC.mpc_mode is MPC_normal){
+                    MPC.mpc_mode = MPC_random(baseContext)
+                    status=true
+                }else{
+                    MPC.mpc_mode = MPC_normal(baseContext)
+                    status=false
+                }
+
+                sendBroadcast(Intent().apply {
+                    this.action=PlayMusicActivity.RANDOM
+                    this.putExtra(PlayMusicActivity.RANDOM,status)
+                })
             }
             PlayMusicActivity.REPEAT -> {
                 MPC.mpc_mode.setLooping()

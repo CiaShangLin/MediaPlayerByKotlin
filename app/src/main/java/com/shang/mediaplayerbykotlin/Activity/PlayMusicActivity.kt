@@ -40,6 +40,7 @@ class PlayMusicActivity : AppCompatActivity() {
         val SEEKBAR_MOVE:String="SEEKBAR_MOVE"
         val LOOPING:String="LOOPING"
         val CURRENT_TIME:String="CURRENT_TIME"
+        val RANDOM:String="RANDOM"
     }
 
 
@@ -96,7 +97,7 @@ class PlayMusicActivity : AppCompatActivity() {
                 }
 
                 LOOPING ->{
-                    toast(intent.getStringExtra("status"))
+                    toast(intent.getStringExtra(MPC_Interface.STATUS))
                 }
 
                 CURRENT_TIME ->{
@@ -104,6 +105,16 @@ class PlayMusicActivity : AppCompatActivity() {
                     seekBar.progress=duration
                     startTimeTv.text=getTimeFormat(duration)
                 }
+
+                RANDOM->{
+                    var status=intent.getBooleanExtra(RANDOM,false)
+                    if(status){
+                        randomBt.setImageResource(R.drawable.ic_random_focus)
+                    }else{
+                        randomBt.setImageResource(R.drawable.ic_random_nofocus)
+                    }
+                }
+
             }
         }
     }
@@ -209,6 +220,7 @@ class PlayMusicActivity : AppCompatActivity() {
             this.addAction(MODE)
             this.addAction(LOOPING)
             this.addAction(CURRENT_TIME)
+            this.addAction(RANDOM)
         }
         registerReceiver(myReceiver, intentFilter)
     }

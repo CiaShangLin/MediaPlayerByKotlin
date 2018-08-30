@@ -20,7 +20,7 @@ class Notification {
     companion object {
 
         val ID = 1
-        fun showNotication(context: Context) {
+        fun showNotication(context: Context,name:String) {
             var notificationChannel: NotificationChannel
             var notificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             var notificationBuilder: Notification.Builder
@@ -35,17 +35,16 @@ class Notification {
                 notificationManager.createNotificationChannel(notificationChannel)
 
                 notificationBuilder = Notification.Builder(context, channel_ID).apply {
-                    this.setContent(getRemoteViews(context))
-                    this.setSmallIcon(R.drawable.ic_favorite)
+                    this.setContent(getRemoteViews(context,name))
+                    this.setSmallIcon(R.drawable.ic_music)
                     this.setLargeIcon(android.graphics.BitmapFactory.decodeResource(context.resources, R.drawable.ic_music))
                 }
 
             } else {
                 notificationBuilder = Notification.Builder(context).apply {
-                    this.setContentTitle("Title")
-                    this.setContentText("TEST")
-                    this.setSmallIcon(R.drawable.ic_favorite)
-                    this.setLargeIcon(android.graphics.BitmapFactory.decodeResource(context.resources, R.drawable.ic_music))
+                    this.setContent(getRemoteViews(context,name))
+                    this.setSmallIcon(R.drawable.ic_music)
+
                 }
             }
 
@@ -54,19 +53,19 @@ class Notification {
 
         }
 
-        fun getRemoteViews(context: Context): RemoteViews {
+        private fun getRemoteViews(context: Context,name:String): RemoteViews {
             var remote= RemoteViews(context.packageName,R.layout.remote_view_layout)
             remote.setImageViewResource(R.id.remoteIg,R.drawable.ic_music)
             remote.setImageViewResource(R.id.remotePreBt,R.drawable.ic_previous)
             remote.setImageViewResource(R.id.remotePlayBt,R.drawable.ic_remote_play)
             remote.setImageViewResource(R.id.remoteNextBt,R.drawable.ic_next)
             remote.setImageViewResource(R.id.remoteCancelBt,R.drawable.ic_cancel)
-            remote.setTextViewText(R.id.remoteNameTv,"Song Name")
+            remote.setTextViewText(R.id.remoteNameTv,name)
 
             return remote
         }
 
-        fun getPendingIntent(context: Context): PendingIntent {
+        private fun getPendingIntent(context: Context): PendingIntent {
             var intent = Intent(context, MediaPlayerService::class.java).apply {
                 this.action = PlayMusicActivity.PLAY
             }
