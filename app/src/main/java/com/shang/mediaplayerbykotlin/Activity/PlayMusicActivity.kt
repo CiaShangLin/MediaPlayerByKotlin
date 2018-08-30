@@ -1,5 +1,6 @@
 package com.shang.mediaplayerbykotlin.Activity
 
+import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -66,15 +67,13 @@ class PlayMusicActivity : AppCompatActivity() {
             when (intent.action) {
                 START -> {
                     var duration = intent.getIntExtra(MPC_Interface.DURATION, 0)
-                    var name=intent.getStringExtra(MPC_Interface.NAME)
-
 
                     seekBar.progress = 0
                     seekBar.max = duration
 
                     startTimeTv.text = "0:00"
                     endTimeTv.text = getTimeFormat(duration)
-                    nameTv.text = name
+                    nameTv.text = intent.getStringExtra(MPC_Interface.NAME)
 
                     var bitmap=BitmapFactory.decodeFile(MPC.musicList.get(MPC.index).picture)
                     if(bitmap==null){
@@ -85,16 +84,18 @@ class PlayMusicActivity : AppCompatActivity() {
 
                     playerBt.setImageResource(R.drawable.ic_pause)
 
-                    Notification.showNotication(this@PlayMusicActivity,name)
+                    Notification.showNotication(this@PlayMusicActivity,intent.getStringExtra(MPC_Interface.NAME),MPC.musicList.get(MPC.index).picture)
+                    Notification.update(MPC.musicList.get(MPC.index).name,MPC.musicList.get(MPC.index).picture)
                 }
 
                 PAUSE ->{
                     playerBt.setImageResource(R.drawable.ic_play_button)
+                    Notification.update(MPC.musicList.get(MPC.index).name,MPC.musicList.get(MPC.index).picture)
                 }
 
                 RESTART ->{
                     playerBt.setImageResource(R.drawable.ic_pause)
-
+                    Notification.update(MPC.musicList.get(MPC.index).name,MPC.musicList.get(MPC.index).picture)
                 }
 
                 NEXT ->{

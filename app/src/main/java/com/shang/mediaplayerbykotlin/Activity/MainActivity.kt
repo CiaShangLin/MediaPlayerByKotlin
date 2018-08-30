@@ -147,7 +147,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.favorite -> {
 
-                    Notification.showNotication(this,MPC.musicList.get(MPC.index).name)
+
                 }
                 R.id.musicList -> {
                     doAsync {

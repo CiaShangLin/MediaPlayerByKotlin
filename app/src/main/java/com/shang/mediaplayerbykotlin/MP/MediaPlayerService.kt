@@ -67,6 +67,7 @@ class MediaPlayerService : Service() {
                     this.putExtra(PlayMusicActivity.MODE,status)
                 })
             }
+
             PlayMusicActivity.REPEAT -> {
                 MPC.mpc_mode.setLooping()
             }
