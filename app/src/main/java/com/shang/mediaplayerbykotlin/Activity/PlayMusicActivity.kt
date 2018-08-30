@@ -20,6 +20,7 @@ import com.shang.mediaplayerbykotlin.R
 import kotlinx.android.synthetic.main.activity_play_music.*
 import kotlinx.android.synthetic.main.media_play_controller.*
 import kotlinx.android.synthetic.main.media_player.*
+import kotlinx.android.synthetic.main.toolbar_layout.*
 import org.jetbrains.anko.contentView
 import org.jetbrains.anko.toast
 import java.text.SimpleDateFormat
@@ -154,10 +155,11 @@ class PlayMusicActivity : AppCompatActivity() {
             })
         }
 
+        setSupportActionBar(play_music_bar)
         play_music_bar.setNavigationIcon(R.drawable.ic_back)
         play_music_bar.title = ""
-        setSupportActionBar(play_music_bar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
 
         playerBt.setOnClickListener {
             startService(Intent(this, MediaPlayerService::class.java).apply {
