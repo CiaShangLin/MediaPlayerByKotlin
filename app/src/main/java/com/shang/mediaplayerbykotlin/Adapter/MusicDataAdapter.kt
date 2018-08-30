@@ -102,7 +102,7 @@ class MusicDataAdapter(var context: Context, var musicList: MutableList<Music_Da
     }
 
     fun addDialog(array: Array<String>, playListName: MutableList<Music_ListName_Entity>,position:Int) {
-        AlertDialog.Builder(context,android.R.style.Theme_Material_Dialog)
+        AlertDialog.Builder(context,android.R.style.Theme_Material_Light_Dialog)
                 .setTitle("加入至播放清單")
                 .setItems(array, DialogInterface.OnClickListener { dialog, which ->
                     doAsync {
