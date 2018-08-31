@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import org.jetbrains.anko.custom.style
 
 /**
  * Created by SERS on 2018/8/31.
@@ -23,6 +24,8 @@ class LoadDialog : DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         var view=inflater!!.inflate(R.layout.loading_dialog,container)
+
+
 
         return view
     }
