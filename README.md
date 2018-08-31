@@ -1,18 +1,10 @@
 # MediaPlayerByKotlin
-1.先循片手機的資料是MP3或是其他音檔的附檔名  
 
-2.使用MediaPlayer給定File或是檔案路徑,測試撥放   
+製作目的:
+剛讀完一個kotlin的書,想說做個APP順便練習kotlin,
+剛好換了新手機,以前ASUS有個撥放音樂軟體不錯
+可是新的ASUS沒有,也沒找到其他不錯的播放器
+所以就順手寫了一個
 
-3.Recycleview列出所有音檔,MediaPlayer的生命週期,MediaPlayer的UI變化  
-
-4.使用ViewPager或是negative抽屜,點擊功能
-
-5.睡眠定時器,撥放清單,最愛
-
-
-------------------------------------------------
-1.取得所有MP3檔案,本地+SDCARD
-2.使用MediaPlayer
-3.使用Service控制MediaPlayer
-4.使用android最新資料庫ROOM取代SQLite
-5.MediaPlayer的UI控制器
+google play
+https://play.google.com/store/apps/details?id=com.shang.mediaplayerbykotlin
