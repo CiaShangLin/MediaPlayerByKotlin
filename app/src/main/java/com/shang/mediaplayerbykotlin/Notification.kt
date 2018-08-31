@@ -47,6 +47,7 @@ class Notification {
             }
 
             notificationManager.notify(ID, notificationBuilder.build())
+
         }
 
         fun update(name:String,picture:String){
