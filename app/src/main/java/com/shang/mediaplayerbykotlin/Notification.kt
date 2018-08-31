@@ -35,7 +35,7 @@ class Notification {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 notificationManager=context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                notificationChannel = NotificationChannel(channel_ID, context.getString(R.string.app_name), NotificationManager.IMPORTANCE_MIN)
+                notificationChannel = NotificationChannel(channel_ID, context.getString(R.string.app_name), NotificationManager.IMPORTANCE_LOW)
                 notificationChannel.enableLights(true)
                 notificationChannel.lightColor = Color.GREEN
                 notificationChannel.enableVibration(false)
@@ -52,6 +52,7 @@ class Notification {
 
         fun update(name:String,picture:String){
             remoteViews.setTextViewText(R.id.remoteNameTv,name)
+
             if(MPC.mediaPlayer!=null && MPC.mediaPlayer!!.isPlaying){
                 remoteViews.setImageViewResource(R.id.remotePlayBt,R.drawable.ic_remote_pause)
             }else{
@@ -79,14 +80,17 @@ class Notification {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
                 notificationBuilder = Notification.Builder(context, channel_ID).apply {
-                    this.setContent(remoteViews)
+
                     this.setSmallIcon(R.drawable.ic_music)
                     this.setLargeIcon(android.graphics.BitmapFactory.decodeResource(context.resources, R.drawable.ic_music))
+                    this.setCustomContentView(remoteViews)
+
                 }
             } else {
                 notificationBuilder = Notification.Builder(context).apply {
                     this.setContent(remoteViews)
                     this.setSmallIcon(R.drawable.ic_music)
+         
                 }
             }
         }
