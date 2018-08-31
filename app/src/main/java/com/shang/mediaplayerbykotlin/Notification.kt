@@ -32,9 +32,9 @@ class Notification {
         fun showNotication(context: Context,name:String,picture: String) {
 
             remoteViews= getRemoteViews(context,name,picture)
-
+            notificationManager=context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                notificationManager=context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
                 notificationChannel = NotificationChannel(channel_ID, context.getString(R.string.app_name), NotificationManager.IMPORTANCE_LOW)
                 notificationChannel.enableLights(true)
                 notificationChannel.lightColor = Color.GREEN
