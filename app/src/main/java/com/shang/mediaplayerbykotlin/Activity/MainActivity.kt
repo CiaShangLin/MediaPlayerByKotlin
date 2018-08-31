@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var adapterMain: MusicDataAdapter
     lateinit var adapterListName: PlayListNameAdapter
+    lateinit var loadDialog: LoadDialog
 
 
     var handler = object : Handler() {
@@ -67,6 +68,7 @@ class MainActivity : AppCompatActivity() {
                 MusicDataAdapter.DATABASE_SUCCCESS -> {
                     adapterMain = MusicDataAdapter(this@MainActivity, MPC.musicList)
                     recyclerview.adapter = adapterMain
+                    loadDialog.dismiss()
                 }
             }
         }
@@ -124,6 +126,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun initView() {
+
+        loadDialog= LoadDialog()
+        loadDialog.show(fragmentManager,"LoadingDialog")
 
         setSupportActionBar(toolbar)
         toolbar.title = "我的音樂"
