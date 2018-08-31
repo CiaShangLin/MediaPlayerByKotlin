@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="80dp"
@@ -9,55 +9,66 @@
         android:id="@+id/remoteIg"
         android:layout_width="80dp"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:scaleType="fitXY"
         app:srcCompat="@drawable/ic_music" />
 
-    <TextView
-        android:id="@+id/remoteNameTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="13dp"
-        android:layout_toEndOf="@+id/remoteIg"
-        android:layout_toStartOf="@+id/remoteNextBt"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:text="歌名"
-        android:textColor="@android:color/white"
-        android:textSize="18sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <ImageButton
-        android:id="@+id/remotePreBt"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/remoteNameTv"
-        android:background="@android:color/transparent"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_previous" />
+        <TextView
+            android:id="@+id/remoteNameTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
 
-    <ImageButton
-        android:id="@+id/remotePlayBt"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="83dp"
-        android:layout_toEndOf="@+id/remotePreBt"
-        android:background="@android:color/transparent"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_remote_play" />
+            android:layout_marginStart="13dp"
 
-    <ImageButton
-        android:id="@+id/remoteNextBt"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"
-        android:background="@android:color/transparent"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_next" />
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="歌名"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
 
-</RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/remotePreBt"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+
+                android:layout_marginBottom="6dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_previous" />
+
+            <ImageButton
+                android:id="@+id/remotePlayBt"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_marginBottom="6dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_remote_play" />
+
+            <ImageButton
+                android:id="@+id/remoteNextBt"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+
+                android:layout_marginBottom="6dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_next" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
