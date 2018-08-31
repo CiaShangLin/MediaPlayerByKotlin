@@ -10,7 +10,7 @@ https://play.google.com/store/apps/details?id=com.shang.mediaplayerbykotlin
 ![alt](https://github.com/CiaShangLin/MediaPlayerByKotlin/blob/master/180731231505.png)  
 
 主要使用元件:  
-1.recyclerview  
+1.Recyclerview  
 2.CardView  
 3.AppBarLayout  
 4.CollapsingToolbarLayout  
