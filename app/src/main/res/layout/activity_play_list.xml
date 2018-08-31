@@ -13,6 +13,7 @@
 
 
         <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="?attr/actionModeSplitBackground"
@@ -22,8 +23,7 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/faker"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize">
-            </android.support.v7.widget.Toolbar>
+                android:layout_height="?attr/actionBarSize"></android.support.v7.widget.Toolbar>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/play_list_toolbar"

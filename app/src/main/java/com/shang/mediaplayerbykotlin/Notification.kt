@@ -90,7 +90,7 @@ class Notification {
                 notificationBuilder = Notification.Builder(context).apply {
                     this.setContent(remoteViews)
                     this.setSmallIcon(R.drawable.ic_music)
-         
+
                 }
             }
         }

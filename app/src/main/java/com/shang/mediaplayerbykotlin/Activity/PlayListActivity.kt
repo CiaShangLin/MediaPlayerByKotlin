@@ -1,5 +1,8 @@
 package com.shang.mediaplayerbykotlin.Activity
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -36,6 +39,7 @@ class PlayListActivity : AppCompatActivity() {
 
     companion object {
         var playListName_id: Long = 0
+        var name:String=""
     }
 
 
@@ -47,10 +51,30 @@ class PlayListActivity : AppCompatActivity() {
 
     }
 
+    fun changeData() {
+        doAsync {
+            playListName_id = intent.getLongExtra(MPC_Interface.ID, 0)
+            name= intent.getStringExtra(MPC_Interface.NAME)
+
+            DataList = database.getMusic_ListData_Dao().getListDataFromListName(playListName_id)
+            update(0, 0)
+
+            var musicList = mutableListOf<Music_Data_Entity>()
+            DataList.forEach {
+                musicList.add(database.getMusic_Data_Dao().findListData(it.musicPath))
+            }
+            MPC.musicList = musicList
+
+            uiThread {
+                initView()
+            }
+        }
+    }
+
     fun initView() {
 
         setSupportActionBar(play_list_toolbar)
-        play_list_toolbar.title="播放清單"
+        play_list_toolbar.title=name
         play_list_toolbar.setNavigationIcon(R.drawable.ic_back)
         play_list_toolbar.setNavigationOnClickListener{
             finish()
@@ -59,6 +83,9 @@ class PlayListActivity : AppCompatActivity() {
         var adapter = PlayListDataAdapter(this, MPC.musicList)
         play_list_recyc.layoutManager = LinearLayoutManager(this)
         play_list_recyc.adapter = adapter
+
+
+        setCollapsingBackground()
 
 
         var item = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback((ItemTouchHelper.UP or ItemTouchHelper.DOWN), 0) {
@@ -100,23 +127,6 @@ class PlayListActivity : AppCompatActivity() {
         play_list_recyc.addItemDecoration(item)
     }
 
-    fun changeData() {
-        doAsync {
-            playListName_id = intent.getLongExtra(MPC_Interface.ID, 0)
-            DataList = database.getMusic_ListData_Dao().getListDataFromListName(playListName_id)
-            update(0, 0)
-
-            var musicList = mutableListOf<Music_Data_Entity>()
-            DataList.forEach {
-                musicList.add(database.getMusic_Data_Dao().findListData(it.musicPath))
-            }
-            MPC.musicList = musicList
-
-            uiThread {
-                initView()
-            }
-        }
-    }
 
     fun update(from: Int, to: Int) {
         var temp = DataList.removeAt(from)
@@ -131,6 +141,25 @@ class PlayListActivity : AppCompatActivity() {
         DataList.forEach {
             Log.d(TAG, "DataList:  " + it.musicPath + " " + it.position)
         }
+    }
+
+    fun setCollapsingBackground(){
+
+
+        var list= mutableListOf<Bitmap>()
+        MPC.musicList.forEach {
+            var bitmap=BitmapFactory.decodeFile(it.picture)
+            if(bitmap!=null)
+                list.add(bitmap)
+        }
+
+        if(list.size==0){
+            collapsing.background=resources.getDrawable(R.color.colorP)
+        }else{
+            var random=(Math.random()*list.size).toInt()
+            collapsing.background=BitmapDrawable(list.get(random))
+        }
+
     }
 
 

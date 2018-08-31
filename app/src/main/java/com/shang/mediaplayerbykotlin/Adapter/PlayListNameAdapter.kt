@@ -76,6 +76,7 @@ class PlayListNameAdapter(var context: Context, var playList: MutableList<Music_
             holder.playListCardView.setOnClickListener {
                 context.startActivity(Intent(context, PlayListActivity::class.java).apply {
                     this.putExtra(MPC_Interface.ID, playList.get(position).id)
+                    this.putExtra(MPC_Interface.NAME,playList.get(position).tableName)
                 })
             }
 
