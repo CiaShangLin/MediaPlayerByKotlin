@@ -14,6 +14,7 @@ android {
         targetSdkVersion 26
         versionCode 2
         versionName "2"
+        //發布新版本 這兩個要修改
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
