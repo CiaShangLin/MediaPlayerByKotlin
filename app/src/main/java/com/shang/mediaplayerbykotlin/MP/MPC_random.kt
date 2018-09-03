@@ -56,11 +56,6 @@ class MPC_random(var context: Context) : MPC_Interface {
             release()
             next()
         }
-
-        context.sendBroadcast(Intent().apply {
-            action = PlayMusicActivity.START
-        })
-
     }
 
 
@@ -159,5 +154,16 @@ class MPC_random(var context: Context) : MPC_Interface {
             MPC.mediaPlayer = null
         }
         MPC.stopTimer()
+    }
+
+
+    override fun reStore(){
+        context.sendBroadcast(Intent().apply {
+            this.action=PlayMusicActivity.RESTORE
+            this.putExtra(MPC_Interface.NAME,MPC.musicList.get(MPC.index).name)
+            this.putExtra(MPC_Interface.CURRENT_TIME,MPC.currentTime)
+            this.putExtra(MPC_Interface.DURATION,MPC.musicList.get(MPC.index).duration)
+            this.putExtra(MPC_Interface.STATUS,MPC.mediaPlayer!!.isPlaying)
+        })
     }
 }

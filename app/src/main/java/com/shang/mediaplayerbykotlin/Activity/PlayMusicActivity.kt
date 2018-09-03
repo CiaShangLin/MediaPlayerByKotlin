@@ -45,7 +45,7 @@ class PlayMusicActivity : AppCompatActivity() {
         val SEEKBAR_MOVE:String="SEEKBAR_MOVE"
         val LOOPING:String="LOOPING"
         val CURRENT_TIME:String="CURRENT_TIME"
-
+        val RESTORE:String="RESTORE"
     }
 
 
@@ -128,6 +128,31 @@ class PlayMusicActivity : AppCompatActivity() {
                     }
                 }
 
+                RESTORE->{
+                    Log.d(TAG,"回復")
+                    seekBar.max =MPC.musicList.get(MPC.index).duration.toInt()
+                    seekBar.progress=MPC.currentTime
+
+                    startTimeTv.text = getTimeFormat(MPC.currentTime)
+                    endTimeTv.text = getTimeFormat(MPC.musicList.get(MPC.index).duration.toInt())
+
+                    nameTv.text = MPC.musicList.get(MPC.index).name
+
+                    var bitmap=BitmapFactory.decodeFile(MPC.musicList.get(MPC.index).picture)
+                    if(bitmap==null){
+                        playmusicIg.setImageResource(R.drawable.ic_music)
+                    }else{
+                        playmusicIg.setImageBitmap(bitmap)
+                    }
+
+                    if(MPC.mediaPlayer!=null && MPC.mediaPlayer!!.isPlaying){
+                        playerBt.setImageResource(R.drawable.ic_pause)
+                    }else{
+                        playerBt.setImageResource(R.drawable.ic_play)
+                    }
+                }
+
+
             }
         }
     }
@@ -141,7 +166,8 @@ class PlayMusicActivity : AppCompatActivity() {
 
         myReceiver = MyReceiver()
 
-        if(MPC.mediaPlayer==null){
+
+        /*if(MPC.mediaPlayer==null){
             Log.d(TAG,"正常播放")
             MPC.index=intent.getIntExtra(MPC_Interface.INDEX,0)
             startService(Intent(this, MediaPlayerService::class.java).apply {
@@ -152,6 +178,19 @@ class PlayMusicActivity : AppCompatActivity() {
             MPC.index=intent.getIntExtra(MPC_Interface.INDEX,0)
             startService(Intent(this, MediaPlayerService::class.java).apply {
                 this.action = INSERT
+            })
+        }*/
+
+        //進入畫面
+        var playIndex=intent.getIntExtra(MPC_Interface.INDEX,0)
+        if(MPC.index!=playIndex){  //點到跟現在不同的 用PLAY的話她會啟動到RESTART
+            MPC.index=playIndex
+            startService(Intent(this, MediaPlayerService::class.java).apply {
+                this.action = INSERT
+            })
+        }else{  //恢復
+            startService(Intent(this,MediaPlayerService::class.java).apply {
+                action= RESTORE
             })
         }
 
@@ -245,7 +284,7 @@ class PlayMusicActivity : AppCompatActivity() {
             this.addAction(MODE)
             this.addAction(LOOPING)
             this.addAction(CURRENT_TIME)
-
+            this.addAction(RESTORE)
         }
         registerReceiver(myReceiver, intentFilter)
     }

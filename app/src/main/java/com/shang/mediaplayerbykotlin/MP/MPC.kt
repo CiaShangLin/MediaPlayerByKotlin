@@ -18,7 +18,7 @@ open class MPC {
 
         var mediaPlayer: MediaPlayer? = null
         var currentTime: Int = 0
-        var index: Int = 0
+        var index: Int = -1
         lateinit var mpc_mode: MPC_Interface
         lateinit var musicList: MutableList<Music_Data_Entity>
         var timer: Timer? = null

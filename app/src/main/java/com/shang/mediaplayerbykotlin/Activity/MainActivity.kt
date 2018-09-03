@@ -35,7 +35,7 @@ import kotlinx.android.synthetic.main.drawer_layout.*
 import kotlinx.android.synthetic.main.media_play_controller.*
 import kotlinx.android.synthetic.main.media_player.*
 import kotlinx.android.synthetic.main.music_data_item.*
-import kotlinx.android.synthetic.main.small_controller_layout.*
+import kotlinx.android.synthetic.main.sample_controller_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
@@ -96,7 +96,6 @@ class MainActivity : AppCompatActivity() {
                 PlayMusicActivity.RESTART -> {
                     simpleBt.setImageResource(R.drawable.ic_remote_pause)
                 }
-
             }
         }
 
@@ -127,8 +126,8 @@ class MainActivity : AppCompatActivity() {
 
     fun initView() {
 
-        loadDialog= LoadDialog()
-        loadDialog.show(fragmentManager,"LoadingDialog")
+        loadDialog = LoadDialog()
+        loadDialog.show(fragmentManager, "LoadingDialog")
 
         setSupportActionBar(toolbar)
         toolbar.title = "我的音樂"
@@ -186,6 +185,11 @@ class MainActivity : AppCompatActivity() {
             })
         }
 
+        simple_conLy.setOnClickListener {
+            startActivity(Intent(this, PlayMusicActivity::class.java).apply {
+                this.putExtra(MPC_Interface.INDEX, MPC.index)
+            })
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -247,7 +251,7 @@ class MainActivity : AppCompatActivity() {
                         })
 
                         MPC.sort(mode, type)
-                        Log.d(TAG,"sort")
+                        Log.d(TAG, "sort")
                         uiThread {
 
                             adapterMain.notifyDataSetChanged()

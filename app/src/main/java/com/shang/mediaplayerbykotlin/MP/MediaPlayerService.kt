@@ -80,6 +80,9 @@ class MediaPlayerService : Service() {
                 MPC.mpc_mode.seekbar_move(intent.getIntExtra( PlayMusicActivity.SEEKBAR_MOVE,0))
             }
 
+            PlayMusicActivity.RESTORE->{
+                MPC.mpc_mode.reStore()
+            }
 
         }
 
