@@ -15,7 +15,7 @@ interface Music_ListName_Dao {
     @Query("select tableName from " + Music_ListName_Entity.TABLE_NAME)
     fun getAllTableName(): Array<String>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(musicList:Music_ListName_Entity)
 
     @Delete

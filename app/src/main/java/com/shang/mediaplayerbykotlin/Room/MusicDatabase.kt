@@ -20,7 +20,9 @@ abstract class MusicDatabase : RoomDatabase() {
 
         fun getMusicDatabase(context: Context): MusicDatabase {
             if (musicDatabase == null) {
-                musicDatabase = Room.databaseBuilder(context, MusicDatabase::class.java, DATABASE_NAME).build()
+                musicDatabase = Room.databaseBuilder(context, MusicDatabase::class.java, DATABASE_NAME)
+                        .allowMainThreadQueries()
+                        .build()
             }
             return musicDatabase as MusicDatabase
         }

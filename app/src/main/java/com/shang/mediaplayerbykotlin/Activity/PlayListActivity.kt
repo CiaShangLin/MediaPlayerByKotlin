@@ -39,7 +39,7 @@ class PlayListActivity : AppCompatActivity() {
 
     companion object {
         var playListName_id: Long = 0
-        var name:String=""
+        var name: String = ""
     }
 
 
@@ -52,31 +52,28 @@ class PlayListActivity : AppCompatActivity() {
     }
 
     fun changeData() {
-        doAsync {
-            playListName_id = intent.getLongExtra(MPC_Interface.ID, 0)
-            name= intent.getStringExtra(MPC_Interface.NAME)
 
-            DataList = database.getMusic_ListData_Dao().getListDataFromListName(playListName_id)
-            update(0, 0)
+        playListName_id = intent.getLongExtra(MPC_Interface.ID, 0)
+        name = intent.getStringExtra(MPC_Interface.NAME)
 
-            var musicList = mutableListOf<Music_Data_Entity>()
-            DataList.forEach {
-                musicList.add(database.getMusic_Data_Dao().findListData(it.musicPath))
-            }
-            MPC.musicList = musicList
+        DataList = database.getMusic_ListData_Dao().getListDataFromListName(playListName_id)
+        update(0, 0)
 
-            uiThread {
-                initView()
-            }
+        var musicList = mutableListOf<Music_Data_Entity>()
+        DataList.forEach {
+            musicList.add(database.getMusic_Data_Dao().findListData(it.musicPath))
         }
+        MPC.musicList = musicList
+
+        initView()
     }
 
     fun initView() {
 
         setSupportActionBar(play_list_toolbar)
-        play_list_toolbar.title=name
+        play_list_toolbar.title = name
         play_list_toolbar.setNavigationIcon(R.drawable.ic_back)
-        play_list_toolbar.setNavigationOnClickListener{
+        play_list_toolbar.setNavigationOnClickListener {
             finish()
         }
 
@@ -94,13 +91,13 @@ class PlayListActivity : AppCompatActivity() {
                 var from = viewHolder!!.adapterPosition
                 val to = target!!.adapterPosition
 
-                if(from < to ){
+                if (from < to) {
 
-                    for(i in from..to-1){
-                        Collections.swap(adapter.musicList,i,i+1)
+                    for (i in from..to - 1) {
+                        Collections.swap(adapter.musicList, i, i + 1)
 
                     }
-                }else{
+                } else {
                     for (i in from downTo to + 1) {
                         Collections.swap(adapter.musicList, i, i - 1)
                     }
@@ -110,10 +107,10 @@ class PlayListActivity : AppCompatActivity() {
                 adapter.notifyItemMoved(from, to)
 
 
-                doAsync {
-                    update(from, to)
-                    MPC.musicList = adapter.musicList
-                }
+
+                update(from, to)
+                MPC.musicList = adapter.musicList
+
                 return true
             }
 
@@ -143,25 +140,23 @@ class PlayListActivity : AppCompatActivity() {
         }
     }
 
-    fun setCollapsingBackground(){
+    fun setCollapsingBackground() {
 
-
-        var list= mutableListOf<Bitmap>()
+        var list = mutableListOf<Bitmap>()
         MPC.musicList.forEach {
-            var bitmap=BitmapFactory.decodeFile(it.picture)
-            if(bitmap!=null)
+            var bitmap = BitmapFactory.decodeFile(it.picture)
+            if (bitmap != null)
                 list.add(bitmap)
         }
 
-        if(list.size==0){
-            collapsing.background=resources.getDrawable(R.color.colorP)
-        }else{
-            var random=(Math.random()*list.size).toInt()
-            collapsing.background=BitmapDrawable(list.get(random))
+        if (list.size == 0) {
+            collapsing.background = resources.getDrawable(R.color.colorP)
+        } else {
+            var random = (Math.random() * list.size).toInt()
+            collapsing.background = BitmapDrawable(list.get(random))
         }
 
     }
-
 
 
 }

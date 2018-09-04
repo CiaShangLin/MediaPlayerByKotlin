@@ -14,7 +14,7 @@ interface Music_ListData_Dao {
     fun getListDataFromListName(id:Long):MutableList<Music_ListData_Entity>
 
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(musicListData:Music_ListData_Entity)
 
     @Update

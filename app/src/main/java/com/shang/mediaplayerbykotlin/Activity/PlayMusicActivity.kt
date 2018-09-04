@@ -166,21 +166,6 @@ class PlayMusicActivity : AppCompatActivity() {
 
         myReceiver = MyReceiver()
 
-
-        /*if(MPC.mediaPlayer==null){
-            Log.d(TAG,"正常播放")
-            MPC.index=intent.getIntExtra(MPC_Interface.INDEX,0)
-            startService(Intent(this, MediaPlayerService::class.java).apply {
-                this.action = PLAY
-            })
-        }else{
-            Log.d(TAG,"插播")
-            MPC.index=intent.getIntExtra(MPC_Interface.INDEX,0)
-            startService(Intent(this, MediaPlayerService::class.java).apply {
-                this.action = INSERT
-            })
-        }*/
-
         //進入畫面
         var playIndex=intent.getIntExtra(MPC_Interface.INDEX,0)
         if(MPC.index!=playIndex){  //點到跟現在不同的 用PLAY的話她會啟動到RESTART
@@ -261,7 +246,6 @@ class PlayMusicActivity : AppCompatActivity() {
                     this.putExtra(SEEKBAR_MOVE,seekBar!!.progress)
                 })
             }
-
         })
 
 

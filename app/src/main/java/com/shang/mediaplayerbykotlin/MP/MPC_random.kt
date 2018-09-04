@@ -88,18 +88,17 @@ class MPC_random(var context: Context) : MPC_Interface {
 
     override fun next() {
         Log.d(MPC.TAG, "next():"+MPC.index)
-        if (indexMap.size < MPC.musicList.size) {
+        if (indexMap.size < MPC.musicList.size) {  //map還沒播完
             release()
             var index = (Math.random() * MPC.musicList.size).toInt()
             while (indexMap.get(index) == true) {   //true代表已經播過了
                 index = (index + 1) % MPC.musicList.size
             }
-            MPC.index=index
+            MPC.index = index
+            indexMap.put(index, true)
             start()
-        } else {
-            context.sendBroadcast(Intent().apply {
-                this.action = PlayMusicActivity.NEXT
-            })
+        }else{
+            Log.d(MPC.TAG,"已播畢")
         }
     }
 

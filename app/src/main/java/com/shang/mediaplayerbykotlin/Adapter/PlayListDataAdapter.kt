@@ -45,7 +45,7 @@ class PlayListDataAdapter(var context: Context, var musicList: MutableList<Music
         holder.dataTitle.text = musicList.get(position).name
         holder.dataTime.text = FileUnits.lastModifiedToSimpleDateFormat(musicList.get(position).duration)
         holder.dataCardview.setOnClickListener {
-            Log.d("PlayListDataAdapter",position.toString()+" "+musicList.get(position).name)
+            Log.d("PlayListDataAdapter", position.toString() + " " + musicList.get(position).name)
             context.startActivity(Intent(context, PlayMusicActivity::class.java).apply {
                 this.putExtra(MPC_Interface.INDEX, position)
             })
@@ -72,17 +72,14 @@ class PlayListDataAdapter(var context: Context, var musicList: MutableList<Music
         popupMenu.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.playListData_delete -> {
-                    doAsync {
-                        database.getMusic_ListData_Dao().delete(Music_ListData_Entity().apply {
-                            this.table_id = PlayListActivity.playListName_id
-                            this.musicPath = musicList.get(position).path
-                        })
+                    database.getMusic_ListData_Dao().delete(Music_ListData_Entity().apply {
+                        this.table_id = PlayListActivity.playListName_id
+                        this.musicPath = musicList.get(position).path
+                    })
 
-                        musicList.removeAt(position)
-                        uiThread {
-                            notifyDataSetChanged()
-                        }
-                    }
+                    musicList.removeAt(position)
+
+                    notifyDataSetChanged()
                 }
             }
             true

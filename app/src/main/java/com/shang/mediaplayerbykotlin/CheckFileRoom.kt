@@ -1,6 +1,7 @@
 package com.shang.mediaplayerbykotlin
 
 import android.content.Context
+import android.content.Intent
 import android.os.AsyncTask
 import android.os.Message
 import android.util.Log
@@ -95,12 +96,11 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
         Log.d(TAG, "setting:" + setting_entity.sort_mode+" "+setting_entity.sort_type)
         MPC.musicList = musicList
         MPC.sort(setting_entity.sort_mode,setting_entity.sort_type)
-        (context as MainActivity).handler.sendMessage(Message().apply {
-            this.what = MusicDataAdapter.DATABASE_SUCCCESS
+
+        context.sendBroadcast(Intent().apply {
+            this.action=MainActivity.DATABASE_SUCCCESS
         })
 
-        //insert不管有沒有 6秒
-        //先query 5秒
         //不做取圖片1.186秒  取徒占了大份的時間
     }
 

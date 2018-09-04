@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
+    android:layout_height="64dp"
     android:background="@color/colorP">
 
     <ImageView
@@ -28,7 +28,7 @@
             android:singleLine="true"
             android:text="歌名"
             android:textColor="@android:color/white"
-            android:textSize="14sp" />
+            android:textSize="16dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,7 +39,7 @@
             <ImageButton
                 android:id="@+id/remotePreBt"
                 android:layout_width="match_parent"
-                android:layout_height="36dp"
+                android:layout_height="30dp"
 
                 android:layout_marginBottom="6dp"
                 android:layout_weight="1"
@@ -50,7 +50,7 @@
             <ImageButton
                 android:id="@+id/remotePlayBt"
                 android:layout_width="match_parent"
-                android:layout_height="36dp"
+                android:layout_height="30dp"
                 android:layout_marginBottom="6dp"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
@@ -60,7 +60,7 @@
             <ImageButton
                 android:id="@+id/remoteNextBt"
                 android:layout_width="match_parent"
-                android:layout_height="36dp"
+                android:layout_height="30dp"
 
                 android:layout_marginBottom="6dp"
                 android:layout_weight="1"

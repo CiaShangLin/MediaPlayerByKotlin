@@ -21,6 +21,8 @@ interface Music_Data_Dao {
     @Query("select * from "+Music_Data_Entity.TABLE_NAME+" where path=:path")
     fun findListData(path:String):Music_Data_Entity
 
+    @Query("select * from " + Music_Data_Entity.TABLE_NAME+" ORDER BY name ASC")
+    fun test(): MutableList<Music_Data_Entity>
 
     //vararg
     @Insert(onConflict = OnConflictStrategy.IGNORE)

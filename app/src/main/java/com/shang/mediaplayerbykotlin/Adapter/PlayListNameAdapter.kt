@@ -33,12 +33,9 @@ class PlayListNameAdapter(var context: Context, var playList: MutableList<Music_
         RecyclerView.Adapter<PlayListNameAdapter.ViewHolder>() {
 
 
-    lateinit var database: MusicDatabase
-
-    init {
-        database = MusicDatabase.getMusicDatabase(context)
+    val database: MusicDatabase by lazy {
+        MusicDatabase.getMusicDatabase(context)
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): PlayListNameAdapter.ViewHolder {
         var view = LayoutInflater.from(context).inflate(R.layout.play_list_name_item, parent, false)
@@ -76,7 +73,7 @@ class PlayListNameAdapter(var context: Context, var playList: MutableList<Music_
             holder.playListCardView.setOnClickListener {
                 context.startActivity(Intent(context, PlayListActivity::class.java).apply {
                     this.putExtra(MPC_Interface.ID, playList.get(position).id)
-                    this.putExtra(MPC_Interface.NAME,playList.get(position).tableName)
+                    this.putExtra(MPC_Interface.NAME, playList.get(position).tableName)
                 })
             }
 
@@ -94,7 +91,7 @@ class PlayListNameAdapter(var context: Context, var playList: MutableList<Music_
 
         val playListCardView = view.findViewById<CardView>(R.id.playListCardView)
 
-        val playListCon=view.findViewById<ConstraintLayout>(R.id.playListCon)
+        val playListCon = view.findViewById<ConstraintLayout>(R.id.playListCon)
 
     }
 
@@ -105,17 +102,14 @@ class PlayListNameAdapter(var context: Context, var playList: MutableList<Music_
         popupMenu.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.playListDelete -> {
-                    doAsync {
-                        database.getMusic_ListName_Dao().delete(Music_ListName_Entity().apply {
-                            this.id = playList.get(position).id
-                            this.tableName = playList.get(position).tableName
-                        })
-                        playList.removeAt(position)
-                        uiThread {
-                            notifyDataSetChanged()
-                            Toast.makeText(context, "刪除成功", Toast.LENGTH_SHORT).show()
-                        }
-                    }
+                    database.getMusic_ListName_Dao().delete(Music_ListName_Entity().apply {
+                        this.id = playList.get(position).id
+                        this.tableName = playList.get(position).tableName
+                    })
+                    playList.removeAt(position)
+
+                    notifyDataSetChanged()
+                    Toast.makeText(context, "刪除成功", Toast.LENGTH_SHORT).show()
                 }
                 R.id.playListUpdate -> {
                     var view = LayoutInflater.from(context).inflate(R.layout.input_edittext, null)
@@ -123,16 +117,13 @@ class PlayListNameAdapter(var context: Context, var playList: MutableList<Music_
                     AlertDialog.Builder(context)
                             .setView(view)
                             .setPositiveButton("修改", DialogInterface.OnClickListener { dialog, which ->
-                                doAsync {
-                                    playList.get(position).tableName = view.playListEt.text.toString().trim()
-                                    database.getMusic_ListName_Dao().update(Music_ListName_Entity().apply {
-                                        this.id = playList.get(position).id
-                                        this.tableName = view.playListEt.text.toString().trim()
-                                    })
-                                    uiThread {
-                                        notifyDataSetChanged()
-                                    }
-                                }
+                                playList.get(position).tableName = view.playListEt.text.toString().trim()
+                                database.getMusic_ListName_Dao().update(Music_ListName_Entity().apply {
+                                    this.id = playList.get(position).id
+                                    this.tableName = view.playListEt.text.toString().trim()
+                                })
+
+                                notifyDataSetChanged()
                             }).setNegativeButton("取消", DialogInterface.OnClickListener { dialog, which ->
 
                             })
@@ -155,20 +146,16 @@ class PlayListNameAdapter(var context: Context, var playList: MutableList<Music_
 
                     var name = view.playListEt.text.toString().trim()
                     if (name.length != 0) {
-                        doAsync {
-                            var entity = Music_ListName_Entity().apply {
-                                this.tableName = name
-                            }
 
-                            playList.add(entity)
-                            database.getMusic_ListName_Dao().insert(entity)
-
-
-                            uiThread {
-                                Toast.makeText(context, "新增成功", Toast.LENGTH_SHORT).show()
-                                notifyDataSetChanged()
-                            }
+                        var entity = Music_ListName_Entity().apply {
+                            this.tableName = name
                         }
+
+                        playList.add(entity)
+                        database.getMusic_ListName_Dao().insert(entity)
+
+                        Toast.makeText(context, "新增成功", Toast.LENGTH_SHORT).show()
+                        notifyDataSetChanged()
                     } else {
                         context.runOnUiThread {
                             Toast.makeText(context, "名稱不能為空", Toast.LENGTH_SHORT).show()

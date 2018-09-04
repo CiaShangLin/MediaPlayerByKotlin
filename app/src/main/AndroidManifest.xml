@@ -42,6 +42,7 @@
                 <action android:name="com.shang.mediaplayerbykotlin.Activity.LOOPING" />
                 <action android:name="com.shang.mediaplayerbykotlin.Activity.CURRENT_TIME" />
                 <action android:name="com.shang.mediaplayerbykotlin.Activity.RESTORE" />
+                <action android:name="com.shang.mediaplayerbykotlin.Activity.DATABASE_SUCCCESS" />
             </intent-filter>
         </receiver>
 

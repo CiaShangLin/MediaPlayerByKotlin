@@ -31,16 +31,9 @@ import org.jetbrains.anko.uiThread
 class MusicDataAdapter(var context: Context, var musicList: MutableList<Music_Data_Entity>) : RecyclerView.Adapter<MusicDataAdapter.ViewHolder>() {
 
 
-    lateinit var database: MusicDatabase
-
-    init {
-        database = MusicDatabase.getMusicDatabase(context)
+    val database: MusicDatabase by lazy {
+        MusicDatabase.getMusicDatabase(context)
     }
-
-    companion object {
-        val DATABASE_SUCCCESS = 1
-    }
-
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
@@ -56,13 +49,10 @@ class MusicDataAdapter(var context: Context, var musicList: MutableList<Music_Da
             popupMenu.setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.more_add -> {
-                        doAsync {
-                            var playListName = database.getMusic_ListName_Dao().getAll()
-                            var array = database.getMusic_ListName_Dao().getAllTableName()
-                            uiThread {
-                                addDialog(array, playListName,position)
-                            }
-                        }
+                        var playListName = database.getMusic_ListName_Dao().getAll()
+                        var array = database.getMusic_ListName_Dao().getAllTableName()
+
+                        addDialog(array, playListName, position)
                     }
                 }
                 true
@@ -101,21 +91,17 @@ class MusicDataAdapter(var context: Context, var musicList: MutableList<Music_Da
 
     }
 
-    fun addDialog(array: Array<String>, playListName: MutableList<Music_ListName_Entity>,position:Int) {
-        AlertDialog.Builder(context,android.R.style.Theme_Material_Light_Dialog)
+    fun addDialog(array: Array<String>, playListName: MutableList<Music_ListName_Entity>, position: Int) {
+        AlertDialog.Builder(context, android.R.style.Theme_Material_Light_Dialog)
                 .setTitle("加入至播放清單")
                 .setItems(array, DialogInterface.OnClickListener { dialog, which ->
-                    doAsync {
-                        Log.d("Music",playListName.get(which).id.toString()+" "+musicList.get(position).path)
 
-                        database.getMusic_ListData_Dao().insert(Music_ListData_Entity().apply {
-                            this.musicPath=musicList.get(position).path
-                            this.table_id=playListName.get(which).id
-                        })
-                        uiThread {
-                            Toast.makeText(context,"新增至"+array[which],Toast.LENGTH_SHORT).show()
-                        }
-                    }
+                    Log.d("Music", playListName.get(which).id.toString() + " " + musicList.get(position).path)
+                    database.getMusic_ListData_Dao().insert(Music_ListData_Entity().apply {
+                        this.musicPath = musicList.get(position).path
+                        this.table_id = playListName.get(which).id
+                    })
+                    Toast.makeText(context, "新增至" + array[which], Toast.LENGTH_SHORT).show()
                 })
                 .show()
     }

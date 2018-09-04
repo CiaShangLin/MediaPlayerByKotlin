@@ -1,6 +1,10 @@
 package com.shang.mediaplayerbykotlin.Activity
 
 import android.app.ProgressDialog
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProviders
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -55,28 +59,25 @@ class MainActivity : AppCompatActivity() {
         MusicDatabase.getMusicDatabase(this)
     }
 
+    companion object {
+        val DATABASE_SUCCCESS: String = "DATABASE_SUCCCESS"
+        lateinit var model: MPC
+    }
+
+
     lateinit var adapterMain: MusicDataAdapter
     lateinit var adapterListName: PlayListNameAdapter
     lateinit var loadDialog: LoadDialog
 
 
-    var handler = object : Handler() {
-        override fun handleMessage(msg: Message?) {
-            super.handleMessage(msg)
-
-            when (msg?.what) {
-                MusicDataAdapter.DATABASE_SUCCCESS -> {
+    var broadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            when (intent!!.action) {
+                DATABASE_SUCCCESS -> {
                     adapterMain = MusicDataAdapter(this@MainActivity, MPC.musicList)
                     recyclerview.adapter = adapterMain
                     loadDialog.dismiss()
                 }
-            }
-        }
-    }
-
-    var broadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            when (intent!!.action) {
                 PlayMusicActivity.START -> {
                     simpleBt.setImageResource(R.drawable.ic_remote_pause)
 
@@ -121,10 +122,16 @@ class MainActivity : AppCompatActivity() {
             CheckFileRoom(this).execute()
         }
 
-
     }
 
     fun initView() {
+
+        model = ViewModelProviders.of(this).get(MPC::class.java)
+        model.getLiveData().observe(this, Observer {
+            MPC.musicList=it!!
+            adapterMain.musicList=it!!
+            adapterMain.notifyDataSetChanged()
+        })
 
         loadDialog = LoadDialog()
         loadDialog.show(fragmentManager, "LoadingDialog")
@@ -142,30 +149,27 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
 
                 R.id.myMusic -> {
-                    doAsync {
-                        var list = database.getMusic_Data_Dao().getAll()
-                        var setting = database.getSetting_Dao().getSetting()
+                    var list = database.getMusic_Data_Dao().getAll()
+                    var setting = database.getSetting_Dao().getSetting()
 
-                        MPC.musicList = list
-                        MPC.sort(setting.sort_mode, setting.sort_type)
-                        uiThread {
-                            recyclerview.adapter = adapterMain
-                        }
-                    }
+                    MPC.musicList = list
+                    MPC.sort(setting.sort_mode, setting.sort_type)
+
+                    recyclerview.adapter = adapterMain
+
                 }
                 R.id.favorite -> {
 
 
                 }
                 R.id.musicList -> {
-                    doAsync {
-                        var playList = mutableListOf<Music_ListName_Entity>()
-                        playList.addAll(database.getMusic_ListName_Dao().getAll())
-                        uiThread {
-                            adapterListName = PlayListNameAdapter(this@MainActivity, playList)
-                            recyclerview.adapter = adapterListName
-                        }
-                    }
+
+                    var playList = mutableListOf<Music_ListName_Entity>()
+                    playList.addAll(database.getMusic_ListName_Dao().getAll())
+
+                    adapterListName = PlayListNameAdapter(this@MainActivity, playList)
+                    recyclerview.adapter = adapterListName
+
                 }
                 R.id.timer -> {
                     var timerDialog = TimerDialog()
@@ -200,7 +204,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
 
         R.id.search -> {
-
+            model.getLiveData().value= database.getMusic_Data_Dao().test()
             true
         }
 
@@ -212,59 +216,57 @@ class MainActivity : AppCompatActivity() {
             inf.inflate(R.menu.sort_menu, popupMenu.menu)
 
 
-            doAsync {
-                var settingDao = database.getSetting_Dao()
-                var settingEntity = settingDao.getSetting()
+            var settingDao = database.getSetting_Dao()
+            var settingEntity = settingDao.getSetting()
 
-                var mode: Boolean = settingEntity.sort_mode
-                var type: Int = settingEntity.sort_type
-                Log.d(TAG, mode.toString() + " " + type)
+            var mode: Boolean = settingEntity.sort_mode
+            var type: Int = settingEntity.sort_type
+            Log.d(TAG, mode.toString() + " " + type)
 
-                popupMenu.menu.findItem(R.id.sort_mode).setChecked(mode)
-                popupMenu.menu.getItem(type).setChecked(true)
+            popupMenu.menu.findItem(R.id.sort_mode).setChecked(mode)
+            popupMenu.menu.getItem(type).setChecked(true)
 
-                popupMenu?.setOnMenuItemClickListener {
-                    when (it.itemId) {
-                        R.id.sort_mode -> {
-                            mode = !mode
-                            it.setChecked(mode)
-                        }
-                        R.id.sort_modify -> {
-                            type = 1
-                            it.setChecked(true)
-                        }
-                        R.id.sort_name -> {
-                            type = 2
-                            it.setChecked(true)
-                        }
-                        R.id.sort_time -> {
-                            type = 3
-                            it.setChecked(true)
-                        }
+            popupMenu?.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.sort_mode -> {
+                        mode = !mode
+                        it.setChecked(mode)
                     }
-
-                    doAsync {
-                        database.getSetting_Dao().update(Setting_Entity().apply {
-                            this.name = Setting_Entity.key
-                            this.sort_mode = mode
-                            this.sort_type = type
-                        })
-
-                        MPC.sort(mode, type)
-                        Log.d(TAG, "sort")
-                        uiThread {
-
-                            adapterMain.notifyDataSetChanged()
-                        }
+                    R.id.sort_modify -> {
+                        type = 1
+                        it.setChecked(true)
                     }
-                    true
+                    R.id.sort_name -> {
+                        type = 2
+                        it.setChecked(true)
+                    }
+                    R.id.sort_time -> {
+                        type = 3
+                        it.setChecked(true)
+                    }
                 }
 
-                uiThread {
-                    popupMenu.show()
-                }
 
+                database.getSetting_Dao().update(Setting_Entity().apply {
+                    this.name = Setting_Entity.key
+                    this.sort_mode = mode
+                    this.sort_type = type
+                })
+
+                MPC.sort(mode, type)
+
+
+                Log.d(TAG, "sort")
+
+                adapterMain.notifyDataSetChanged()
+
+
+                true
             }
+
+
+            popupMenu.show()
+
 
             true
         }
@@ -301,6 +303,7 @@ class MainActivity : AppCompatActivity() {
             this.addAction(PlayMusicActivity.START)
             this.addAction(PlayMusicActivity.PAUSE)
             this.addAction(PlayMusicActivity.RESTART)
+            this.addAction(DATABASE_SUCCCESS)
         }
         registerReceiver(broadcastReceiver, intentFilter)
     }
