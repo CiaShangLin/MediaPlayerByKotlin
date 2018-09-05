@@ -1,7 +1,9 @@
 package com.shang.mediaplayerbykotlin
 
+import android.provider.MediaStore
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
+import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -21,4 +23,5 @@ class ExampleInstrumentedTest {
         val appContext = InstrumentationRegistry.getTargetContext()
         assertEquals("com.shang.mediaplayerbykotlin", appContext.packageName)
     }
+
 }
