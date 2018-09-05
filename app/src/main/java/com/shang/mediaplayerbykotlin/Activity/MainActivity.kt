@@ -139,7 +139,6 @@ class MainActivity : AppCompatActivity() {
         loadDialog.show(fragmentManager, "LoadingDialog")
 
         setSupportActionBar(toolbar)
-        toolbar.title = "我的音樂"
         toolbar.setNavigationIcon(R.drawable.ic_navigation)
 
         val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name)

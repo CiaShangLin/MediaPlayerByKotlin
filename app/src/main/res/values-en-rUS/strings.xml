@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">KtMediaPlayer</string>
+    <string name="MyRecevier">MyRecevier</string>
+    <string name="title_activity_play_list">PlayListActivity</string>
+    <string name="playList">PlayList</string>
+    <string name="loading">Loading</string>
+    <string name="songName">SongName</string>
+    <string name="sleepTimer">Sleep Timer</string>
+    <string name="reset">Reset</string>
+    <string name="start">Start</string>
+    <string name="myMusic">My Music</string>
+    <string name="sort">sort</string>
+    <string name="search">search</string>
+    <string name="sort_mode">Ascending</string>
+    <string name="sort_modify">Modified date</string>
+    <string name="sort_name">Song Name</string>
+    <string name="sort_time">Play Time</string>
+    <string name="playListDelete">Delete</string>
+    <string name="playListUpdate">Update</string>
+    <string name="playListData_delete">Delete</string>
+    <string name="my_Music">My Music</string>
+    <string name="favorite">Favorite</string>
+    <string name="musicList">MusicList</string>
+    <string name="timer">Sleep Timer</string>
+    <string name="more_add">Add to PlayList</string>
+</resources>
