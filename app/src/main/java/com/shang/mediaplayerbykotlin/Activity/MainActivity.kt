@@ -206,7 +206,8 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
 
         R.id.search -> {
-            model.getLiveData().value= database.getMusic_Data_Dao().test()
+            //model.getLiveData().value= database.getMusic_Data_Dao().test()
+            MediaRecorder.getAmplitude()
             true
         }
 

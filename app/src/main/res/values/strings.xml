@@ -3,4 +3,42 @@
 
     <string name="MyRecevier">MyRecevier</string>
     <string name="title_activity_play_list">PlayListActivity</string>
+
+
+    <!-- layout -->
+    <string name="playList">播放清單</string>
+    <string name="loading">載入中</string>
+    <string name="songName">歌曲</string>
+    <string name="sleepTimer">睡眠計時器</string>
+    <string name="reset">重置</string>
+    <string name="start">開始</string>
+    <string name="myMusic">我的音樂</string>
+
+
+    <!-- menu -->
+    <!-- toolbar_menu -->
+    <string name="sort">排序</string>
+    <string name="search">搜尋</string>
+
+    <!-- sort_menu -->
+    <string name="sort_mode">升序</string>
+    <string name="sort_modify">修改日期</string>
+    <string name="sort_name">歌曲名稱</string>
+    <string name="sort_time">播放時間</string>
+
+    <!-- play_list_more-->
+    <string name="playListDelete">刪除</string>
+    <string name="playListUpdate">更新名稱</string>
+
+    <!-- play_list_menu-->
+    <string name="playListData_delete">刪除</string>
+
+    <!-- nav_view_menu -->
+    <string name="my_Music">我的音樂</string>
+    <string name="favorite">最愛歌曲</string>
+    <string name="musicList">播放清單</string>
+    <string name="timer">睡眠計時器</string>
+
+    <!-- more_menu -->
+    <string name="more_add">加入至播放清單</string>
 </resources>

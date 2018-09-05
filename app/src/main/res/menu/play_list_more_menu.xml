@@ -3,8 +3,8 @@
 
     <item
         android:id="@+id/playListDelete"
-        android:title="刪除" />
+        android:title="@string/playListDelete" />
     <item
         android:id="@+id/playListUpdate"
-        android:title="更新名稱" />
+        android:title="@string/playListUpdate" />
 </menu>

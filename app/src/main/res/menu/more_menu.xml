@@ -5,7 +5,7 @@
     <group>
         <item
             android:id="@+id/more_add"
-            android:title="加入至播放清單"
+            android:title="@string/more_add"
             app:showAsAction="always" />
     </group>
 

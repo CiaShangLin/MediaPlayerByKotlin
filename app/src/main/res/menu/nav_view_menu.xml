@@ -5,29 +5,28 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:title="我的音樂"
             android:id="@+id/myMusic"
-            android:icon="@drawable/ic_music">
+            android:icon="@drawable/ic_music"
+            android:title="@string/my_Music">
 
         </item>
         <item
             android:id="@+id/favorite"
             android:icon="@drawable/ic_favorite"
-            android:title="最愛"
-            android:visible="false"
-            app:showAsAction="always"></item>
+            android:title="@string/favorite"
+            android:visible="false"></item>
 
         <item
             android:id="@+id/musicList"
             android:icon="@drawable/ic_musiclist"
-            android:title="播放清單"
+            android:title="@string/musicList"
             app:showAsAction="always"></item>
 
 
         <item
             android:id="@+id/timer"
             android:icon="@drawable/ic_timer"
-            android:title="計時器"
+            android:title="@string/sleepTimer"
             app:showAsAction="always"></item>
 
     </group>

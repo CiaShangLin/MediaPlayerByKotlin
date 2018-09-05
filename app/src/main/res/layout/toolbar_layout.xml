@@ -38,7 +38,7 @@
                     android:elevation="4dp"
                     android:fitsSystemWindows="true"
                     app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                    app:title="我的音樂"></android.support.v7.widget.Toolbar>
+                    app:title="@string/myMusic"></android.support.v7.widget.Toolbar>
 
                 <include
                     layout="@layout/sample_controller_layout"

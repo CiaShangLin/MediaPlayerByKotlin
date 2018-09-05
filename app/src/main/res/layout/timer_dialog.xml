@@ -12,7 +12,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="睡眠計時器"
+        android:text="@string/sleepTimer"
         android:textColor="@color/black"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -88,7 +88,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="12dp"
             android:layout_weight="1"
-            android:text="重置"
+            android:background="@color/colorP"
+            android:text="@string/reset"
             android:textSize="18sp"
             tools:layout_editor_absoluteX="216dp"
             tools:layout_editor_absoluteY="228dp" />
@@ -99,7 +100,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="12dp"
             android:layout_weight="1"
-            android:text="開始"
+            android:background="@color/colorP"
+            android:text="@string/start"
             android:textSize="18sp"
             tools:layout_editor_absoluteX="52dp"
             tools:layout_editor_absoluteY="220dp" />

@@ -29,7 +29,7 @@
                 android:id="@+id/play_list_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:title="播放清單"></android.support.v7.widget.Toolbar>
+                app:title="@string/playList"></android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
 

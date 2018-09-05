@@ -26,7 +26,7 @@
 
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="歌名"
+            android:text="@string/songName"
             android:textColor="@android:color/white"
             android:textSize="16dp" />
 
