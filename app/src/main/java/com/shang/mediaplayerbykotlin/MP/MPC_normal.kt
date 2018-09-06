@@ -46,9 +46,9 @@ class MPC_normal(var context: Context) : MPC_Interface {
         }
 
         MPC.mediaPlayer!!.setOnCompletionListener {
-            stopTimer()
-            release()
-            next()
+            context.startService(Intent(context,MediaPlayerService::class.java).apply {
+                this.action=PlayMusicActivity.NEXT
+            })
         }
 
     }
@@ -118,7 +118,6 @@ class MPC_normal(var context: Context) : MPC_Interface {
             MPC.currentTime = time
             MPC.mediaPlayer!!.seekTo(time)
         }
-
     }
 
     override fun setLooping() {

@@ -12,10 +12,8 @@ import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
  */
 class MPC_random(var context: Context) : MPC_Interface {
 
-    lateinit var indexMap: MutableMap<Int, Boolean>
-
-    init {
-        indexMap = mutableMapOf<Int, Boolean>()
+    val indexMap: MutableMap<Int, Boolean> by lazy {
+        mutableMapOf<Int, Boolean>()
     }
 
     override fun getName(): String {
@@ -52,9 +50,9 @@ class MPC_random(var context: Context) : MPC_Interface {
         }
 
         MPC.mediaPlayer!!.setOnCompletionListener {
-            MPC.stopTimer()
-            release()
-            next()
+            context.startService(Intent(context,MediaPlayerService::class.java).apply {
+                this.action=PlayMusicActivity.NEXT
+            })
         }
     }
 
