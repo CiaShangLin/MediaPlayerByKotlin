@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.media.MediaPlayer
+import android.os.Build
 import android.util.Log
 import com.shang.mediaplayerbykotlin.MP.MPC.Companion.stopTimer
 import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
@@ -46,9 +47,15 @@ class MPC_normal(var context: Context) : MPC_Interface {
         }
 
         MPC.mediaPlayer!!.setOnCompletionListener {
-            context.startService(Intent(context,MediaPlayerService::class.java).apply {
-                this.action=PlayMusicActivity.NEXT
-            })
+            var intent = Intent(context, MediaPlayerService::class.java).apply {
+                this.action = PlayMusicActivity.NEXT
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(intent)
+            }else{
+                context.startService(intent)
+            }
         }
 
     }
@@ -80,7 +87,6 @@ class MPC_normal(var context: Context) : MPC_Interface {
         }
     }
 
-
     override fun next() {
         Log.d(MPC.TAG, "next()")
         if (MPC.index < MPC.musicList.size - 1) {
@@ -93,7 +99,6 @@ class MPC_normal(var context: Context) : MPC_Interface {
             })
         }
     }
-
 
     override fun insert() {   //插播
         release()
@@ -128,8 +133,8 @@ class MPC_normal(var context: Context) : MPC_Interface {
             MPC.mediaPlayer!!.isLooping = !MPC.mediaPlayer!!.isLooping
 
             context.sendBroadcast(Intent().apply {
-                action= PlayMusicActivity.LOOPING
-                putExtra(MPC_Interface.STATUS,status)
+                action = PlayMusicActivity.LOOPING
+                putExtra(MPC_Interface.STATUS, status)
             })
 
         }
@@ -146,13 +151,13 @@ class MPC_normal(var context: Context) : MPC_Interface {
         MPC.stopTimer()
     }
 
-    override fun reStore(){
+    override fun reStore() {
         context.sendBroadcast(Intent().apply {
-            this.action=PlayMusicActivity.RESTORE
-            this.putExtra(MPC_Interface.NAME,MPC.musicList.get(MPC.index).name)
-            this.putExtra(MPC_Interface.CURRENT_TIME,MPC.currentTime)
-            this.putExtra(MPC_Interface.DURATION,MPC.musicList.get(MPC.index).duration)
-            this.putExtra(MPC_Interface.STATUS,MPC.mediaPlayer!!.isPlaying)
+            this.action = PlayMusicActivity.RESTORE
+            this.putExtra(MPC_Interface.NAME, MPC.musicList.get(MPC.index).name)
+            this.putExtra(MPC_Interface.CURRENT_TIME, MPC.currentTime)
+            this.putExtra(MPC_Interface.DURATION, MPC.musicList.get(MPC.index).duration)
+            this.putExtra(MPC_Interface.STATUS, MPC.mediaPlayer!!.isPlaying)
         })
     }
 

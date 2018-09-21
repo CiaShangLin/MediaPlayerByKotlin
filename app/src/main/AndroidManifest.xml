@@ -15,7 +15,7 @@
         android:theme="@style/test">
         <activity
             android:name=".Activity.MainActivity"
-            android:launchMode="singleTask">
+            android:launchMode="standard">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

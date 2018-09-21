@@ -1,15 +1,17 @@
 package com.shang.mediaplayerbykotlin.MP
 
+
+import android.app.Notification
 import android.app.Service
 import android.content.Intent
+import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
+import com.shang.mediaplayerbykotlin.NotificationUnits
+import com.shang.mediaplayerbykotlin.NotificationUnits.Companion.Notification_ID
 
 
-/**
- * Created by Shang on 2018/8/12.
- */
 class MediaPlayerService : Service() {
 
     companion object {
@@ -24,11 +26,18 @@ class MediaPlayerService : Service() {
         super.onCreate()
         Log.d(TAG, "onCreate")
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForeground(NotificationUnits.Notification_ID,
+                    NotificationUnits.instance(baseContext).notificationBuilder(baseContext, "", "").build())
+            Log.d(TAG, "startForeground")
+        }
+
         MPC.mpc_mode = MPC_normal(baseContext)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(TAG, "onStartCommand:" + startId)
+
 
         when (intent!!.action) {
             PlayMusicActivity.PLAY -> {
@@ -52,19 +61,19 @@ class MediaPlayerService : Service() {
 
             PlayMusicActivity.MODE -> {
 
-                var status:Boolean
-                if(MPC.mpc_mode is MPC_normal){
+                var status: Boolean
+                if (MPC.mpc_mode is MPC_normal) {
                     MPC.mpc_mode = MPC_random(baseContext)
-                    status=true
-                }else{
+                    status = true
+                } else {
                     MPC.mpc_mode = MPC_normal(baseContext)
-                    status=false
+                    status = false
                 }
                 Log.d(TAG, MPC.mpc_mode.getName())
 
                 sendBroadcast(Intent().apply {
-                    this.action=PlayMusicActivity.MODE
-                    this.putExtra(PlayMusicActivity.MODE,status)
+                    this.action = PlayMusicActivity.MODE
+                    this.putExtra(PlayMusicActivity.MODE, status)
                 })
             }
 
@@ -72,15 +81,15 @@ class MediaPlayerService : Service() {
                 MPC.mpc_mode.setLooping()
             }
 
-            PlayMusicActivity.INSERT->{
+            PlayMusicActivity.INSERT -> {
                 MPC.mpc_mode.insert()
             }
 
-            PlayMusicActivity.SEEKBAR_MOVE->{
-                MPC.mpc_mode.seekbar_move(intent.getIntExtra( PlayMusicActivity.SEEKBAR_MOVE,0))
+            PlayMusicActivity.SEEKBAR_MOVE -> {
+                MPC.mpc_mode.seekbar_move(intent.getIntExtra(PlayMusicActivity.SEEKBAR_MOVE, 0))
             }
 
-            PlayMusicActivity.RESTORE->{
+            PlayMusicActivity.RESTORE -> {
                 MPC.mpc_mode.reStore()
             }
 
@@ -95,10 +104,9 @@ class MediaPlayerService : Service() {
     }
 
     override fun onDestroy() {
-
         super.onDestroy()
         Log.d(TAG, "onDestroy")
-
         stopSelf()
+        stopForeground(true)
     }
 }

@@ -1,11 +1,11 @@
 package com.shang.mediaplayerbykotlin.Activity
 
-import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.BitmapFactory
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -15,25 +15,25 @@ import com.shang.mediaplayerbykotlin.MP.MPC
 import com.shang.mediaplayerbykotlin.MP.MPC_Interface
 import com.shang.mediaplayerbykotlin.MP.MPC_normal
 import com.shang.mediaplayerbykotlin.MP.MediaPlayerService
-import com.shang.mediaplayerbykotlin.Notification
+import com.shang.mediaplayerbykotlin.NotificationUnits
 import com.shang.mediaplayerbykotlin.R
 import kotlinx.android.synthetic.main.activity_play_music.*
 import kotlinx.android.synthetic.main.media_play_controller.*
 import kotlinx.android.synthetic.main.media_player.*
-import kotlinx.android.synthetic.main.toolbar_layout.*
-import org.jetbrains.anko.contentView
+import org.jetbrains.anko.startService
 import org.jetbrains.anko.toast
 import java.text.SimpleDateFormat
 
 class PlayMusicActivity : AppCompatActivity() {
 
 
-    lateinit var myReceiver: MyReceiver
+
 
     //Service用 廣播用
     companion object {
+        lateinit var myReceiver: MyReceiver
         val TAG = "PlayMusicActivity"
-        val PLAY:String="PLAY"
+        val PLAY: String = "PLAY"
         val START: String = "START"
         val PAUSE: String = "PAUSE"
         val RESTART: String = "RESTART"
@@ -42,10 +42,10 @@ class PlayMusicActivity : AppCompatActivity() {
         val MODE: String = "MODE"
         val REPEAT: String = "REPEAT"
         val INSERT: String = "INSERT"
-        val SEEKBAR_MOVE:String="SEEKBAR_MOVE"
-        val LOOPING:String="LOOPING"
-        val CURRENT_TIME:String="CURRENT_TIME"
-        val RESTORE:String="RESTORE"
+        val SEEKBAR_MOVE: String = "SEEKBAR_MOVE"
+        val LOOPING: String = "LOOPING"
+        val CURRENT_TIME: String = "CURRENT_TIME"
+        val RESTORE: String = "RESTORE"
     }
 
 
@@ -76,83 +76,86 @@ class PlayMusicActivity : AppCompatActivity() {
                     endTimeTv.text = getTimeFormat(duration)
                     nameTv.text = intent.getStringExtra(MPC_Interface.NAME)
 
-                    var bitmap=BitmapFactory.decodeFile(MPC.musicList.get(MPC.index).picture)
-                    if(bitmap==null){
+                    var bitmap = BitmapFactory.decodeFile(MPC.musicList.get(MPC.index).picture)
+                    if (bitmap == null) {
                         playmusicIg.setImageResource(R.drawable.ic_music)
-                    }else{
+                    } else {
                         playmusicIg.setImageBitmap(bitmap)
                     }
 
                     playerBt.setImageResource(R.drawable.ic_pause)
 
-                    Notification.showNotication(this@PlayMusicActivity,intent.getStringExtra(MPC_Interface.NAME),MPC.musicList.get(MPC.index).picture)
-                    Notification.update(MPC.musicList.get(MPC.index).name,MPC.musicList.get(MPC.index).picture)
+                    NotificationUnits.instance(this@PlayMusicActivity).update(this@PlayMusicActivity,
+                            MPC.musicList.get(MPC.index).name,
+                            MPC.musicList.get(MPC.index).picture)
                 }
 
-                PAUSE ->{
+                PAUSE -> {
                     playerBt.setImageResource(R.drawable.ic_play_button)
-                    Notification.update(MPC.musicList.get(MPC.index).name,MPC.musicList.get(MPC.index).picture)
+                    NotificationUnits.instance(this@PlayMusicActivity).update(this@PlayMusicActivity,
+                            MPC.musicList.get(MPC.index).name,
+                            MPC.musicList.get(MPC.index).picture)
                 }
 
-                RESTART ->{
+                RESTART -> {
                     playerBt.setImageResource(R.drawable.ic_pause)
-                    Notification.update(MPC.musicList.get(MPC.index).name,MPC.musicList.get(MPC.index).picture)
+                    NotificationUnits.instance(this@PlayMusicActivity).update(this@PlayMusicActivity,
+                            MPC.musicList.get(MPC.index).name,
+                            MPC.musicList.get(MPC.index).picture)
                 }
 
-                NEXT ->{
+                NEXT -> {
                     toast("最後一首了")
                 }
 
-                PREVIOUS ->{
+                PREVIOUS -> {
                     toast("已經是第一首")
                 }
 
-                LOOPING ->{
+                LOOPING -> {
                     toast(intent.getStringExtra(MPC_Interface.STATUS))
                 }
 
-                CURRENT_TIME ->{
-                    var duration:Int=intent.getIntExtra(MPC_Interface.CURRENT_TIME,0)
-                    seekBar.progress=duration
-                    startTimeTv.text=getTimeFormat(duration)
+                CURRENT_TIME -> {
+                    var duration: Int = intent.getIntExtra(MPC_Interface.CURRENT_TIME, 0)
+                    seekBar.progress = duration
+                    startTimeTv.text = getTimeFormat(duration)
                 }
 
-                MODE->{
-                    var status=intent.getBooleanExtra(MODE,false)
-                    if(status){
+                MODE -> {
+                    var status = intent.getBooleanExtra(MODE, false)
+                    if (status) {
                         randomBt.setImageResource(R.drawable.ic_random_focus)
                         toast("隨機模式打開")
-                    }else{
+                    } else {
                         randomBt.setImageResource(R.drawable.ic_random_nofocus)
                         toast("隨機模式關閉")
                     }
                 }
 
-                RESTORE->{
-                    Log.d(TAG,"回復")
-                    seekBar.max =MPC.musicList.get(MPC.index).duration.toInt()
-                    seekBar.progress=MPC.currentTime
+                RESTORE -> {
+                    Log.d(TAG, "回復")
+                    seekBar.max = MPC.musicList.get(MPC.index).duration.toInt()
+                    seekBar.progress = MPC.currentTime
 
                     startTimeTv.text = getTimeFormat(MPC.currentTime)
                     endTimeTv.text = getTimeFormat(MPC.musicList.get(MPC.index).duration.toInt())
 
                     nameTv.text = MPC.musicList.get(MPC.index).name
 
-                    var bitmap=BitmapFactory.decodeFile(MPC.musicList.get(MPC.index).picture)
-                    if(bitmap==null){
+                    var bitmap = BitmapFactory.decodeFile(MPC.musicList.get(MPC.index).picture)
+                    if (bitmap == null) {
                         playmusicIg.setImageResource(R.drawable.ic_music)
-                    }else{
+                    } else {
                         playmusicIg.setImageBitmap(bitmap)
                     }
 
-                    if(MPC.mediaPlayer!=null && MPC.mediaPlayer!!.isPlaying){
+                    if (MPC.mediaPlayer != null && MPC.mediaPlayer!!.isPlaying) {
                         playerBt.setImageResource(R.drawable.ic_pause)
-                    }else{
+                    } else {
                         playerBt.setImageResource(R.drawable.ic_play)
                     }
                 }
-
-
             }
         }
     }
@@ -167,16 +170,27 @@ class PlayMusicActivity : AppCompatActivity() {
         myReceiver = MyReceiver()
 
         //進入畫面
-        var playIndex=intent.getIntExtra(MPC_Interface.INDEX,0)
-        if(MPC.index!=playIndex){  //點到跟現在不同的 用PLAY的話她會啟動到RESTART
-            MPC.index=playIndex
-            startService(Intent(this, MediaPlayerService::class.java).apply {
+        var playIndex = intent.getIntExtra(MPC_Interface.INDEX, 0)
+        if (MPC.index != playIndex) {  //點到跟現在不同的 用PLAY的話她會啟動到RESTART
+            MPC.index = playIndex
+            var intent = Intent(this, MediaPlayerService::class.java).apply {
                 this.action = INSERT
-            })
-        }else{  //恢復
-            startService(Intent(this,MediaPlayerService::class.java).apply {
-                action= RESTORE
-            })
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(intent)
+            } else {
+                startService(intent)
+            }
+        } else {  //恢復
+            var intent=Intent(this, MediaPlayerService::class.java).apply {
+                action = RESTORE
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(intent)
+            } else {
+                startService(intent)
+            }
         }
 
         setSupportActionBar(play_music_bar)
@@ -184,48 +198,67 @@ class PlayMusicActivity : AppCompatActivity() {
         play_music_bar.title = ""
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-
         playerBt.setOnClickListener {
-            startService(Intent(this, MediaPlayerService::class.java).apply {
+            var intent = Intent(this, MediaPlayerService::class.java).apply {
                 this.action = PLAY
-            })
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(intent)
+            } else {
+                startService(intent)
+            }
         }
 
         nextBt.setOnClickListener {
-            startService(Intent(this,MediaPlayerService::class.java).apply {
-                this.action= NEXT
-            })
+            var intent=Intent(this, MediaPlayerService::class.java).apply {
+                this.action = NEXT
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(intent)
+            }else{
+                startService(intent)
+            }
         }
 
         previousBt.setOnClickListener {
-            startService(Intent(this,MediaPlayerService::class.java).apply {
-                this.action= PREVIOUS
-            })
+            var intent=Intent(this, MediaPlayerService::class.java).apply {
+                this.action = PREVIOUS
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(intent)
+            }else{
+                startService(intent)
+            }
         }
 
         repeatBt.setOnClickListener {
-            startService(Intent(this,MediaPlayerService::class.java).apply {
-                this.action= REPEAT
+            startService(Intent(this, MediaPlayerService::class.java).apply {
+                this.action = REPEAT
             })
-            if(MPC.mediaPlayer!=null && MPC.mediaPlayer!!.isLooping){
+            if (MPC.mediaPlayer != null && MPC.mediaPlayer!!.isLooping) {
                 repeatBt.setImageResource(R.drawable.ic_repeat_nofocus)
-            }else{
+            } else {
                 repeatBt.setImageResource(R.drawable.ic_repeat_focus)
             }
         }
 
         randomBt.setOnClickListener {
-            startService(Intent(this,MediaPlayerService::class.java).apply {
-                this.action= MODE
-            })
-        }
-        try{
-            if(MPC.mpc_mode is MPC_normal){
-                randomBt.setImageResource(R.drawable.ic_random_nofocus)
+            var intent=Intent(this, MediaPlayerService::class.java).apply {
+                this.action = MODE
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(intent)
             }else{
+                startService(intent)
+            }
+        }
+        try {
+            if (MPC.mpc_mode is MPC_normal) {
+                randomBt.setImageResource(R.drawable.ic_random_nofocus)
+            } else {
                 randomBt.setImageResource(R.drawable.ic_random_focus)
             }
-        }catch (e:Exception){  //會噴出未定義錯誤
+        } catch (e: Exception) {  //會噴出未定義錯誤
             randomBt.setImageResource(R.drawable.ic_random_nofocus)
         }
 
@@ -241,24 +274,30 @@ class PlayMusicActivity : AppCompatActivity() {
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                startService(Intent(this@PlayMusicActivity,MediaPlayerService::class.java).apply {
-                    this.action= SEEKBAR_MOVE
-                    this.putExtra(SEEKBAR_MOVE,seekBar!!.progress)
-                })
+                var intent=Intent(this@PlayMusicActivity, MediaPlayerService::class.java).apply {
+                    this.action = SEEKBAR_MOVE
+                    this.putExtra(SEEKBAR_MOVE, seekBar!!.progress)
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(intent)
+                }else{
+                    startService(intent)
+                }
             }
         })
 
 
     }
 
-    fun getTimeFormat(duration:Int):String{
+    fun getTimeFormat(duration: Int): String {
         return SimpleDateFormat("mm:ss").format(duration)
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG, "onStart()")
-        var intentFilter=IntentFilter().apply {
+    override fun onResume() {
+        super.onResume()
+        play_music_bar.title = ""
+        var intentFilter = IntentFilter().apply {
             this.addAction(PLAY)
             this.addAction(START)
             this.addAction(PAUSE)
@@ -271,11 +310,6 @@ class PlayMusicActivity : AppCompatActivity() {
             this.addAction(RESTORE)
         }
         registerReceiver(myReceiver, intentFilter)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        play_music_bar.title = ""
     }
 
     override fun onDestroy() {

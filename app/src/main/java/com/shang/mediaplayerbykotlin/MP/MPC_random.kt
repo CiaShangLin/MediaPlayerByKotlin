@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.media.MediaPlayer
+import android.os.Build
 import android.util.Log
 import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
 
@@ -50,9 +51,15 @@ class MPC_random(var context: Context) : MPC_Interface {
         }
 
         MPC.mediaPlayer!!.setOnCompletionListener {
-            context.startService(Intent(context,MediaPlayerService::class.java).apply {
+            var intent=Intent(context,MediaPlayerService::class.java).apply {
                 this.action=PlayMusicActivity.NEXT
-            })
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(intent)
+            }else{
+                context.startService(intent)
+            }
         }
     }
 
@@ -69,6 +76,7 @@ class MPC_random(var context: Context) : MPC_Interface {
         context.sendBroadcast(Intent().apply {
             action = PlayMusicActivity.PAUSE
         })
+
     }
 
     override fun reStart() {

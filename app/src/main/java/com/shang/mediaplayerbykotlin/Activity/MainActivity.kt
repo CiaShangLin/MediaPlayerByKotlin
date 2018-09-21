@@ -1,6 +1,7 @@
 package com.shang.mediaplayerbykotlin.Activity
 
 import android.app.ProgressDialog
+import android.app.Service
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
@@ -13,6 +14,7 @@ import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.os.*
 import android.support.v4.app.ActivityCompat
+import android.support.v4.app.ServiceCompat.stopForeground
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.MenuCompat
 import android.support.v4.view.MenuItemCompat
@@ -177,7 +179,6 @@ class MainActivity : AppCompatActivity() {
                     timerDialog.show(fragmentManager, "TimerDialog")
                 }
             }
-
             true
         }
 
@@ -185,9 +186,15 @@ class MainActivity : AppCompatActivity() {
         recyclerview.setHasFixedSize(true)
 
         simpleBt.setOnClickListener {
-            startService(Intent(this, MediaPlayerService::class.java).apply {
+            var intent=Intent(this, MediaPlayerService::class.java).apply {
                 this.action = PlayMusicActivity.PLAY
-            })
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(intent)
+            }else{
+                startService(intent)
+            }
         }
 
         simple_conLy.setOnClickListener {
@@ -314,7 +321,9 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
 
         unregisterReceiver(broadcastReceiver)
+        stopService(Intent(this,MediaPlayerService::class.java))
     }
+
 }
 
 
