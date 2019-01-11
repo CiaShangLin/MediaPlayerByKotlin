@@ -224,6 +224,7 @@ class PlayMusicActivity : AppCompatActivity() {
             var intent=Intent(this, MediaPlayerService::class.java).apply {
                 this.action = PREVIOUS
             }
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(intent)
             }else{

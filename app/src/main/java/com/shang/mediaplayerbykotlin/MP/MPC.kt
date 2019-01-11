@@ -32,9 +32,6 @@ open class MPC :ViewModel(){
 
         var mutableData=MutableLiveData<MutableList<Music_Data_Entity>>()
 
-
-
-
         // 1=修改日期 2=名稱長度 3=時間長度
         fun sort(mode: Boolean, type: Int) {
             var s=System.currentTimeMillis()

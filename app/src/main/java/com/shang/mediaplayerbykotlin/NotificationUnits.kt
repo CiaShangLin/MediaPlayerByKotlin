@@ -29,6 +29,7 @@ class NotificationUnits {
 
 
         fun instance(context: Context): NotificationUnits {
+
             if (notiUnits == null) {
                 notiUnits = NotificationUnits()
                 manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -53,13 +54,16 @@ class NotificationUnits {
                 this.setLargeIcon(android.graphics.BitmapFactory.decodeResource(context.resources, R.drawable.ic_music))
                 this.setCustomContentView(getRemoteViews(context, name, picture))
                 this.setChannelId(channel_ID)
+                this.setAutoCancel(true)
             }
         } else {
             builder = Notification.Builder(context).apply {
                 this.setContent(getRemoteViews(context, name, picture))
                 this.setSmallIcon(R.drawable.ic_music)
+                this.setAutoCancel(true)
             }
         }
+
         return builder
     }
 

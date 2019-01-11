@@ -25,6 +25,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.text.format.DateFormat.getTimeFormat
 import android.util.Log
+import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -67,7 +68,6 @@ class MainActivity : AppCompatActivity() {
         val DATABASE_SUCCCESS: String = "DATABASE_SUCCCESS"
         lateinit var model: MPC
     }
-
 
     lateinit var adapterMain: MusicDataAdapter
     lateinit var adapterListName: PlayListNameAdapter
@@ -112,7 +112,6 @@ class MainActivity : AppCompatActivity() {
 
         Log.d(TAG, "onCreate")
 
-
         initView()
 
         var readPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
@@ -132,8 +131,8 @@ class MainActivity : AppCompatActivity() {
 
         model = ViewModelProviders.of(this).get(MPC::class.java)
         model.getLiveData().observe(this, Observer {
-            MPC.musicList=it!!
-            adapterMain.musicList=it!!
+            MPC.musicList = it!!
+            adapterMain.musicList = it!!
             adapterMain.notifyDataSetChanged()
         })
 
@@ -186,13 +185,13 @@ class MainActivity : AppCompatActivity() {
         recyclerview.setHasFixedSize(true)
 
         simpleBt.setOnClickListener {
-            var intent=Intent(this, MediaPlayerService::class.java).apply {
+            var intent = Intent(this, MediaPlayerService::class.java).apply {
                 this.action = PlayMusicActivity.PLAY
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(intent)
-            }else{
+            } else {
                 startService(intent)
             }
         }
@@ -318,11 +317,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+
         super.onDestroy()
+        Log.d("TAG", "onDestroy")
 
         unregisterReceiver(broadcastReceiver)
-        stopService(Intent(this,MediaPlayerService::class.java))
+        stopService(Intent(this, MediaPlayerService::class.java))
     }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Log.d("TAG", "上衣葉")
+            moveTaskToBack(true)
+        }
+        return true
+    }
+
 
 }
 

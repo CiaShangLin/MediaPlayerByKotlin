@@ -106,6 +106,7 @@ class MediaPlayerService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG, "onDestroy")
+        MPC.mpc_mode.release()
         stopSelf()
         stopForeground(true)
     }

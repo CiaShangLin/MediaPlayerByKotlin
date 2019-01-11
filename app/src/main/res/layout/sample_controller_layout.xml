@@ -36,13 +36,13 @@
         android:id="@+id/simpleTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:singleLine="true"
         android:text="MusicTitle"
         android:textColor="@color/white"
-        android:textSize="14sp"
+        android:textSize="18dp"
         app:layout_constraintEnd_toStartOf="@+id/simpleBt"
         app:layout_constraintStart_toEndOf="@+id/simpleIg"
         app:layout_constraintTop_toTopOf="@+id/simpleIg" />
@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:text="MusicTime"
         android:textColor="@color/white"
-        android:textSize="12sp"
+        android:textSize="14dp"
         app:layout_constraintStart_toStartOf="@+id/simpleTitle"
         app:layout_constraintTop_toBottomOf="@+id/simpleTitle" />
 </android.support.constraint.ConstraintLayout>
