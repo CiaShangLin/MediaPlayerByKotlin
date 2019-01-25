@@ -12,8 +12,8 @@ android {
         applicationId "com.shang.mediaplayerbykotlin"
         minSdkVersion 18
         targetSdkVersion 26
-        versionCode 7
-        versionName "7"
+        versionCode 8
+        versionName "8"
         //發布新版本 這兩個要修改
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

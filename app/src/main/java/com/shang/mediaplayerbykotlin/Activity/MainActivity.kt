@@ -327,13 +327,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Log.d("TAG", "上衣葉")
             moveTaskToBack(true)
         }
-        return true
+        return super.onKeyDown(keyCode, event)
     }
-
-
 }
 
 
