@@ -28,4 +28,4 @@
     6.Drawerlayout+Navigation View 
 
 # APP瀏覽圖  
-[側頁欄.jpg](圖片/側頁欄.jpg)
+[側頁欄.jpg](https://github.com/CiaShangLin/MediaPlayerByKotlin/blob/master/%E5%9C%96%E7%89%87/%E5%81%B4%E9%A0%81%E6%AC%84.jpg)
