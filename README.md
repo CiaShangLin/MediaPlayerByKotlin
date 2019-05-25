@@ -28,4 +28,4 @@
     6.Drawerlayout+Navigation View 
 
 # APP瀏覽圖  
-![][圖片/unnamed (1).jpg]
+![][../圖片/unnamed (1).jpg]
