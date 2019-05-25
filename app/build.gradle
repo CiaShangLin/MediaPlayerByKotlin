@@ -23,14 +23,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    buildToolsVersion '26.0.2'
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     //Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:1.2.71"
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation "org.jetbrains.anko:anko:$anko_version"
 
