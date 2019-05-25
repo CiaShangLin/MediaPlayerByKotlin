@@ -1,3 +1,4 @@
+<img src=https://github.com/CiaShangLin/MediaPlayerByKotlin/blob/master/%E5%9C%96%E7%89%87/unnamed%20(8).jpg height="128" width="128" >
 # MediaPlayerByKotlin Kt音樂播放器
 **製作目的 :** 
 <br>剛讀完一個kotlin的書,想說做個APP順便練習kotlin,
@@ -28,4 +29,6 @@
     6.Drawerlayout+Navigation View 
 
 # APP瀏覽圖  
-[側頁欄.jpg](https://github.com/CiaShangLin/MediaPlayerByKotlin/blob/master/%E5%9C%96%E7%89%87/%E5%81%B4%E9%A0%81%E6%AC%84.jpg)
+|<img src=https://github.com/CiaShangLin/MediaPlayerByKotlin/blob/master/%E5%9C%96%E7%89%87/unnamed%20(2).jpg height="540" width=30% >|<img src=https://github.com/CiaShangLin/MediaPlayerByKotlin/blob/master/%E5%9C%96%E7%89%87/unnamed%20(3).jpg height="540" width=30% >|<img src=https://github.com/CiaShangLin/MediaPlayerByKotlin/blob/master/%E5%9C%96%E7%89%87/unnamed%20(4).jpg height="540" width=30% >
+|<img src=https://github.com/CiaShangLin/MediaPlayerByKotlin/blob/master/%E5%9C%96%E7%89%87/unnamed%20(5).jpg height="540" width=30% >|<img src=https://github.com/CiaShangLin/MediaPlayerByKotlin/blob/master/%E5%9C%96%E7%89%87/unnamed%20(6).jpg height="540" width=30% >|<img src=https://github.com/CiaShangLin/MediaPlayerByKotlin/blob/master/%E5%9C%96%E7%89%87/unnamed%20(7).jpg height="540" width=30% >
+|<img src=https://github.com/CiaShangLin/MediaPlayerByKotlin/blob/master/%E5%9C%96%E7%89%87/%E5%81%B4%E9%A0%81%E6%AC%84.jpg height="540" width=30% >|
