@@ -46,14 +46,7 @@ import kotlinx.android.synthetic.main.media_player.*
 import kotlinx.android.synthetic.main.music_data_item.*
 import kotlinx.android.synthetic.main.sample_controller_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
-import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.android.UI
-import org.jetbrains.anko.custom.async
-import org.jetbrains.anko.custom.style
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.toast
-import org.jetbrains.anko.uiThread
-import java.io.File
+
 
 
 class MainActivity : AppCompatActivity() {

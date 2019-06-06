@@ -17,36 +17,26 @@
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/actionModeSplitBackground"
             app:layout_scrollFlags="scroll|enterAlways"
+            app:titleEnabled="false"
             app:toolbarId="@+id/test">
 
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/test"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:title=""></android.support.v7.widget.Toolbar>
-
-            <LinearLayout
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="?attr/actionBarSize"
+                android:elevation="4dp"
+                android:fitsSystemWindows="true"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:title="@string/myMusic"></android.support.v7.widget.Toolbar>
 
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:elevation="4dp"
-                    android:fitsSystemWindows="true"
-                    app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                    app:title="@string/myMusic"></android.support.v7.widget.Toolbar>
+            <include
+                layout="@layout/sample_controller_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="?attr/actionBarSize">
 
-                <include
-                    layout="@layout/sample_controller_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                </include>
-            </LinearLayout>
+            </include>
 
 
         </android.support.design.widget.CollapsingToolbarLayout>
