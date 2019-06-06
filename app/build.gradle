@@ -51,8 +51,7 @@ dependencies {
     kapt "android.arch.persistence.room:compiler:1.0.0"
 
     //LivaData
-    implementation "android.arch.lifecycle:extensions:1.0.0"
-    annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
-    androidTestImplementation "android.arch.core:core-testing:1.0.0"
-    testImplementation "android.arch.core:core-testing:1.0.0"
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-beta01'
+    implementation "androidx.lifecycle:lifecycle-viewmodel:2.0.0"
+    implementation "androidx.lifecycle:lifecycle-livedata:2.0.0"
 }
