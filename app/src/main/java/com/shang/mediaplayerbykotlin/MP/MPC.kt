@@ -1,11 +1,11 @@
 package com.shang.mediaplayerbykotlin.MP
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import java.util.*
@@ -13,9 +13,9 @@ import java.util.*
 /**
  * Created by Shang on 2018/8/14.
  */
-open class MPC :ViewModel(){
+open class MPC : ViewModel(){
 
-    public fun getLiveData():MutableLiveData<MutableList<Music_Data_Entity>>{
+    public fun getLiveData(): MutableLiveData<MutableList<Music_Data_Entity>> {
         return mutableData
     }
 

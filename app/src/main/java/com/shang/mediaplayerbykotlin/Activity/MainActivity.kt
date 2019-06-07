@@ -1,53 +1,40 @@
 package com.shang.mediaplayerbykotlin.Activity
 
-import android.app.ProgressDialog
-import android.app.Service
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProviders
+
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
-import android.os.*
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.ServiceCompat.stopForeground
-import android.support.v4.content.ContextCompat
-import android.support.v4.view.MenuCompat
-import android.support.v4.view.MenuItemCompat
-import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
-
-import android.support.v7.widget.LinearLayoutManager
-import android.text.format.DateFormat.getTimeFormat
+import android.os.Build
+import android.os.Bundle
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import android.util.Log
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
-import android.widget.ProgressBar
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.shang.mediaplayerbykotlin.*
 import com.shang.mediaplayerbykotlin.Adapter.MusicDataAdapter
-import com.shang.mediaplayerbykotlin.Adapter.PlayListDataAdapter
 import com.shang.mediaplayerbykotlin.Adapter.PlayListNameAdapter
 import com.shang.mediaplayerbykotlin.MP.MPC
 import com.shang.mediaplayerbykotlin.MP.MPC_Interface
 import com.shang.mediaplayerbykotlin.MP.MediaPlayerService
-import com.shang.mediaplayerbykotlin.Room.*
-import kotlinx.android.synthetic.main.activity_play_music.*
+import com.shang.mediaplayerbykotlin.Room.MusicDatabase
+import com.shang.mediaplayerbykotlin.Room.Music_ListName_Entity
+import com.shang.mediaplayerbykotlin.Room.Setting_Entity
 import kotlinx.android.synthetic.main.drawer_layout.*
-import kotlinx.android.synthetic.main.media_play_controller.*
-import kotlinx.android.synthetic.main.media_player.*
-import kotlinx.android.synthetic.main.music_data_item.*
 import kotlinx.android.synthetic.main.sample_controller_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
-
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -74,6 +61,7 @@ class MainActivity : AppCompatActivity() {
                     adapterMain = MusicDataAdapter(this@MainActivity, MPC.musicList)
                     recyclerview.adapter = adapterMain
                     loadDialog.dismiss()
+
                 }
                 PlayMusicActivity.START -> {
                     simpleBt.setImageResource(R.drawable.ic_remote_pause)
@@ -105,6 +93,7 @@ class MainActivity : AppCompatActivity() {
 
         Log.d(TAG, "onCreate")
 
+
         initView()
 
         var readPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
@@ -118,16 +107,17 @@ class MainActivity : AppCompatActivity() {
             CheckFileRoom(this).execute()
         }
 
+
     }
 
     fun initView() {
 
-        model = ViewModelProviders.of(this).get(MPC::class.java)
+        /*model = ViewModelProviders.of(this).get(MPC::class.java)
         model.getLiveData().observe(this, Observer {
             MPC.musicList = it!!
             adapterMain.musicList = it!!
             adapterMain.notifyDataSetChanged()
-        })
+        })*/
 
         loadDialog = LoadDialog()
         loadDialog.show(fragmentManager, "LoadingDialog")
@@ -194,6 +184,8 @@ class MainActivity : AppCompatActivity() {
                 this.putExtra(MPC_Interface.INDEX, MPC.index)
             })
         }
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -205,7 +197,8 @@ class MainActivity : AppCompatActivity() {
 
         R.id.search -> {
             //model.getLiveData().value= database.getMusic_Data_Dao().test()
-            MediaRecorder.getAmplitude()
+
+
             true
         }
 

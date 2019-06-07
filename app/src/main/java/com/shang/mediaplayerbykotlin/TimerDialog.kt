@@ -24,6 +24,7 @@ import org.jetbrains.anko.toast
 /**
  * Created by SERS on 2018/8/29.
  */
+//睡眠定時器
 class TimerDialog : DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -57,7 +58,6 @@ class TimerDialog : DialogFragment() {
         }
 
         timerResetBt.setOnClickListener {
-
             try {
                 handler.removeCallbacks(runnable)
                 toast("重置完成")

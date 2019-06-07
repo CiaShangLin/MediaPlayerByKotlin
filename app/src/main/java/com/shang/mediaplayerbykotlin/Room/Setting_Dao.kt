@@ -1,6 +1,6 @@
 package com.shang.mediaplayerbykotlin.Room
 
-import android.arch.persistence.room.*
+import androidx.room.*
 
 /**
  * Created by SERS on 2018/8/23.

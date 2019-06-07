@@ -1,7 +1,7 @@
 package com.shang.mediaplayerbykotlin.Room
 
-import android.arch.persistence.room.Room
-import android.support.test.InstrumentationRegistry
+import androidx.room.Room
+import androidx.test.InstrumentationRegistry
 import org.junit.Test
 
 import org.junit.Assert.*

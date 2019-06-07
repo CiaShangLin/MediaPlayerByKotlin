@@ -7,9 +7,9 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Build
-import android.support.constraint.ConstraintLayout
-import android.support.v7.widget.CardView
-import android.support.v7.widget.RecyclerView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.cardview.widget.CardView
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +17,7 @@ import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
 import com.shang.mediaplayerbykotlin.Activity.PlayListActivity
 import com.shang.mediaplayerbykotlin.MP.MPC_Interface
 import com.shang.mediaplayerbykotlin.R
@@ -33,11 +34,12 @@ class PlayListNameAdapter(var context: Context, var playList: MutableList<Music_
         RecyclerView.Adapter<PlayListNameAdapter.ViewHolder>() {
 
 
+
     val database: MusicDatabase by lazy {
         MusicDatabase.getMusicDatabase(context)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): PlayListNameAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var view = LayoutInflater.from(context).inflate(R.layout.play_list_name_item, parent, false)
         return ViewHolder(view)
     }

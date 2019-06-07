@@ -1,6 +1,6 @@
 package com.shang.mediaplayerbykotlin.Room
 
-import android.arch.persistence.room.*
+import androidx.room.*
 
 @Dao
 interface Music_ListData_Dao {

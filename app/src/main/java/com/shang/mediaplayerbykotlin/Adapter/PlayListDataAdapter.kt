@@ -2,8 +2,7 @@ package com.shang.mediaplayerbykotlin.Adapter
 
 import android.content.Context
 import android.content.Intent
-import android.support.v7.widget.CardView
-import android.support.v7.widget.RecyclerView
+import androidx.cardview.widget.CardView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +11,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.shang.mediaplayerbykotlin.Activity.PlayListActivity
 import com.shang.mediaplayerbykotlin.FileUnits
 import com.shang.mediaplayerbykotlin.MP.MPC_Interface
@@ -36,10 +36,11 @@ class PlayListDataAdapter(var context: Context, var musicList: MutableList<Music
         return musicList.size
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): PlayListDataAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var view = LayoutInflater.from(context).inflate(R.layout.play_list_data_item, parent, false)
         return ViewHolder(view)
     }
+
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.dataTitle.text = musicList.get(position).name

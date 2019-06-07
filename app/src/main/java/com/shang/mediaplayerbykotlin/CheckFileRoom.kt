@@ -101,7 +101,7 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
             this.action=MainActivity.DATABASE_SUCCCESS
         })
 
-        //不做取圖片1.186秒  取徒占了大份的時間
+        //不做取圖片1.186秒  讀取占了大份的時間
     }
 
     fun insertSetting() {

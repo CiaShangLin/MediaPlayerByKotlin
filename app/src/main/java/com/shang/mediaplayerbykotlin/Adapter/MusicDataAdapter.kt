@@ -4,8 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.support.v7.widget.CardView
-import android.support.v7.widget.RecyclerView
+import androidx.cardview.widget.CardView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +13,7 @@ import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
 import com.shang.mediaplayerbykotlin.FileUnits
 import com.shang.mediaplayerbykotlin.MP.MPC_Interface
 import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
@@ -33,6 +33,11 @@ class MusicDataAdapter(var context: Context, var musicList: MutableList<Music_Da
 
     val database: MusicDatabase by lazy {
         MusicDatabase.getMusicDatabase(context)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        var view = LayoutInflater.from(parent?.context).inflate(R.layout.music_data_item, parent, false)
+        return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -68,12 +73,6 @@ class MusicDataAdapter(var context: Context, var musicList: MutableList<Music_Da
 
         holder.itemView.setTag(position)
 
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): MusicDataAdapter.ViewHolder {
-        var view = LayoutInflater.from(parent?.context).inflate(R.layout.music_data_item, parent, false)
-
-        return ViewHolder(view)
     }
 
 

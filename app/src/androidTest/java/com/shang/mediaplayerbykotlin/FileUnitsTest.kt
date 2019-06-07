@@ -2,7 +2,7 @@ package com.shang.mediaplayerbykotlin
 
 import android.content.Context
 import android.provider.MediaStore
-import android.support.test.InstrumentationRegistry
+import androidx.test.InstrumentationRegistry
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import org.junit.Assert.*
 import org.junit.Test

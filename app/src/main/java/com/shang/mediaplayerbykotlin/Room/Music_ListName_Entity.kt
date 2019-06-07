@@ -1,8 +1,8 @@
 package com.shang.mediaplayerbykotlin.Room
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 @Entity(tableName = Music_ListName_Entity.TABLE_NAME)
 class Music_ListName_Entity {
