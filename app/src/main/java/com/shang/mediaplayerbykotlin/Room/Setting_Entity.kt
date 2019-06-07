@@ -8,22 +8,22 @@ import androidx.room.PrimaryKey
  */
 
 @Entity(tableName = Setting_Entity.TABLE_NAME)
-class Setting_Entity  {
+class Setting_Entity {
 
     companion object {
-        const val TABLE_NAME:String="Setting_Table"
-        val key:String="Setting"
+        const val TABLE_NAME: String = "Setting_Table"
+        val key: String = "Setting"
     }
 
 
     @PrimaryKey
-    var name:String=key
+    var name: String = key
 
     // true=升序 false=降序
-    var sort_mode:Boolean=true
+    var sort_mode: Boolean = true
 
     //0=修改日期 1=名稱長度 2=時間長度
-    var sort_type:Int=1
+    var sort_type: Int = 1
 
 
 }

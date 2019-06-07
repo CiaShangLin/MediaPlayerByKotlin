@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.AsyncTask
 import android.os.Message
 import android.util.Log
+import androidx.lifecycle.LiveData
 import com.shang.mediaplayerbykotlin.Activity.MainActivity
 import com.shang.mediaplayerbykotlin.Adapter.MusicDataAdapter
 import com.shang.mediaplayerbykotlin.MP.MPC
@@ -21,7 +22,7 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
     lateinit var music_data_dao: Music_Data_Dao
     var beforeMap: MutableMap<String, Music_Data_Entity> = mutableMapOf()
     lateinit var musicList: MutableList<Music_Data_Entity>
-    lateinit var setting_entity: Setting_Entity
+    lateinit var setting_entity: LiveData<Setting_Entity>
 
     var start: Long = 0
 
@@ -93,9 +94,9 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
         super.onPostExecute(result)
 
         Log.d(TAG, "finish:" + (System.currentTimeMillis() - start) / 1000.0)
-        Log.d(TAG, "setting:" + setting_entity.sort_mode+" "+setting_entity.sort_type)
+        //Log.d(TAG, "setting:" + setting_entity.sort_mode+" "+setting_entity.sort_type)
         MPC.musicList = musicList
-        MPC.sort(setting_entity.sort_mode,setting_entity.sort_type)
+       // MPC.sort(setting_entity.value.sort_mode,setting_entity.value!!.sort_type)
 
         context.sendBroadcast(Intent().apply {
             this.action=MainActivity.DATABASE_SUCCCESS

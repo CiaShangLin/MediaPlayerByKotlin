@@ -1,5 +1,7 @@
 package com.shang.mediaplayerbykotlin.Room
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 
 /**
@@ -9,7 +11,7 @@ import androidx.room.*
 interface Setting_Dao {
 
     @Query("select * from " + Setting_Entity.TABLE_NAME)
-    fun getSetting(): Setting_Entity
+    fun getSetting(): LiveData<Setting_Entity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertSetting(setting_Entity: Setting_Entity)

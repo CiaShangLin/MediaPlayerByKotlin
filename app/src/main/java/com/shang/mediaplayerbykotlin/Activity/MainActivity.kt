@@ -52,6 +52,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var adapterMain: MusicDataAdapter
     lateinit var adapterListName: PlayListNameAdapter
     lateinit var loadDialog: LoadDialog
+    private val mediaPlayerModel: MediaPlayerModel by lazy {
+        ViewModelProviders.of(this).get(MediaPlayerModel::class.java)
+    }
 
 
     var broadcastReceiver = object : BroadcastReceiver() {
@@ -112,13 +115,6 @@ class MainActivity : AppCompatActivity() {
 
     fun initView() {
 
-        /*model = ViewModelProviders.of(this).get(MPC::class.java)
-        model.getLiveData().observe(this, Observer {
-            MPC.musicList = it!!
-            adapterMain.musicList = it!!
-            adapterMain.notifyDataSetChanged()
-        })*/
-
         loadDialog = LoadDialog()
         loadDialog.show(fragmentManager, "LoadingDialog")
 
@@ -138,7 +134,7 @@ class MainActivity : AppCompatActivity() {
                     var setting = database.getSetting_Dao().getSetting()
 
                     MPC.musicList = list
-                    MPC.sort(setting.sort_mode, setting.sort_type)
+                    //MPC.sort(setting.sort_mode, setting.sort_type)
 
                     recyclerview.adapter = adapterMain
 
@@ -185,6 +181,13 @@ class MainActivity : AppCompatActivity() {
             })
         }
 
+        //Setting
+        mediaPlayerModel?.getSettingLiveData().observe(this, object : Observer<Setting_Entity> {
+            override fun onChanged(t: Setting_Entity) {
+
+            }
+        })
+
 
     }
 
@@ -196,13 +199,17 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
 
         R.id.search -> {
-            //model.getLiveData().value= database.getMusic_Data_Dao().test()
-
-
+            var popupMenu = MyPopupMenu(this, findViewById<View>(R.id.sort),R.menu.sort_menu)
+            popupMenu.show()
             true
         }
 
         R.id.sort -> {
+
+            var settingEntity = mediaPlayerModel.getSettingLiveData().value
+            var mode = settingEntity?.sort_mode
+            var type = settingEntity?.sort_type
+            Log.d(TAG, mode.toString() + " " + type)
 
             var view = findViewById<View>(R.id.sort)
             var popupMenu = PopupMenu(this, view)
@@ -210,17 +217,10 @@ class MainActivity : AppCompatActivity() {
             inf.inflate(R.menu.sort_menu, popupMenu.menu)
 
 
-            var settingDao = database.getSetting_Dao()
-            var settingEntity = settingDao.getSetting()
+            popupMenu.menu.findItem(R.id.sort_mode).setChecked(mode!!)
+            popupMenu.menu.getItem(type!!).setChecked(true)
 
-            var mode: Boolean = settingEntity.sort_mode
-            var type: Int = settingEntity.sort_type
-            Log.d(TAG, mode.toString() + " " + type)
-
-            popupMenu.menu.findItem(R.id.sort_mode).setChecked(mode)
-            popupMenu.menu.getItem(type).setChecked(true)
-
-            popupMenu?.setOnMenuItemClickListener {
+            /*popupMenu?.setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.sort_mode -> {
                         mode = !mode
@@ -247,7 +247,7 @@ class MainActivity : AppCompatActivity() {
                     this.sort_type = type
                 })
 
-                MPC.sort(mode, type)
+                MPC.sort(mode!!, type!!)
 
 
                 Log.d(TAG, "sort")
@@ -259,7 +259,7 @@ class MainActivity : AppCompatActivity() {
             }
 
 
-            popupMenu.show()
+            popupMenu.show()*/
 
 
             true

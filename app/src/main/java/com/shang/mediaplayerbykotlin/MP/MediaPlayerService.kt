@@ -1,15 +1,15 @@
 package com.shang.mediaplayerbykotlin.MP
 
-
-import android.app.Notification
 import android.app.Service
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
+import androidx.lifecycle.ViewModelProviders
 import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
+import com.shang.mediaplayerbykotlin.MediaPlayerModel
 import com.shang.mediaplayerbykotlin.NotificationUnits
-import com.shang.mediaplayerbykotlin.NotificationUnits.Companion.Notification_ID
+
 
 
 class MediaPlayerService : Service() {
@@ -33,6 +33,7 @@ class MediaPlayerService : Service() {
         }
 
         MPC.mpc_mode = MPC_normal(baseContext)
+
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
