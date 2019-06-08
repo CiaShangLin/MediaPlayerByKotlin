@@ -10,21 +10,21 @@ import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import java.util.*
 
-/**
- * Created by Shang on 2018/8/14.
- */
-open class MPC{
+
+
+//音樂控制器和狀態
+class MPC{
 
     companion object {
         val TAG = "MPC"
 
-        var mediaPlayer: MediaPlayer? = null
-        var currentTime: Int = 0
-        var index: Int = -1
-        lateinit var mpc_mode: MPC_Interface
-        lateinit var musicList: MutableList<Music_Data_Entity>
-        var timer: Timer? = null
-        var timerTask: TimerTask? = null
+        var mediaPlayer: MediaPlayer? = null  //播放器
+        var currentTime: Int = 0             //目前撥放到的時間
+        var index: Int = -1                 //第幾首
+        lateinit var mpc_mode: MPC_Interface  //操作模式
+        lateinit var musicList: MutableList<Music_Data_Entity>  //要撥放的清單
+        var timer: Timer? = null                              //定時器
+        var timerTask: TimerTask? = null                       //定時任務
 
         // 1=修改日期 2=名稱長度 3=時間長度
         fun sort(mode: Boolean, type: Int) {
