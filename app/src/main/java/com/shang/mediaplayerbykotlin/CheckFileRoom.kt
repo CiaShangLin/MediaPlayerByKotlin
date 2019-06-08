@@ -22,13 +22,10 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
     lateinit var music_data_dao: Music_Data_Dao
     var beforeMap: MutableMap<String, Music_Data_Entity> = mutableMapOf()
     lateinit var musicList: MutableList<Music_Data_Entity>
-    lateinit var setting_entity: LiveData<Setting_Entity>
-
-    var start: Long = 0
 
     override fun onPreExecute() {
         super.onPreExecute()
-        start = System.currentTimeMillis()
+
     }
 
     override fun onProgressUpdate(vararg values: Void?) {
@@ -85,19 +82,13 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
 
         musicList = database.getMusic_Data_Dao().getAll()
 
-        insertSetting()  //插入設定
-
         return true
     }
 
     override fun onPostExecute(result: Boolean?) {
         super.onPostExecute(result)
 
-        Log.d(TAG, "finish:" + (System.currentTimeMillis() - start) / 1000.0)
-        //Log.d(TAG, "setting:" + setting_entity.sort_mode+" "+setting_entity.sort_type)
         MPC.musicList = musicList
-       // MPC.sort(setting_entity.value.sort_mode,setting_entity.value!!.sort_type)
-
         context.sendBroadcast(Intent().apply {
             this.action=MainActivity.DATABASE_SUCCCESS
         })
@@ -105,12 +96,5 @@ class CheckFileRoom(var context: Context) : AsyncTask<Void, Void, Boolean>() {
         //不做取圖片1.186秒  讀取占了大份的時間
     }
 
-    fun insertSetting() {
-        database.getSetting_Dao().insertSetting(Setting_Entity().apply {
-            this.name = Setting_Entity.key
-        })
-
-        setting_entity=database.getSetting_Dao().getSetting()
-    }
 
 }
