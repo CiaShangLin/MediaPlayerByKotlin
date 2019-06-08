@@ -26,9 +26,6 @@ import java.text.SimpleDateFormat
 
 class PlayMusicActivity : AppCompatActivity() {
 
-
-
-
     //Service用 廣播用
     companion object {
         lateinit var myReceiver: MyReceiver

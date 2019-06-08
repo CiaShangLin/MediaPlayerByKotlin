@@ -46,12 +46,13 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         val DATABASE_SUCCCESS: String = "DATABASE_SUCCCESS"
-        lateinit var model: MPC
     }
 
     lateinit var adapterMain: MusicDataAdapter
     lateinit var adapterListName: PlayListNameAdapter
-    lateinit var loadDialog: LoadDialog
+    val loadDialog: LoadDialog by lazy {
+        LoadDialog()
+    }
     private val mediaPlayerModel: MediaPlayerModel by lazy {
         ViewModelProviders.of(this).get(MediaPlayerModel::class.java)
     }
@@ -59,6 +60,7 @@ class MainActivity : AppCompatActivity() {
 
     var broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
+
             when (intent!!.action) {
                 DATABASE_SUCCCESS -> {
                     adapterMain = MusicDataAdapter(this@MainActivity, MPC.musicList)
@@ -94,14 +96,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Log.d(TAG, "onCreate")
-
-
         initView()
 
         var readPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
         var writePermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
 
+        //檢查權限
         if (readPermission && writePermission) {
             ActivityCompat.requestPermissions(this,
                     arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -115,11 +115,81 @@ class MainActivity : AppCompatActivity() {
 
     fun initView() {
 
-        loadDialog = LoadDialog()
-        loadDialog.show(fragmentManager, "LoadingDialog")
+        loadDialog.show(fragmentManager, LoadDialog.TAG)
 
         setSupportActionBar(toolbar)
         toolbar.setNavigationIcon(R.drawable.ic_navigation)
+        toolbar.inflateMenu(R.menu.toolbar_menu)
+        toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+
+                R.id.search -> {
+                    var popupMenu = MyPopupMenu(this, findViewById<View>(R.id.sort), R.menu.sort_menu)
+                    popupMenu.show()
+                    true
+                }
+
+                R.id.sort -> {
+
+                    var settingEntity = mediaPlayerModel.getSettingLiveData().value
+                    var mode = settingEntity?.sort_mode
+                    var type = settingEntity?.sort_type
+                    Log.d(TAG, mode.toString() + " " + type)
+
+                    var view = findViewById<View>(R.id.sort)
+                    var popupMenu = PopupMenu(this, view)
+                    var inf = popupMenu.menuInflater
+                    inf.inflate(R.menu.sort_menu, popupMenu.menu)
+
+
+                    popupMenu.menu.findItem(R.id.sort_mode).setChecked(mode!!)
+                    popupMenu.menu.getItem(type!!).setChecked(true)
+
+                    /*popupMenu?.setOnMenuItemClickListener {
+                        when (it.itemId) {
+                            R.id.sort_mode -> {
+                                mode = !mode
+                                it.setChecked(mode)
+                            }
+                            R.id.sort_modify -> {
+                                type = 1
+                                it.setChecked(true)
+                            }
+                            R.id.sort_name -> {
+                                type = 2
+                                it.setChecked(true)
+                            }
+                            R.id.sort_time -> {
+                                type = 3
+                                it.setChecked(true)
+                            }
+                        }
+
+
+                        database.getSetting_Dao().update(Setting_Entity().apply {
+                            this.name = Setting_Entity.key
+                            this.sort_mode = mode
+                            this.sort_type = type
+                        })
+
+                        MPC.sort(mode!!, type!!)
+
+
+                        Log.d(TAG, "sort")
+
+                        adapterMain.notifyDataSetChanged()
+
+
+                        true
+                    }
+
+
+                    popupMenu.show()*/
+                }
+
+            }
+            true
+        }
 
         val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name)
         drawerLayout.addDrawerListener(toggle)
@@ -199,7 +269,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
 
         R.id.search -> {
-            var popupMenu = MyPopupMenu(this, findViewById<View>(R.id.sort),R.menu.sort_menu)
+            var popupMenu = MyPopupMenu(this, findViewById<View>(R.id.sort), R.menu.sort_menu)
             popupMenu.show()
             true
         }
@@ -313,7 +383,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            moveTaskToBack(true)
+            moveTaskToBack(true)  //防止destory
         }
         return super.onKeyDown(keyCode, event)
     }
