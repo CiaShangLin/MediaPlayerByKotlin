@@ -15,17 +15,19 @@ import org.jetbrains.anko.custom.style
  */
 class LoadDialog : DialogFragment() {
 
+    companion object {
+        val TAG = "LoadDialog"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        isCancelable=false
-        setStyle(STYLE_NO_TITLE or STYLE_NO_FRAME,R.style.LoadingDialog)
+        isCancelable = false
+        setStyle(STYLE_NO_TITLE or STYLE_NO_FRAME, R.style.LoadingDialog)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        var view=inflater!!.inflate(R.layout.loading_dialog,container)
-
-
+        var view = inflater!!.inflate(R.layout.loading_dialog, container)
 
         return view
     }
