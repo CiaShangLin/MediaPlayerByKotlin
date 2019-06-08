@@ -1,5 +1,6 @@
 package com.shang.mediaplayerbykotlin.Room
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 
 /**
@@ -10,7 +11,7 @@ import androidx.room.*
 interface Music_Data_Dao {
 
     @Query("select * from " + Music_Data_Entity.TABLE_NAME)
-    fun getAll(): MutableList<Music_Data_Entity>
+    fun getAll(): LiveData<MutableList<Music_Data_Entity>>
 
     @Query("select * from " + Music_Data_Entity.TABLE_NAME + " where name= :fileName ")
     fun find_FileByName(fileName: String):Music_Data_Entity

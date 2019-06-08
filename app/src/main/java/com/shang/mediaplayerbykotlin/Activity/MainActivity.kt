@@ -30,6 +30,7 @@ import com.shang.mediaplayerbykotlin.MP.MPC
 import com.shang.mediaplayerbykotlin.MP.MPC_Interface
 import com.shang.mediaplayerbykotlin.MP.MediaPlayerService
 import com.shang.mediaplayerbykotlin.Room.MusicDatabase
+import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import com.shang.mediaplayerbykotlin.Room.Music_ListName_Entity
 import com.shang.mediaplayerbykotlin.Room.Setting_Entity
 import kotlinx.android.synthetic.main.drawer_layout.*
@@ -40,33 +41,20 @@ class MainActivity : AppCompatActivity() {
 
     val TAG = "Music"
 
-    val database: MusicDatabase by lazy {
-        MusicDatabase.getMusicDatabase(this)
-    }
-
     companion object {
         val DATABASE_SUCCCESS: String = "DATABASE_SUCCCESS"
     }
 
     lateinit var adapterMain: MusicDataAdapter
     lateinit var adapterListName: PlayListNameAdapter
-    val loadDialog: LoadDialog by lazy {
-        LoadDialog()
-    }
-    private val mediaPlayerModel: MediaPlayerModel by lazy {
-        ViewModelProviders.of(this).get(MediaPlayerModel::class.java)
-    }
-
+    val loadDialog: LoadDialog by lazy { LoadDialog() }
+    private val mediaPlayerModel: MediaPlayerModel by lazy { ViewModelProviders.of(this).get(MediaPlayerModel::class.java) }
 
     var broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-
             when (intent!!.action) {
                 DATABASE_SUCCCESS -> {
-                    adapterMain = MusicDataAdapter(this@MainActivity, MPC.musicList)
-                    recyclerview.adapter = adapterMain
                     loadDialog.dismiss()
-
                 }
                 PlayMusicActivity.START -> {
                     simpleBt.setImageResource(R.drawable.ic_remote_pause)
@@ -96,8 +84,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        initView()
-
         var readPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
         var writePermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
 
@@ -107,30 +93,28 @@ class MainActivity : AppCompatActivity() {
                     arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE,
                             android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
         } else {
-            CheckFileRoom(this).execute()
+            CheckFileRoom(this, mediaPlayerModel).execute()
         }
 
-
+        initView()
     }
 
     fun initView() {
-
         loadDialog.show(fragmentManager, LoadDialog.TAG)
-
         setSupportActionBar(toolbar)
         toolbar.setNavigationIcon(R.drawable.ic_navigation)
         toolbar.inflateMenu(R.menu.toolbar_menu)
         toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
-
+                //未實作
                 R.id.search -> {
                     var popupMenu = MyPopupMenu(this, findViewById<View>(R.id.sort), R.menu.sort_menu)
                     popupMenu.show()
                     true
                 }
 
+                //要修改
                 R.id.sort -> {
-
                     var settingEntity = mediaPlayerModel.getSettingLiveData().value
                     var mode = settingEntity?.sort_mode
                     var type = settingEntity?.sort_type
@@ -144,49 +128,7 @@ class MainActivity : AppCompatActivity() {
 
                     popupMenu.menu.findItem(R.id.sort_mode).setChecked(mode!!)
                     popupMenu.menu.getItem(type!!).setChecked(true)
-
-                    /*popupMenu?.setOnMenuItemClickListener {
-                        when (it.itemId) {
-                            R.id.sort_mode -> {
-                                mode = !mode
-                                it.setChecked(mode)
-                            }
-                            R.id.sort_modify -> {
-                                type = 1
-                                it.setChecked(true)
-                            }
-                            R.id.sort_name -> {
-                                type = 2
-                                it.setChecked(true)
-                            }
-                            R.id.sort_time -> {
-                                type = 3
-                                it.setChecked(true)
-                            }
-                        }
-
-
-                        database.getSetting_Dao().update(Setting_Entity().apply {
-                            this.name = Setting_Entity.key
-                            this.sort_mode = mode
-                            this.sort_type = type
-                        })
-
-                        MPC.sort(mode!!, type!!)
-
-
-                        Log.d(TAG, "sort")
-
-                        adapterMain.notifyDataSetChanged()
-
-
-                        true
-                    }
-
-
-                    popupMenu.show()*/
                 }
-
             }
             true
         }
@@ -200,10 +142,10 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
 
                 R.id.myMusic -> {
-                    var list = database.getMusic_Data_Dao().getAll()
-                    var setting = database.getSetting_Dao().getSetting()
+                    //var list = database.getMusic_Data_Dao().getAll()
+                    //var setting = database.getSetting_Dao().getSetting()
 
-                    MPC.musicList = list
+                    //MPC.musicList = list
                     //MPC.sort(setting.sort_mode, setting.sort_type)
 
                     recyclerview.adapter = adapterMain
@@ -216,7 +158,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.musicList -> {
 
                     var playList = mutableListOf<Music_ListName_Entity>()
-                    playList.addAll(database.getMusic_ListName_Dao().getAll())
+                    //playList.addAll(database.getMusic_ListName_Dao().getAll())
 
                     adapterListName = PlayListNameAdapter(this@MainActivity, playList)
                     recyclerview.adapter = adapterListName
@@ -252,92 +194,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         //Setting
-        mediaPlayerModel?.getSettingLiveData().observe(this, object : Observer<Setting_Entity> {
-            override fun onChanged(t: Setting_Entity) {
+        mediaPlayerModel?.getSettingLiveData().observe(this, Observer<Setting_Entity> {
 
-            }
         })
 
+        mediaPlayerModel.getAllMusicData().observe(this, Observer<MutableList<Music_Data_Entity>> {
+            adapterMain = MusicDataAdapter(this, it)
+            recyclerview.adapter = adapterMain
+            MPC.musicList = it
+        })
 
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.toolbar_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-
-        R.id.search -> {
-            var popupMenu = MyPopupMenu(this, findViewById<View>(R.id.sort), R.menu.sort_menu)
-            popupMenu.show()
-            true
-        }
-
-        R.id.sort -> {
-
-            var settingEntity = mediaPlayerModel.getSettingLiveData().value
-            var mode = settingEntity?.sort_mode
-            var type = settingEntity?.sort_type
-            Log.d(TAG, mode.toString() + " " + type)
-
-            var view = findViewById<View>(R.id.sort)
-            var popupMenu = PopupMenu(this, view)
-            var inf = popupMenu.menuInflater
-            inf.inflate(R.menu.sort_menu, popupMenu.menu)
-
-
-            popupMenu.menu.findItem(R.id.sort_mode).setChecked(mode!!)
-            popupMenu.menu.getItem(type!!).setChecked(true)
-
-            /*popupMenu?.setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.sort_mode -> {
-                        mode = !mode
-                        it.setChecked(mode)
-                    }
-                    R.id.sort_modify -> {
-                        type = 1
-                        it.setChecked(true)
-                    }
-                    R.id.sort_name -> {
-                        type = 2
-                        it.setChecked(true)
-                    }
-                    R.id.sort_time -> {
-                        type = 3
-                        it.setChecked(true)
-                    }
-                }
-
-
-                database.getSetting_Dao().update(Setting_Entity().apply {
-                    this.name = Setting_Entity.key
-                    this.sort_mode = mode
-                    this.sort_type = type
-                })
-
-                MPC.sort(mode!!, type!!)
-
-
-                Log.d(TAG, "sort")
-
-                adapterMain.notifyDataSetChanged()
-
-
-                true
-            }
-
-
-            popupMenu.show()*/
-
-
-            true
-        }
-
-        else -> {
-            super.onOptionsItemSelected(item)
-        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -352,7 +218,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             if (flag) {
-                CheckFileRoom(this).execute()
+                CheckFileRoom(this, mediaPlayerModel).execute()
             } else {
                 AlertDialog.Builder(this).setMessage("滾").show()
             }

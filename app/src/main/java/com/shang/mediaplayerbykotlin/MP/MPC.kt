@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
@@ -27,7 +28,7 @@ class MPC{
         var timerTask: TimerTask? = null                       //定時任務
 
         // 1=修改日期 2=名稱長度 3=時間長度
-        fun sort(mode: Boolean, type: Int) {
+        /*fun sort(mode: Boolean, type: Int) {
             var s=System.currentTimeMillis()
             if (mode) {   //升序
                 when (type) {
@@ -55,7 +56,7 @@ class MPC{
                 }
             }
             Log.d(TAG,((System.currentTimeMillis()-s)/1000.0).toString())
-        }
+        }*/
 
         fun startTimer(context: Context) {
             Log.d(MPC.TAG, "startTimer()")
