@@ -5,9 +5,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
-import androidx.lifecycle.ViewModelProviders
 import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
-import com.shang.mediaplayerbykotlin.MediaPlayerModel
 import com.shang.mediaplayerbykotlin.NotificationUnits
 
 

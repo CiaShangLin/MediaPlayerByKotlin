@@ -14,7 +14,6 @@ interface MPC_Interface{
         val INDEX:String="INDEX"
         val ID:String="ID"
         val STATUS:String="STATUS"
-
     }
 
 

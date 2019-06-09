@@ -1,4 +1,4 @@
-package com.shang.mediaplayerbykotlin
+package com.shang.mediaplayerbykotlin.Repository
 
 import android.content.Context
 import androidx.lifecycle.LiveData

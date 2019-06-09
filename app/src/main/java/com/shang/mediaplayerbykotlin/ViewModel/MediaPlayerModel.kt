@@ -1,12 +1,12 @@
-package com.shang.mediaplayerbykotlin
+package com.shang.mediaplayerbykotlin.ViewModel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.shang.mediaplayerbykotlin.Repository.MusicRepository
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import com.shang.mediaplayerbykotlin.Room.Setting_Entity
+import com.shang.mediaplayerbykotlin.Repository.SettingRepository
 
 class MediaPlayerModel(application: Application) : AndroidViewModel(application) {
 

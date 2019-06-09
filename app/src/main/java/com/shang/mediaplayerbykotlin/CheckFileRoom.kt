@@ -3,17 +3,11 @@ package com.shang.mediaplayerbykotlin
 import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
-import android.os.Message
 import android.util.Log
-import androidx.lifecycle.LiveData
 import com.shang.mediaplayerbykotlin.Activity.MainActivity
-import com.shang.mediaplayerbykotlin.Adapter.MusicDataAdapter
-import com.shang.mediaplayerbykotlin.MP.MPC
-import com.shang.mediaplayerbykotlin.Room.MusicDatabase
 
-import com.shang.mediaplayerbykotlin.Room.Music_Data_Dao
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
-import com.shang.mediaplayerbykotlin.Room.Setting_Entity
+import com.shang.mediaplayerbykotlin.ViewModel.MediaPlayerModel
 
 class CheckFileRoom(var context: Context, var mediaPlayerModel: MediaPlayerModel) : AsyncTask<Void, Void, Boolean>() {
 

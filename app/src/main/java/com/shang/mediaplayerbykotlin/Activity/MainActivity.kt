@@ -13,8 +13,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.util.Log
 import android.view.KeyEvent
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -29,10 +27,10 @@ import com.shang.mediaplayerbykotlin.Adapter.PlayListNameAdapter
 import com.shang.mediaplayerbykotlin.MP.MPC
 import com.shang.mediaplayerbykotlin.MP.MPC_Interface
 import com.shang.mediaplayerbykotlin.MP.MediaPlayerService
-import com.shang.mediaplayerbykotlin.Room.MusicDatabase
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import com.shang.mediaplayerbykotlin.Room.Music_ListName_Entity
 import com.shang.mediaplayerbykotlin.Room.Setting_Entity
+import com.shang.mediaplayerbykotlin.ViewModel.MediaPlayerModel
 import kotlinx.android.synthetic.main.drawer_layout.*
 import kotlinx.android.synthetic.main.sample_controller_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
@@ -50,7 +48,8 @@ class MainActivity : AppCompatActivity() {
     val loadDialog: LoadDialog by lazy { LoadDialog() }
     private val mediaPlayerModel: MediaPlayerModel by lazy { ViewModelProviders.of(this).get(MediaPlayerModel::class.java) }
 
-    var broadcastReceiver = object : BroadcastReceiver() {
+
+    private var broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent!!.action) {
                 DATABASE_SUCCCESS -> {
@@ -101,6 +100,7 @@ class MainActivity : AppCompatActivity() {
 
     fun initView() {
         loadDialog.show(fragmentManager, LoadDialog.TAG)
+
         setSupportActionBar(toolbar)
         toolbar.setNavigationIcon(R.drawable.ic_navigation)
         toolbar.inflateMenu(R.menu.toolbar_menu)
