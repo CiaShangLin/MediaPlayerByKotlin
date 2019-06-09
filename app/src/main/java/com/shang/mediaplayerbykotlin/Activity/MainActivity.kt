@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun initView() {
-        loadDialog.show(fragmentManager, LoadDialog.TAG)
+        //loadDialog.show(fragmentManager, LoadDialog.TAG)
 
         setSupportActionBar(toolbar)
         toolbar.setNavigationIcon(R.drawable.ic_navigation)
@@ -203,6 +203,15 @@ class MainActivity : AppCompatActivity() {
             recyclerview.adapter = adapterMain
             MPC.musicList = it
         })
+
+        mediaPlayerModel.getLoadStatus().observe(this, Observer {
+            if (it) {
+                loadDialog.dismiss()
+            } else {
+                loadDialog.show(supportFragmentManager, LoadDialog.TAG)
+            }
+        })
+        mediaPlayerModel.getLoadStatus().value = false
 
     }
 

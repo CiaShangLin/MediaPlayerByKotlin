@@ -66,9 +66,10 @@ class CheckFileRoom(var context: Context, var mediaPlayerModel: MediaPlayerModel
     override fun onPostExecute(result: Boolean?) {
         super.onPostExecute(result)
 
-        context.sendBroadcast(Intent().apply {
+        /*context.sendBroadcast(Intent().apply {
             this.action = MainActivity.DATABASE_SUCCCESS
-        })
+        })*/
+        mediaPlayerModel.getLoadStatus().value=true
 
         //不做取圖片1.186秒  讀取占了大份的時間
     }

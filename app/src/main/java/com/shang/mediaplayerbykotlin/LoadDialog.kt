@@ -13,7 +13,7 @@ import org.jetbrains.anko.custom.style
 /**
  * Created by SERS on 2018/8/31.
  */
-class LoadDialog : DialogFragment() {
+class LoadDialog : androidx.fragment.app.DialogFragment() {
 
     companion object {
         val TAG = "LoadDialog"
@@ -23,23 +23,16 @@ class LoadDialog : DialogFragment() {
         super.onCreate(savedInstanceState)
 
         isCancelable = false
-        setStyle(STYLE_NO_TITLE or STYLE_NO_FRAME, R.style.LoadingDialog)
+        setStyle(STYLE_NORMAL, R.style.LoadingDialog)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        var view = inflater!!.inflate(R.layout.loading_dialog, container)
-
-        return view
-    }
-
-
-    override fun setStyle(style: Int, theme: Int) {
-        super.setStyle(style, theme)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.loading_dialog,container,false)
     }
 
     override fun onResume() {
         super.onResume()
 
-        dialog.window.setLayout(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        dialog.window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
     }
 }
