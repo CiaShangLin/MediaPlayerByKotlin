@@ -2,8 +2,6 @@ package com.shang.mediaplayerbykotlin.Repository
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.room.RoomDatabase
 import com.shang.mediaplayerbykotlin.Room.MusicDatabase
 import com.shang.mediaplayerbykotlin.Room.Setting_Entity
 
@@ -14,8 +12,16 @@ class SettingRepository(context: Context) {
         MusicDatabase.getMusicDatabase(context).getSetting_Dao()
     }
 
-    fun getSettingEntiny():LiveData<Setting_Entity>{
-        return settingDao.getSetting()
+    fun getSettingNow():Setting_Entity{
+        return settingDao.getSettingNow()
+    }
+
+    fun getSettingLiveData():LiveData<Setting_Entity>{
+        return settingDao.getSettingLiveData()
+    }
+
+    fun insertSetting(setting_Entity: Setting_Entity){
+        settingDao.insertSetting(setting_Entity)
     }
 
     fun updateSetting(setting_Entity: Setting_Entity){

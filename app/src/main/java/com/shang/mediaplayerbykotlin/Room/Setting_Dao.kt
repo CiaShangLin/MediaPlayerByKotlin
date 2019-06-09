@@ -11,7 +11,10 @@ import androidx.room.*
 interface Setting_Dao {
 
     @Query("select * from " + Setting_Entity.TABLE_NAME)
-    fun getSetting(): LiveData<Setting_Entity>
+    fun getSettingNow(): Setting_Entity
+
+    @Query("select * from " + Setting_Entity.TABLE_NAME)
+    fun getSettingLiveData(): LiveData<Setting_Entity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertSetting(setting_Entity: Setting_Entity)

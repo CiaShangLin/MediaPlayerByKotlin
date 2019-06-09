@@ -11,7 +11,9 @@ import com.shang.mediaplayerbykotlin.Repository.SettingRepository
 
 class MediaPlayerModel(application: Application) : AndroidViewModel(application) {
 
-    private var loadStatus: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
+    private var loadStatus: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply {
+        this.value=false
+    }
     private var musicRepository = MusicRepository(application)
     private var settingRepository = SettingRepository(application)
 
@@ -51,8 +53,18 @@ class MediaPlayerModel(application: Application) : AndroidViewModel(application)
         musicRepository.deleteALL(musicEntity)
     }
 
+    //Setting
+
+    fun getSettingNow():Setting_Entity{
+        return settingRepository.getSettingNow()
+    }
+
     fun getSettingLiveData(): LiveData<Setting_Entity> {
-        return settingRepository.getSettingEntiny()
+        return settingRepository.getSettingLiveData()
+    }
+
+    fun insertSetting(setting_Entity: Setting_Entity){
+        settingRepository.insertSetting(setting_Entity)
     }
 
     fun updateSetting(setting_Entity: Setting_Entity) {

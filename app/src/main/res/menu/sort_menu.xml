@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <group android:checkableBehavior="all">
-
         <item
             android:id="@+id/sort_mode"
             android:checked="true"

@@ -37,24 +37,15 @@ import kotlinx.android.synthetic.main.toolbar_layout.*
 
 class MainActivity : AppCompatActivity() {
 
-    val TAG = "Music"
-
-    companion object {
-        val DATABASE_SUCCCESS: String = "DATABASE_SUCCCESS"
-    }
 
     lateinit var adapterMain: MusicDataAdapter
     lateinit var adapterListName: PlayListNameAdapter
     val loadDialog: LoadDialog by lazy { LoadDialog() }
     private val mediaPlayerModel: MediaPlayerModel by lazy { ViewModelProviders.of(this).get(MediaPlayerModel::class.java) }
 
-
     private var broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent!!.action) {
-                DATABASE_SUCCCESS -> {
-                    loadDialog.dismiss()
-                }
                 PlayMusicActivity.START -> {
                     simpleBt.setImageResource(R.drawable.ic_remote_pause)
 
@@ -96,38 +87,24 @@ class MainActivity : AppCompatActivity() {
         }
 
         initView()
+        initModel()
     }
 
     fun initView() {
-        //loadDialog.show(fragmentManager, LoadDialog.TAG)
 
-        setSupportActionBar(toolbar)
+        //toolbar
         toolbar.setNavigationIcon(R.drawable.ic_navigation)
         toolbar.inflateMenu(R.menu.toolbar_menu)
         toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 //未實作
-                R.id.search -> {
-                    var popupMenu = MyPopupMenu(this, findViewById<View>(R.id.sort), R.menu.sort_menu)
-                    popupMenu.show()
-                    true
-                }
+                R.id.search -> { }
 
                 //要修改
                 R.id.sort -> {
-                    var settingEntity = mediaPlayerModel.getSettingLiveData().value
-                    var mode = settingEntity?.sort_mode
-                    var type = settingEntity?.sort_type
-                    Log.d(TAG, mode.toString() + " " + type)
-
-                    var view = findViewById<View>(R.id.sort)
-                    var popupMenu = PopupMenu(this, view)
-                    var inf = popupMenu.menuInflater
-                    inf.inflate(R.menu.sort_menu, popupMenu.menu)
-
-
-                    popupMenu.menu.findItem(R.id.sort_mode).setChecked(mode!!)
-                    popupMenu.menu.getItem(type!!).setChecked(true)
+                    var popupMenu = MyPopupMenu(this, findViewById<View>(R.id.sort), R.menu.sort_menu, mediaPlayerModel)
+                    popupMenu.setOnMenuItemClickListener(popupMenu)
+                    popupMenu.show()
                 }
             }
             true
@@ -143,7 +120,7 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.myMusic -> {
                     //var list = database.getMusic_Data_Dao().getAll()
-                    //var setting = database.getSetting_Dao().getSetting()
+                    //var setting = database.getSetting_Dao().getSettingLiveData()
 
                     //MPC.musicList = list
                     //MPC.sort(setting.sort_mode, setting.sort_type)
@@ -172,9 +149,11 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+
         recyclerview.layoutManager = LinearLayoutManager(this@MainActivity)
         recyclerview.setHasFixedSize(true)
 
+        //撥放按鈕
         simpleBt.setOnClickListener {
             var intent = Intent(this, MediaPlayerService::class.java).apply {
                 this.action = PlayMusicActivity.PLAY
@@ -187,12 +166,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        //整個simple的Layout
         simple_conLy.setOnClickListener {
             startActivity(Intent(this, PlayMusicActivity::class.java).apply {
                 this.putExtra(MPC_Interface.INDEX, MPC.index)
             })
         }
+    }
 
+    fun initModel(){
         //Setting
         mediaPlayerModel?.getSettingLiveData().observe(this, Observer<Setting_Entity> {
 
@@ -204,6 +186,7 @@ class MainActivity : AppCompatActivity() {
             MPC.musicList = it
         })
 
+        //LoadDailog
         mediaPlayerModel.getLoadStatus().observe(this, Observer {
             if (it) {
                 loadDialog.dismiss()
@@ -211,8 +194,6 @@ class MainActivity : AppCompatActivity() {
                 loadDialog.show(supportFragmentManager, LoadDialog.TAG)
             }
         })
-        mediaPlayerModel.getLoadStatus().value = false
-
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -242,7 +223,6 @@ class MainActivity : AppCompatActivity() {
             this.addAction(PlayMusicActivity.START)
             this.addAction(PlayMusicActivity.PAUSE)
             this.addAction(PlayMusicActivity.RESTART)
-            this.addAction(DATABASE_SUCCCESS)
         }
         registerReceiver(broadcastReceiver, intentFilter)
     }

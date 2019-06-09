@@ -22,7 +22,7 @@ class Setting_Entity {
     // true=升序 false=降序
     var sort_mode: Boolean = true
 
-    //0=修改日期 1=名稱長度 2=時間長度
+    //1=修改日期 2=名稱長度 3=時間長度
     var sort_type: Int = 1
 
 
