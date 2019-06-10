@@ -75,6 +75,11 @@ class MusicDataAdapter(var context: Context, var musicList: MutableList<Music_Da
 
     }
 
+    fun setData(data: MutableList<Music_Data_Entity>) {
+        musicList = data
+        notifyDataSetChanged()
+    }
+
 
     override fun getItemCount(): Int {
         return musicList.size

@@ -18,6 +18,7 @@ import android.widget.PopupMenu
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,6 +39,7 @@ import kotlinx.android.synthetic.main.toolbar_layout.*
 class MainActivity : AppCompatActivity() {
 
 
+    private val TAG: String = "MainActivity"
     lateinit var adapterMain: MusicDataAdapter
     lateinit var adapterListName: PlayListNameAdapter
     val loadDialog: LoadDialog by lazy { LoadDialog() }
@@ -98,7 +100,12 @@ class MainActivity : AppCompatActivity() {
         toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 //未實作
-                R.id.search -> { }
+                R.id.search -> {
+
+                    mediaPlayerModel.getAllMusicDataByASC("duration").forEach{
+                        Log.d("TAG",it.name)
+                    }
+                }
 
                 //要修改
                 R.id.sort -> {
@@ -152,6 +159,8 @@ class MainActivity : AppCompatActivity() {
 
         recyclerview.layoutManager = LinearLayoutManager(this@MainActivity)
         recyclerview.setHasFixedSize(true)
+        adapterMain = MusicDataAdapter(this, mutableListOf())
+        recyclerview.adapter = adapterMain
 
         //撥放按鈕
         simpleBt.setOnClickListener {
@@ -174,16 +183,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun initModel(){
+    fun initModel() {
         //Setting
         mediaPlayerModel?.getSettingLiveData().observe(this, Observer<Setting_Entity> {
-
+            //應該要寫預設插入
+            if (it != null) {
+                var columnInfo: String = Setting_Entity.getSortType(it.sort_type)
+                if (it.sort_mode) {
+                    mediaPlayerModel.getAllMusicData().value = mediaPlayerModel.getAllMusicDataByASC(columnInfo)
+                } else {
+                    mediaPlayerModel.getAllMusicData().value = mediaPlayerModel.getAllMusicDataByDESC(columnInfo)
+                }
+                Log.v(TAG, "setting:${it?.sort_mode} ${it?.sort_type} $columnInfo")
+            }
         })
 
-        //如果使用Room的Order by 會不能通過 因為他好像會痊癒掃描
+        //如果使用Room的Order by ASC和DESC 不能用參數的方法 連column都不能用參數的
         mediaPlayerModel.getAllMusicData().observe(this, Observer<MutableList<Music_Data_Entity>> {
-            adapterMain = MusicDataAdapter(this, it)
-            recyclerview.adapter = adapterMain
+            Log.d(TAG, "mediaPlayerModel")
+            adapterMain.setData(it)
+
             MPC.musicList = it
         })
 
@@ -195,6 +214,8 @@ class MainActivity : AppCompatActivity() {
                 loadDialog.show(supportFragmentManager, LoadDialog.TAG)
             }
         })
+
+
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

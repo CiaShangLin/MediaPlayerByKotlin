@@ -13,6 +13,15 @@ class Setting_Entity {
     companion object {
         const val TABLE_NAME: String = "Setting_Table"
         val key: String = "Setting"
+
+        fun getSortType(sort_type:Int):String{
+            return when(sort_type){
+                1->{Music_Data_Entity.MODIFIED}
+                2->{Music_Data_Entity.NAME}
+                3->{Music_Data_Entity.DURATION}
+                else->{Music_Data_Entity.MODIFIED}
+            }
+        }
     }
 
 
@@ -24,6 +33,7 @@ class Setting_Entity {
 
     //1=修改日期 2=名稱長度 3=時間長度
     var sort_type: Int = 1
+
 
 
 }

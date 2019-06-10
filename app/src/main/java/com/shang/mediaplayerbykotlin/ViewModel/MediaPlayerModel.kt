@@ -21,8 +21,16 @@ class MediaPlayerModel(application: Application) : AndroidViewModel(application)
         return loadStatus
     }
 
-    fun getAllMusicData(): LiveData<MutableList<Music_Data_Entity>> {
+    fun getAllMusicData(): MutableLiveData<MutableList<Music_Data_Entity>> {
         return musicRepository.getAllMusicData()
+    }
+
+    fun getAllMusicDataByASC(columnInfo:String):MutableList<Music_Data_Entity>{
+        return musicRepository.getAllMusicDataByASC(columnInfo)
+    }
+
+    fun getAllMusicDataByDESC(columnInfo:String):MutableList<Music_Data_Entity>{
+        return musicRepository.getAllMusicDataByDESC(columnInfo)
     }
 
     fun find_FileByName(fileName: String): Music_Data_Entity {
