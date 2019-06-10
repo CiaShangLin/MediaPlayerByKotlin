@@ -180,6 +180,7 @@ class MainActivity : AppCompatActivity() {
 
         })
 
+        //如果使用Room的Order by 會不能通過 因為他好像會痊癒掃描
         mediaPlayerModel.getAllMusicData().observe(this, Observer<MutableList<Music_Data_Entity>> {
             adapterMain = MusicDataAdapter(this, it)
             recyclerview.adapter = adapterMain
