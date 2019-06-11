@@ -3,6 +3,7 @@ package com.shang.mediaplayerbykotlin.Room
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.room.*
+import androidx.sqlite.db.SupportSQLiteQuery
 
 /**
  * Created by Shang on 2018/8/14.
@@ -12,13 +13,10 @@ import androidx.room.*
 interface Music_Data_Dao {
 
     @Query("select * from " + Music_Data_Entity.TABLE_NAME)
-    fun getAll(): MutableList<Music_Data_Entity>
+    fun getAllMusicData(): MutableList<Music_Data_Entity>
 
-    @Query("select * from " + Music_Data_Entity.TABLE_NAME +" ORDER BY duration ASC")
-    fun getAllByASC(): MutableList<Music_Data_Entity>
-
-    @Query("select * from " + Music_Data_Entity.TABLE_NAME+" ORDER BY :columnInfo DESC")
-    fun getAllByDESC(columnInfo: String): MutableList<Music_Data_Entity>
+    @RawQuery
+    fun getAllMusicDataOrderBy(query:SupportSQLiteQuery): MutableList<Music_Data_Entity>
 
     @Query("select * from " + Music_Data_Entity.TABLE_NAME + " where name= :fileName ")
     fun find_FileByName(fileName: String):Music_Data_Entity

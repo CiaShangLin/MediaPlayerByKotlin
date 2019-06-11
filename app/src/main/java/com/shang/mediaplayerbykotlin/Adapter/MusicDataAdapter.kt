@@ -76,7 +76,8 @@ class MusicDataAdapter(var context: Context, var musicList: MutableList<Music_Da
     }
 
     fun setData(data: MutableList<Music_Data_Entity>) {
-        musicList = data
+        musicList.clear()
+        musicList.addAll(data)
         notifyDataSetChanged()
     }
 

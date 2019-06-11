@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.sqlite.db.SupportSQLiteQuery
 import com.shang.mediaplayerbykotlin.Repository.MusicRepository
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import com.shang.mediaplayerbykotlin.Room.Setting_Entity
@@ -12,7 +13,7 @@ import com.shang.mediaplayerbykotlin.Repository.SettingRepository
 class MediaPlayerModel(application: Application) : AndroidViewModel(application) {
 
     private var loadStatus: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply {
-        this.value=false
+        this.value = false
     }
     private var musicRepository = MusicRepository(application)
     private var settingRepository = SettingRepository(application)
@@ -25,12 +26,9 @@ class MediaPlayerModel(application: Application) : AndroidViewModel(application)
         return musicRepository.getAllMusicData()
     }
 
-    fun getAllMusicDataByASC(columnInfo:String):MutableList<Music_Data_Entity>{
-        return musicRepository.getAllMusicDataByASC(columnInfo)
-    }
-
-    fun getAllMusicDataByDESC(columnInfo:String):MutableList<Music_Data_Entity>{
-        return musicRepository.getAllMusicDataByDESC(columnInfo)
+    //如果使用Room的Order by ASC和DESC 不能用參數的方法 連column都不能用參數的 只能改用RawQuery
+    fun getAllMusicDataOrderBy(query: SupportSQLiteQuery): MutableList<Music_Data_Entity> {
+        return musicRepository.getAllMusicDataOrderBy(query)
     }
 
     fun find_FileByName(fileName: String): Music_Data_Entity {
@@ -63,7 +61,7 @@ class MediaPlayerModel(application: Application) : AndroidViewModel(application)
 
     //Setting
 
-    fun getSettingNow():Setting_Entity{
+    fun getSettingNow(): Setting_Entity {
         return settingRepository.getSettingNow()
     }
 
@@ -71,7 +69,7 @@ class MediaPlayerModel(application: Application) : AndroidViewModel(application)
         return settingRepository.getSettingLiveData()
     }
 
-    fun insertSetting(setting_Entity: Setting_Entity){
+    fun insertSetting(setting_Entity: Setting_Entity) {
         settingRepository.insertSetting(setting_Entity)
     }
 

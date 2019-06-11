@@ -22,6 +22,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.sqlite.db.SimpleSQLiteQuery
+import androidx.sqlite.db.SupportSQLiteQuery
 import com.shang.mediaplayerbykotlin.*
 import com.shang.mediaplayerbykotlin.Adapter.MusicDataAdapter
 import com.shang.mediaplayerbykotlin.Adapter.PlayListNameAdapter
@@ -102,10 +104,9 @@ class MainActivity : AppCompatActivity() {
                 //未實作
                 R.id.search -> {
 
-                    mediaPlayerModel.getAllMusicDataByASC("duration").forEach{
-                        Log.d("TAG",it.name)
-                    }
+
                 }
+
 
                 //要修改
                 R.id.sort -> {
@@ -126,7 +127,7 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
 
                 R.id.myMusic -> {
-                    //var list = database.getMusic_Data_Dao().getAll()
+                    //var list = database.getMusic_Data_Dao().getAllMusicData()
                     //var setting = database.getSetting_Dao().getSettingLiveData()
 
                     //MPC.musicList = list
@@ -142,7 +143,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.musicList -> {
 
                     var playList = mutableListOf<Music_ListName_Entity>()
-                    //playList.addAll(database.getMusic_ListName_Dao().getAll())
+                    //playList.addAll(database.getMusic_ListName_Dao().getAllMusicData())
 
                     adapterListName = PlayListNameAdapter(this@MainActivity, playList)
                     recyclerview.adapter = adapterListName
@@ -188,21 +189,27 @@ class MainActivity : AppCompatActivity() {
         mediaPlayerModel?.getSettingLiveData().observe(this, Observer<Setting_Entity> {
             //應該要寫預設插入
             if (it != null) {
+                var orderBy = if (it.sort_mode) "DESC" else "ASC"
                 var columnInfo: String = Setting_Entity.getSortType(it.sort_type)
-                if (it.sort_mode) {
-                    mediaPlayerModel.getAllMusicData().value = mediaPlayerModel.getAllMusicDataByASC(columnInfo)
-                } else {
-                    mediaPlayerModel.getAllMusicData().value = mediaPlayerModel.getAllMusicDataByDESC(columnInfo)
+                var simpleSQLiteQuery =
+                        SimpleSQLiteQuery("select * from ${Music_Data_Entity.TABLE_NAME} order by $columnInfo $orderBy")
+                var m = mediaPlayerModel.getAllMusicDataOrderBy(simpleSQLiteQuery)
+                mediaPlayerModel.getAllMusicData().postValue(m)
+                Log.v(TAG, simpleSQLiteQuery.sql)
+                Log.v(TAG, "setting:${it?.sort_mode} ${it?.sort_type}  $orderBy $columnInfo")
+                m.forEach {
+                    Log.d(TAG, it.name)
                 }
-                Log.v(TAG, "setting:${it?.sort_mode} ${it?.sort_type} $columnInfo")
             }
         })
 
-        //如果使用Room的Order by ASC和DESC 不能用參數的方法 連column都不能用參數的
-        mediaPlayerModel.getAllMusicData().observe(this, Observer<MutableList<Music_Data_Entity>> {
-            Log.d(TAG, "mediaPlayerModel")
-            adapterMain.setData(it)
 
+        mediaPlayerModel.getAllMusicData().observe(this, Observer<MutableList<Music_Data_Entity>> {
+            Log.d(TAG, "M mediaPlayerModel")
+            adapterMain.setData(it)
+            it.forEach {
+                Log.d(TAG, it.name)
+            }
             MPC.musicList = it
         })
 
