@@ -1,6 +1,5 @@
 package com.shang.mediaplayerbykotlin.Activity
 
-
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -35,14 +34,26 @@ import kotlinx.android.synthetic.main.sample_controller_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 
 class MainActivity : AppCompatActivity() {
-
-
     private val TAG: String = "MainActivity"
     lateinit var adapterMain: MusicDataAdapter
     lateinit var adapterListName: PlayListNameAdapter
     val loadDialog: LoadDialog by lazy { LoadDialog() }
     private val mediaPlayerModel: MediaPlayerModel by lazy { ViewModelProviders.of(this).get(MediaPlayerModel::class.java) }
 
+    private var myBroadcastReceiverUI=object : MyBroadcastReceiverUI {
+        override fun start(intent: Intent) {
+
+        }
+
+        override fun pause() {
+
+        }
+
+        override fun reStart() {
+
+        }
+    }
+    private var myBroadcastReceiver=MyBroadcastReceiver(myBroadcastReceiverUI)
     private var broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent!!.action) {
@@ -234,7 +245,7 @@ class MainActivity : AppCompatActivity() {
             this.addAction(PlayMusicActivity.PAUSE)
             this.addAction(PlayMusicActivity.RESTART)
         }
-        registerReceiver(broadcastReceiver, intentFilter)
+        registerReceiver(myBroadcastReceiver, intentFilter)
     }
 
     override fun onDestroy() {

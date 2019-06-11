@@ -15,6 +15,7 @@ import com.shang.mediaplayerbykotlin.MP.MPC
 import com.shang.mediaplayerbykotlin.MP.MPC_Interface
 import com.shang.mediaplayerbykotlin.MP.MPC_normal
 import com.shang.mediaplayerbykotlin.MP.MediaPlayerService
+import com.shang.mediaplayerbykotlin.MyBroadcastReceiverUI
 import com.shang.mediaplayerbykotlin.NotificationUnits
 import com.shang.mediaplayerbykotlin.R
 import kotlinx.android.synthetic.main.activity_play_music.*
@@ -57,10 +58,46 @@ class PlayMusicActivity : AppCompatActivity() {
     3.在使用Receiver的class裡註冊廣播
     4.記得要新增IntentFilter(getString(R.string.MyRecevier))
     5.註銷廣播*/
+    private var myBroadcastReceiverUI=object : MyBroadcastReceiverUI {
+        override fun start(intent: Intent) {
+
+        }
+
+        override fun pause() {
+
+        }
+
+        override fun next() {
+
+        }
+
+        override fun previous() {
+
+        }
+
+        override fun reStart() {
+
+        }
+
+        override fun looping() {
+
+        }
+
+        override fun current_time(intent: Intent) {
+
+        }
+
+        override fun mode() {
+
+        }
+
+        override fun reStore() {
+
+        }
+    }
 
     inner class MyReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
-
             when (intent.action) {
                 START -> {
                     var duration = intent.getIntExtra(MPC_Interface.DURATION, 0)
