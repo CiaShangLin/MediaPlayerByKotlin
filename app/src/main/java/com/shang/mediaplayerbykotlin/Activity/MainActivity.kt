@@ -189,27 +189,14 @@ class MainActivity : AppCompatActivity() {
         mediaPlayerModel?.getSettingLiveData().observe(this, Observer<Setting_Entity> {
             //應該要寫預設插入
             if (it != null) {
-                var orderBy = if (it.sort_mode) "DESC" else "ASC"
-                var columnInfo: String = Setting_Entity.getSortType(it.sort_type)
-                var simpleSQLiteQuery =
-                        SimpleSQLiteQuery("select * from ${Music_Data_Entity.TABLE_NAME} order by $columnInfo $orderBy")
-                var m = mediaPlayerModel.getAllMusicDataOrderBy(simpleSQLiteQuery)
-                mediaPlayerModel.getAllMusicData().postValue(m)
-                Log.v(TAG, simpleSQLiteQuery.sql)
-                Log.v(TAG, "setting:${it?.sort_mode} ${it?.sort_type}  $orderBy $columnInfo")
-                m.forEach {
-                    Log.d(TAG, it.name)
-                }
+                mediaPlayerModel.getAllMusicData()
+                        .postValue(mediaPlayerModel.getAllMusicDataOrderBy(it.sort_mode, it.sort_type))
             }
         })
 
-
+        //MusicData
         mediaPlayerModel.getAllMusicData().observe(this, Observer<MutableList<Music_Data_Entity>> {
-            Log.d(TAG, "M mediaPlayerModel")
             adapterMain.setData(it)
-            it.forEach {
-                Log.d(TAG, it.name)
-            }
             MPC.musicList = it
         })
 

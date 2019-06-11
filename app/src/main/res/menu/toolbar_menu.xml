@@ -15,6 +15,7 @@
         android:icon="@drawable/ic_search"
         android:title="@string/search"
 
+        android:visible="false"
         app:showAsAction="always"></item>
 
 
