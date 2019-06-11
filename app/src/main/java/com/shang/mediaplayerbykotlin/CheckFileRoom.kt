@@ -1,11 +1,8 @@
 package com.shang.mediaplayerbykotlin
 
 import android.content.Context
-import android.content.Intent
 import android.os.AsyncTask
 import android.util.Log
-import com.shang.mediaplayerbykotlin.Activity.MainActivity
-
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import com.shang.mediaplayerbykotlin.ViewModel.MediaPlayerModel
 

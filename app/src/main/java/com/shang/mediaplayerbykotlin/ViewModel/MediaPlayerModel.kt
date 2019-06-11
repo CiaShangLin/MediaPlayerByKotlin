@@ -5,11 +5,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.sqlite.db.SimpleSQLiteQuery
-import androidx.sqlite.db.SupportSQLiteQuery
 import com.shang.mediaplayerbykotlin.Repository.MusicRepository
+import com.shang.mediaplayerbykotlin.Repository.SettingRepository
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import com.shang.mediaplayerbykotlin.Room.Setting_Entity
-import com.shang.mediaplayerbykotlin.Repository.SettingRepository
 
 class MediaPlayerModel(application: Application) : AndroidViewModel(application) {
 

@@ -1,10 +1,8 @@
 package com.shang.mediaplayerbykotlin.Room
 
 import androidx.room.ColumnInfo
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.io.File
 
 /**
  * Created by Shang on 2018/8/14.

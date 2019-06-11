@@ -1,13 +1,10 @@
 package com.shang.mediaplayerbykotlin
 
 import android.content.Context
-import android.content.Entity
 import android.util.Log
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
-import androidx.lifecycle.Observer
 import com.shang.mediaplayerbykotlin.Room.Setting_Entity
 import com.shang.mediaplayerbykotlin.ViewModel.MediaPlayerModel
 

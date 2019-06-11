@@ -2,7 +2,6 @@ package com.shang.mediaplayerbykotlin.Adapter
 
 import android.content.Context
 import android.content.Intent
-import androidx.cardview.widget.CardView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,17 +10,16 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.shang.mediaplayerbykotlin.Activity.PlayListActivity
+import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
 import com.shang.mediaplayerbykotlin.FileUnits
 import com.shang.mediaplayerbykotlin.MP.MPC_Interface
-import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
 import com.shang.mediaplayerbykotlin.R
 import com.shang.mediaplayerbykotlin.Room.MusicDatabase
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import com.shang.mediaplayerbykotlin.Room.Music_ListData_Entity
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 
 /**
  * Created by Shang on 2018/8/26.

@@ -3,14 +3,11 @@ package com.shang.mediaplayerbykotlin.Activity
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
-import android.os.AsyncTask
 import android.os.Bundle
-
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-
 import androidx.recyclerview.widget.RecyclerView
 import com.shang.mediaplayerbykotlin.Adapter.PlayListDataAdapter
 import com.shang.mediaplayerbykotlin.MP.MPC
@@ -19,9 +16,7 @@ import com.shang.mediaplayerbykotlin.R
 import com.shang.mediaplayerbykotlin.Room.MusicDatabase
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import com.shang.mediaplayerbykotlin.Room.Music_ListData_Entity
-
 import kotlinx.android.synthetic.main.activity_play_list.*
-
 import java.util.*
 
 class PlayListActivity : AppCompatActivity() {

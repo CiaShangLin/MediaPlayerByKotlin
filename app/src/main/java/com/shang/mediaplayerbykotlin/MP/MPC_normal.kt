@@ -6,8 +6,8 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Build
 import android.util.Log
-import com.shang.mediaplayerbykotlin.MP.MPC.Companion.stopTimer
 import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
+import com.shang.mediaplayerbykotlin.MP.MPC.Companion.stopTimer
 
 
 class MPC_normal(var context: Context) : MPC_Interface {

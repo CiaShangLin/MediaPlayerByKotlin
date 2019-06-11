@@ -1,19 +1,9 @@
 package com.shang.mediaplayerbykotlin
 
 import android.content.Context
-import android.database.Cursor
-import android.media.MediaMetadata
-import android.media.MediaPlayer
-import android.media.ThumbnailUtils
-import android.net.Uri
-import android.os.AsyncTask
-import android.os.Environment
 import android.provider.MediaStore
-import android.provider.MediaStore.Images.Thumbnails.MINI_KIND
-import android.util.Log
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import java.io.File
-import java.sql.Date
 import java.text.SimpleDateFormat
 
 /**

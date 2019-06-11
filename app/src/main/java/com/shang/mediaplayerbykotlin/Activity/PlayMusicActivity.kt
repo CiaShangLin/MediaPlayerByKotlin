@@ -6,11 +6,11 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.BitmapFactory
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.SeekBar
+import androidx.appcompat.app.AppCompatActivity
 import com.shang.mediaplayerbykotlin.MP.MPC
 import com.shang.mediaplayerbykotlin.MP.MPC_Interface
 import com.shang.mediaplayerbykotlin.MP.MPC_normal
@@ -20,7 +20,6 @@ import com.shang.mediaplayerbykotlin.R
 import kotlinx.android.synthetic.main.activity_play_music.*
 import kotlinx.android.synthetic.main.media_play_controller.*
 import kotlinx.android.synthetic.main.media_player.*
-import org.jetbrains.anko.startService
 import org.jetbrains.anko.toast
 import java.text.SimpleDateFormat
 

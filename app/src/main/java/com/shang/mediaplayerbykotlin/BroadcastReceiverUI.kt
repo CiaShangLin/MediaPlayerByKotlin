@@ -1,6 +1,6 @@
 package com.shang.mediaplayerbykotlin
 
-abstract class UI {
+abstract class BroadcastReceiverUI {
     abstract fun start()
 
 }

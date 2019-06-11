@@ -1,9 +1,6 @@
 package com.shang.mediaplayerbykotlin
 
-import android.app.ActionBar
 import android.app.DialogFragment
-import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -12,13 +9,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
-import com.shang.mediaplayerbykotlin.Activity.MainActivity
-import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
 import com.shang.mediaplayerbykotlin.MP.MPC
-import com.shang.mediaplayerbykotlin.MP.MediaPlayerService
-import kotlinx.android.synthetic.main.timer_dialog.*
-import org.jetbrains.anko.runOnUiThread
-import org.jetbrains.anko.startService
 import org.jetbrains.anko.toast
 
 /**

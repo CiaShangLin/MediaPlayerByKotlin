@@ -4,12 +4,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Color
-import android.os.AsyncTask
-import android.os.Build
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.cardview.widget.CardView
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +11,8 @@ import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
+import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.shang.mediaplayerbykotlin.Activity.PlayListActivity
 import com.shang.mediaplayerbykotlin.MP.MPC_Interface
@@ -24,8 +20,7 @@ import com.shang.mediaplayerbykotlin.R
 import com.shang.mediaplayerbykotlin.Room.MusicDatabase
 import com.shang.mediaplayerbykotlin.Room.Music_ListName_Entity
 import kotlinx.android.synthetic.main.input_edittext.view.*
-import kotlinx.android.synthetic.main.play_list_name_item.view.*
-import org.jetbrains.anko.*
+import org.jetbrains.anko.runOnUiThread
 
 /**
  * Created by Shang on 2018/8/23.

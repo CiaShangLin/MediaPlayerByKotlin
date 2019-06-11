@@ -1,7 +1,8 @@
 package com.shang.mediaplayerbykotlin.Room
 
-import androidx.room.*
-import org.jetbrains.annotations.NotNull
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
 
 /**
  * Created by Shang on 2018/8/16.

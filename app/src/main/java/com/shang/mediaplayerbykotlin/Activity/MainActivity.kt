@@ -9,21 +9,17 @@ import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import android.widget.PopupMenu
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.MutableLiveData
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.sqlite.db.SimpleSQLiteQuery
-import androidx.sqlite.db.SupportSQLiteQuery
 import com.shang.mediaplayerbykotlin.*
 import com.shang.mediaplayerbykotlin.Adapter.MusicDataAdapter
 import com.shang.mediaplayerbykotlin.Adapter.PlayListNameAdapter
@@ -95,7 +91,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun initView() {
-
         //toolbar
         toolbar.setNavigationIcon(R.drawable.ic_navigation)
         toolbar.inflateMenu(R.menu.toolbar_menu)
@@ -106,8 +101,6 @@ class MainActivity : AppCompatActivity() {
 
 
                 }
-
-
                 //要修改
                 R.id.sort -> {
                     var popupMenu = MyPopupMenu(this, findViewById<View>(R.id.sort), R.menu.sort_menu, mediaPlayerModel)
@@ -158,6 +151,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+        //recyclerview
         recyclerview.layoutManager = LinearLayoutManager(this@MainActivity)
         recyclerview.setHasFixedSize(true)
         adapterMain = MusicDataAdapter(this, mutableListOf())
