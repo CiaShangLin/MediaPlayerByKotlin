@@ -84,9 +84,9 @@ class NotificationUnits {
         remote.setImageViewResource(R.id.remoteNextBt, R.drawable.ic_next)
         remote.setTextViewText(R.id.remoteNameTv, name)
 
-        remote.setOnClickPendingIntent(R.id.remotePlayBt, getPendingIntent(context, PlayMusicActivity.PLAY))
-        remote.setOnClickPendingIntent(R.id.remoteNextBt, getPendingIntent(context, PlayMusicActivity.NEXT))
-        remote.setOnClickPendingIntent(R.id.remotePreBt, getPendingIntent(context, PlayMusicActivity.PREVIOUS))
+        remote.setOnClickPendingIntent(R.id.remotePlayBt, getPendingIntent(context, MyBroadcastReceiver.PLAY))
+        remote.setOnClickPendingIntent(R.id.remoteNextBt, getPendingIntent(context, MyBroadcastReceiver.NEXT))
+        remote.setOnClickPendingIntent(R.id.remotePreBt, getPendingIntent(context, MyBroadcastReceiver.PREVIOUS))
 
         return remote
     }

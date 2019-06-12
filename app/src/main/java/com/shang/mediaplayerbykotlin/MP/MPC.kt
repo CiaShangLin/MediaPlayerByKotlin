@@ -6,6 +6,7 @@ import android.media.MediaPlayer
 import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
+import com.shang.mediaplayerbykotlin.MyBroadcastReceiver
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import java.util.*
 
@@ -24,37 +25,6 @@ class MPC{
         var timer: Timer? = null                              //定時器
         var timerTask: TimerTask? = null                       //定時任務
 
-        // 1=修改日期 2=名稱長度 3=時間長度
-        /*fun sort(mode: Boolean, type: Int) {
-            var s=System.currentTimeMillis()
-            if (mode) {   //升序
-                when (type) {
-                    1 -> {
-                        musicList.sortByDescending { it.modified }
-                    }
-                    2 -> {
-                        musicList.sortByDescending { it.name.length }
-                    }
-                    3 -> {
-                        musicList.sortByDescending { it.duration }
-                    }
-                }
-            } else {      //降序
-                when (type) {
-                    1 -> {
-                        musicList.sortedBy { it.modified }
-                    }
-                    2 -> {
-                        musicList.sortBy { it.name.length }
-                    }
-                    3 -> {
-                        musicList.sortBy { it.duration }
-                    }
-                }
-            }
-            Log.d(TAG,((System.currentTimeMillis()-s)/1000.0).toString())
-        }*/
-
         fun startTimer(context: Context) {
             Log.d(MPC.TAG, "startTimer()")
             if (timer == null) {
@@ -62,7 +32,7 @@ class MPC{
                 timerTask = object : TimerTask() {
                     override fun run() {
                         var intent = Intent().apply {
-                            this.action = PlayMusicActivity.CURRENT_TIME
+                            this.action = MyBroadcastReceiver.CURRENT_TIME
                             this.putExtra(MPC_Interface.CURRENT_TIME, MPC.mediaPlayer!!.currentPosition)
                         }
                         LocalBroadcastManager.getInstance(context).sendBroadcast(intent)

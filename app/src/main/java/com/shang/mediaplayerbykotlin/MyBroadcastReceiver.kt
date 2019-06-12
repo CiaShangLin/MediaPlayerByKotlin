@@ -80,7 +80,7 @@ open class MyBroadcastReceiver(var myBroadcastReceiverUI: MyBroadcastReceiverUI)
             }
 
             LOOPING -> {
-                myBroadcastReceiverUI.looping()
+                myBroadcastReceiverUI.looping(intent)
             }
 
             CURRENT_TIME -> {
@@ -88,7 +88,7 @@ open class MyBroadcastReceiver(var myBroadcastReceiverUI: MyBroadcastReceiverUI)
             }
 
             MODE -> {
-                myBroadcastReceiverUI.mode()
+                myBroadcastReceiverUI.mode(intent)
             }
 
             RESTORE -> {

@@ -162,9 +162,8 @@ class MainActivity : AppCompatActivity() {
         //撥放按鈕
         simpleBt.setOnClickListener {
             var intent = Intent(this, MediaPlayerService::class.java).apply {
-                this.action = PlayMusicActivity.PLAY
+                this.action = MyBroadcastReceiver.PLAY
             }
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(intent)
             } else {

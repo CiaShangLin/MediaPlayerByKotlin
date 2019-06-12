@@ -20,11 +20,11 @@ interface MyBroadcastReceiverUI {
 
     fun reStart(){}
 
-    fun looping(){}
+    fun looping(intent:Intent){}
 
     fun current_time(intent:Intent){}
 
-    fun mode(){}
+    fun mode(intent:Intent){}
 
     fun reStore(){}
 }

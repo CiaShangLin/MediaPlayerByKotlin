@@ -5,7 +5,9 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
+import com.shang.mediaplayerbykotlin.MyBroadcastReceiver
 import com.shang.mediaplayerbykotlin.NotificationUnits
 
 
@@ -39,26 +41,26 @@ class MediaPlayerService : Service() {
 
 
         when (intent!!.action) {
-            PlayMusicActivity.PLAY -> {
+            MyBroadcastReceiver.PLAY -> {
                 MPC.mpc_mode.play()
             }
-            PlayMusicActivity.START -> {
+            MyBroadcastReceiver.START -> {
                 MPC.mpc_mode.start()
             }
-            PlayMusicActivity.PAUSE -> {
+            MyBroadcastReceiver.PAUSE -> {
                 MPC.mpc_mode.pause()
             }
-            PlayMusicActivity.RESTART -> {
+            MyBroadcastReceiver.RESTART -> {
                 MPC.mpc_mode.reStart()
             }
-            PlayMusicActivity.NEXT -> {
+            MyBroadcastReceiver.NEXT -> {
                 MPC.mpc_mode.next()
             }
-            PlayMusicActivity.PREVIOUS -> {
+            MyBroadcastReceiver.PREVIOUS -> {
                 MPC.mpc_mode.previous()
             }
 
-            PlayMusicActivity.MODE -> {
+            MyBroadcastReceiver.MODE -> {
 
                 var status: Boolean
                 if (MPC.mpc_mode is MPC_normal) {
@@ -70,25 +72,25 @@ class MediaPlayerService : Service() {
                 }
                 Log.d(TAG, MPC.mpc_mode.getName())
 
-                sendBroadcast(Intent().apply {
-                    this.action = PlayMusicActivity.MODE
-                    this.putExtra(PlayMusicActivity.MODE, status)
+                LocalBroadcastManager.getInstance(this).sendBroadcast(Intent().apply {
+                    this.action = MyBroadcastReceiver.MODE
+                    this.putExtra(MyBroadcastReceiver.MODE, status)
                 })
             }
 
-            PlayMusicActivity.REPEAT -> {
+            MyBroadcastReceiver.REPEAT -> {
                 MPC.mpc_mode.setLooping()
             }
 
-            PlayMusicActivity.INSERT -> {
+            MyBroadcastReceiver.INSERT -> {
                 MPC.mpc_mode.insert()
             }
 
-            PlayMusicActivity.SEEKBAR_MOVE -> {
-                MPC.mpc_mode.seekbar_move(intent.getIntExtra(PlayMusicActivity.SEEKBAR_MOVE, 0))
+            MyBroadcastReceiver.SEEKBAR_MOVE -> {
+                MPC.mpc_mode.seekbar_move(intent.getIntExtra(MyBroadcastReceiver.SEEKBAR_MOVE, 0))
             }
 
-            PlayMusicActivity.RESTORE -> {
+            MyBroadcastReceiver.RESTORE -> {
                 MPC.mpc_mode.reStore()
             }
 

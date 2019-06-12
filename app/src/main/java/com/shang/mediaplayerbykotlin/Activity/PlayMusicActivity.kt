@@ -28,28 +28,11 @@ import java.text.SimpleDateFormat
 
 class PlayMusicActivity : AppCompatActivity() {
 
-    //Service用 廣播用
-    companion object {
-        val TAG = "PlayMusicActivity"
-        val PLAY: String = "PLAY"
-        val START: String = "START"
-        val PAUSE: String = "PAUSE"
-        val RESTART: String = "RESTART"
-        val NEXT: String = "NEXT"
-        val PREVIOUS: String = "PREVIOUS"
-        val MODE: String = "MODE"
-        val REPEAT: String = "REPEAT"
-        val INSERT: String = "INSERT"
-        val SEEKBAR_MOVE: String = "SEEKBAR_MOVE"
-        val LOOPING: String = "LOOPING"
-        val CURRENT_TIME: String = "CURRENT_TIME"
-        val RESTORE: String = "RESTORE"
-    }
-
-    private val mLocalBroadcastManager by lazy { LocalBroadcastManager.getInstance(this)}
-    var myBroadcastReceiverUI=object :MyBroadcastReceiverUI{
+    private val TAG = "PlayMusicActivity"
+    private val mLocalBroadcastManager by lazy { LocalBroadcastManager.getInstance(this) }
+    private var myBroadcastReceiverUI = object : MyBroadcastReceiverUI {
         override fun start(intent: Intent) {
-            Log.v(TAG,"START")
+            Log.v(TAG, "START")
             var duration = intent.getIntExtra(MPC_Interface.DURATION, 0)
 
             seekBar.progress = 0
@@ -74,21 +57,21 @@ class PlayMusicActivity : AppCompatActivity() {
         }
 
         override fun pause() {
-            Log.v(TAG,"PAUSE")
+            Log.v(TAG, "PAUSE")
             playerBt.setImageResource(R.drawable.ic_play_button)
             NotificationUnits.instance(this@PlayMusicActivity)
                     .update(this@PlayMusicActivity,
-                    MPC.musicList.get(MPC.index).name,
-                    MPC.musicList.get(MPC.index).picture)
+                            MPC.musicList.get(MPC.index).name,
+                            MPC.musicList.get(MPC.index).picture)
         }
 
         override fun reStart() {
-            Log.v(TAG,"RESTART")
+            Log.v(TAG, "RESTART")
             playerBt.setImageResource(R.drawable.ic_pause)
             NotificationUnits.instance(this@PlayMusicActivity)
                     .update(this@PlayMusicActivity,
-                    MPC.musicList.get(MPC.index).name,
-                    MPC.musicList.get(MPC.index).picture)
+                            MPC.musicList.get(MPC.index).name,
+                            MPC.musicList.get(MPC.index).picture)
         }
 
         override fun next() {
@@ -99,7 +82,7 @@ class PlayMusicActivity : AppCompatActivity() {
             toast("已經是第一首")
         }
 
-        override fun looping() {
+        override fun looping(intent: Intent) {
             toast(intent.getStringExtra(MPC_Interface.STATUS))
         }
 
@@ -109,10 +92,10 @@ class PlayMusicActivity : AppCompatActivity() {
             startTimeTv.text = getTimeFormat(duration)
         }
 
-        override fun mode() {
-            var status = intent.getBooleanExtra(MODE, false)
-            var imageResource=if(status) R.drawable.ic_random_focus else R.drawable.ic_random_nofocus
-            var mode=if(status) "隨機模式打開" else "隨機模式關閉"
+        override fun mode(intent: Intent) {
+            var status = intent.getBooleanExtra(MyBroadcastReceiver.MODE, false)
+            var imageResource = if (status) R.drawable.ic_random_focus else R.drawable.ic_random_nofocus
+            var mode = if (status) "隨機模式打開" else "隨機模式關閉"
             randomBt.setImageResource(imageResource)
             toast(mode)
         }
@@ -141,7 +124,7 @@ class PlayMusicActivity : AppCompatActivity() {
             }
         }
     }
-    var myBroadcastReceiver=MyBroadcastReceiver(myBroadcastReceiverUI)
+    var myBroadcastReceiver = MyBroadcastReceiver(myBroadcastReceiverUI)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -152,7 +135,7 @@ class PlayMusicActivity : AppCompatActivity() {
         if (MPC.index != playIndex) {  //點到跟現在不同的 用PLAY的話她會啟動到RESTART
             MPC.index = playIndex
             var intent = Intent(this, MediaPlayerService::class.java).apply {
-                this.action = INSERT
+                this.action = MyBroadcastReceiver.INSERT
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -161,8 +144,8 @@ class PlayMusicActivity : AppCompatActivity() {
                 startService(intent)
             }
         } else {  //恢復
-            var intent=Intent(this, MediaPlayerService::class.java).apply {
-                action = RESTORE
+            var intent = Intent(this, MediaPlayerService::class.java).apply {
+                action = MyBroadcastReceiver.RESTORE
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(intent)
@@ -171,12 +154,13 @@ class PlayMusicActivity : AppCompatActivity() {
             }
         }
 
+        //Toolbar
         play_music_bar.setNavigationIcon(R.drawable.ic_back)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        play_music_bar.setNavigationOnClickListener { finish() }
 
         playerBt.setOnClickListener {
             var intent = Intent(this, MediaPlayerService::class.java).apply {
-                this.action = PLAY
+                this.action = MyBroadcastReceiver.PLAY
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(intent)
@@ -186,31 +170,31 @@ class PlayMusicActivity : AppCompatActivity() {
         }
 
         nextBt.setOnClickListener {
-            var intent=Intent(this, MediaPlayerService::class.java).apply {
-                this.action = NEXT
+            var intent = Intent(this, MediaPlayerService::class.java).apply {
+                this.action = MyBroadcastReceiver.NEXT
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(intent)
-            }else{
+            } else {
                 startService(intent)
             }
         }
 
         previousBt.setOnClickListener {
-            var intent=Intent(this, MediaPlayerService::class.java).apply {
-                this.action = PREVIOUS
+            var intent = Intent(this, MediaPlayerService::class.java).apply {
+                this.action = MyBroadcastReceiver.PREVIOUS
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(intent)
-            }else{
+            } else {
                 startService(intent)
             }
         }
 
         repeatBt.setOnClickListener {
             startService(Intent(this, MediaPlayerService::class.java).apply {
-                this.action = REPEAT
+                this.action = MyBroadcastReceiver.REPEAT
             })
             if (MPC.mediaPlayer != null && MPC.mediaPlayer!!.isLooping) {
                 repeatBt.setImageResource(R.drawable.ic_repeat_nofocus)
@@ -220,14 +204,15 @@ class PlayMusicActivity : AppCompatActivity() {
         }
 
         randomBt.setOnClickListener {
-            var intent=Intent(this, MediaPlayerService::class.java).apply {
-                this.action = MODE
+            var intent = Intent(this, MediaPlayerService::class.java).apply {
+                this.action = MyBroadcastReceiver.MODE
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(intent)
-            }else{
+            } else {
                 startService(intent)
             }
+
         }
 
         try {
@@ -240,8 +225,6 @@ class PlayMusicActivity : AppCompatActivity() {
             randomBt.setImageResource(R.drawable.ic_random_nofocus)
         }
 
-
-
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
 
@@ -252,14 +235,14 @@ class PlayMusicActivity : AppCompatActivity() {
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                var intent=Intent(this@PlayMusicActivity, MediaPlayerService::class.java).apply {
-                    this.action = SEEKBAR_MOVE
-                    this.putExtra(SEEKBAR_MOVE, seekBar!!.progress)
+                var intent = Intent(this@PlayMusicActivity, MediaPlayerService::class.java).apply {
+                    this.action = MyBroadcastReceiver.SEEKBAR_MOVE
+                    this.putExtra(MyBroadcastReceiver.SEEKBAR_MOVE, seekBar!!.progress)
                 }
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     startForegroundService(intent)
-                }else{
+                } else {
                     startService(intent)
                 }
             }

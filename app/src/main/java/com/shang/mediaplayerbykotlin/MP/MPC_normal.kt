@@ -9,6 +9,7 @@ import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
 import com.shang.mediaplayerbykotlin.MP.MPC.Companion.stopTimer
+import com.shang.mediaplayerbykotlin.MyBroadcastReceiver
 
 
 class MPC_normal(var context: Context) : MPC_Interface {
@@ -42,7 +43,7 @@ class MPC_normal(var context: Context) : MPC_Interface {
             if (it != null) {
                 it.start()
                 mLocalBroadcastManager.sendBroadcast(Intent().apply {
-                    this.action = PlayMusicActivity.START
+                    this.action = MyBroadcastReceiver.START
                     this.putExtra(MPC_Interface.NAME, MPC.musicList.get(MPC.index).name)
                     this.putExtra(MPC_Interface.DURATION, MPC!!.mediaPlayer!!.duration)
                 })
@@ -52,7 +53,7 @@ class MPC_normal(var context: Context) : MPC_Interface {
 
         MPC.mediaPlayer!!.setOnCompletionListener {
             var intent = Intent(context, MediaPlayerService::class.java).apply {
-                this.action = PlayMusicActivity.NEXT
+                this.action = MyBroadcastReceiver.NEXT
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -74,7 +75,7 @@ class MPC_normal(var context: Context) : MPC_Interface {
 
         stopTimer()
         mLocalBroadcastManager.sendBroadcast(Intent().apply {
-            action = PlayMusicActivity.PAUSE
+            action = MyBroadcastReceiver.PAUSE
         })
     }
 
@@ -86,7 +87,7 @@ class MPC_normal(var context: Context) : MPC_Interface {
             MPC.startTimer(context)
 
             mLocalBroadcastManager.sendBroadcast(Intent().apply {
-                action = PlayMusicActivity.RESTART
+                action = MyBroadcastReceiver.RESTART
             })
         }
     }
@@ -99,7 +100,7 @@ class MPC_normal(var context: Context) : MPC_Interface {
             start()
         } else { //發出廣播 做UI顯示
             mLocalBroadcastManager.sendBroadcast(Intent().apply {
-                this.action = PlayMusicActivity.NEXT
+                this.action = MyBroadcastReceiver.NEXT
             })
         }
     }
@@ -116,7 +117,7 @@ class MPC_normal(var context: Context) : MPC_Interface {
             start()
         } else {   //發出廣播 做UI顯示
             mLocalBroadcastManager.sendBroadcast(Intent().apply {
-                action = PlayMusicActivity.PREVIOUS
+                action = MyBroadcastReceiver.PREVIOUS
             })
         }
     }
@@ -136,7 +137,7 @@ class MPC_normal(var context: Context) : MPC_Interface {
 
             MPC.mediaPlayer!!.isLooping = !MPC.mediaPlayer!!.isLooping
             mLocalBroadcastManager.sendBroadcast(Intent().apply {
-                action = PlayMusicActivity.LOOPING
+                action = MyBroadcastReceiver.LOOPING
                 putExtra(MPC_Interface.STATUS, status)
             })
 
@@ -156,7 +157,7 @@ class MPC_normal(var context: Context) : MPC_Interface {
 
     override fun reStore() {
         mLocalBroadcastManager.sendBroadcast(Intent().apply {
-            this.action = PlayMusicActivity.RESTORE
+            this.action = MyBroadcastReceiver.RESTORE
             this.putExtra(MPC_Interface.NAME, MPC.musicList.get(MPC.index).name)
             this.putExtra(MPC_Interface.CURRENT_TIME, MPC.currentTime)
             this.putExtra(MPC_Interface.DURATION, MPC.musicList.get(MPC.index).duration)
