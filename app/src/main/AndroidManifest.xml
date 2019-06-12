@@ -31,27 +31,11 @@
         <activity android:name=".Activity.PlayMusicActivity"
             android:theme="@style/test"></activity>
 
-        <receiver
-            android:name=".Activity.PlayMusicActivity$MyReceiver"
-            android:enabled="true">
-            <intent-filter>
-                <action android:name="com.shang.mediaplayerbykotlin.Activity.START" />
-                <action android:name="com.shang.mediaplayerbykotlin.Activity.PAUSE" />
-                <action android:name="com.shang.mediaplayerbykotlin.Activity.RESTART" />
-                <action android:name="com.shang.mediaplayerbykotlin.Activity.NEXT" />
-                <action android:name="com.shang.mediaplayerbykotlin.Activity.PREVIOUS" />
-                <action android:name="com.shang.mediaplayerbykotlin.Activity.MODE" />
-                <action android:name="com.shang.mediaplayerbykotlin.Activity.LOOPING" />
-                <action android:name="com.shang.mediaplayerbykotlin.Activity.CURRENT_TIME" />
-                <action android:name="com.shang.mediaplayerbykotlin.Activity.RESTORE" />
-                <action android:name="com.shang.mediaplayerbykotlin.Activity.DATABASE_SUCCCESS" />
-            </intent-filter>
-        </receiver>
-
         <activity
             android:name=".Activity.PlayListActivity"
             android:label="@string/title_activity_play_list"
             android:theme="@style/test"></activity>
+
     </application>
 
 </manifest>

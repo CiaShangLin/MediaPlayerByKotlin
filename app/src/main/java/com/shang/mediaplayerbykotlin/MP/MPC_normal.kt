@@ -6,6 +6,7 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Build
 import android.util.Log
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
 import com.shang.mediaplayerbykotlin.MP.MPC.Companion.stopTimer
 
@@ -37,6 +38,11 @@ class MPC_normal(var context: Context) : MPC_Interface {
         MPC.mediaPlayer!!.setOnPreparedListener {
             if (it != null) {
                 it.start()
+                LocalBroadcastManager.getInstance(context).sendBroadcast(Intent().apply {
+                    this.action = PlayMusicActivity.START
+                    this.putExtra(MPC_Interface.NAME, MPC.musicList.get(MPC.index).name)
+                    this.putExtra(MPC_Interface.DURATION, MPC!!.mediaPlayer!!.duration)
+                })
                 context.sendBroadcast(Intent().apply {
                     this.action = PlayMusicActivity.START
                     this.putExtra(MPC_Interface.NAME, MPC.musicList.get(MPC.index).name)
@@ -70,7 +76,11 @@ class MPC_normal(var context: Context) : MPC_Interface {
 
         stopTimer()
 
-        context.sendBroadcast(Intent().apply {
+        /*context.sendBroadcast(Intent().apply {
+            action = PlayMusicActivity.PAUSE
+        })*/
+
+        LocalBroadcastManager.getInstance(context).sendBroadcast(Intent().apply {
             action = PlayMusicActivity.PAUSE
         })
     }
@@ -81,7 +91,10 @@ class MPC_normal(var context: Context) : MPC_Interface {
             MPC.mediaPlayer!!.seekTo(MPC.currentTime)
             MPC.mediaPlayer!!.start()
             MPC.startTimer(context)
-            context.sendBroadcast(Intent().apply {
+            /*context.sendBroadcast(Intent().apply {
+                action = PlayMusicActivity.RESTART
+            })*/
+            LocalBroadcastManager.getInstance(context).sendBroadcast(Intent().apply {
                 action = PlayMusicActivity.RESTART
             })
         }

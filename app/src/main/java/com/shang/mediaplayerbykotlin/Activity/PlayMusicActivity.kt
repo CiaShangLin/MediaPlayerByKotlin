@@ -11,10 +11,12 @@ import android.util.Log
 import android.view.MenuItem
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.shang.mediaplayerbykotlin.MP.MPC
 import com.shang.mediaplayerbykotlin.MP.MPC_Interface
 import com.shang.mediaplayerbykotlin.MP.MPC_normal
 import com.shang.mediaplayerbykotlin.MP.MediaPlayerService
+import com.shang.mediaplayerbykotlin.MyBroadcastReceiver
 import com.shang.mediaplayerbykotlin.MyBroadcastReceiverUI
 import com.shang.mediaplayerbykotlin.NotificationUnits
 import com.shang.mediaplayerbykotlin.R
@@ -58,48 +60,30 @@ class PlayMusicActivity : AppCompatActivity() {
     3.在使用Receiver的class裡註冊廣播
     4.記得要新增IntentFilter(getString(R.string.MyRecevier))
     5.註銷廣播*/
-    private var myBroadcastReceiverUI=object : MyBroadcastReceiverUI {
+    private val mLocalBroadcastManager by lazy {
+        LocalBroadcastManager.getInstance(this)
+    }
+    var myBroadcastReceiverUI=object :MyBroadcastReceiverUI{
         override fun start(intent: Intent) {
-
+            Log.d(TAG,"start")
         }
 
         override fun pause() {
-
-        }
-
-        override fun next() {
-
-        }
-
-        override fun previous() {
-
+            Log.d(TAG,"pause")
         }
 
         override fun reStart() {
-
-        }
-
-        override fun looping() {
-
-        }
-
-        override fun current_time(intent: Intent) {
-
-        }
-
-        override fun mode() {
-
-        }
-
-        override fun reStore() {
-
+            Log.d(TAG,"reStart")
         }
     }
+    var myBroadcastReceiver=MyBroadcastReceiver(myBroadcastReceiverUI)
+
 
     inner class MyReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
             when (intent.action) {
                 START -> {
+                    Log.d(TAG,"START")
                     var duration = intent.getIntExtra(MPC_Interface.DURATION, 0)
 
                     seekBar.progress = 0
@@ -124,6 +108,7 @@ class PlayMusicActivity : AppCompatActivity() {
                 }
 
                 PAUSE -> {
+                    Log.d(TAG,"PAUSE")
                     playerBt.setImageResource(R.drawable.ic_play_button)
                     NotificationUnits.instance(this@PlayMusicActivity).update(this@PlayMusicActivity,
                             MPC.musicList.get(MPC.index).name,
@@ -131,6 +116,7 @@ class PlayMusicActivity : AppCompatActivity() {
                 }
 
                 RESTART -> {
+                    Log.d(TAG,"RESTART")
                     playerBt.setImageResource(R.drawable.ic_pause)
                     NotificationUnits.instance(this@PlayMusicActivity).update(this@PlayMusicActivity,
                             MPC.musicList.get(MPC.index).name,
@@ -198,8 +184,6 @@ class PlayMusicActivity : AppCompatActivity() {
         setContentView(R.layout.activity_play_music)
 
 
-        Log.d(TAG, "onCreate")
-
         myReceiver = MyReceiver()
 
         //進入畫面
@@ -226,9 +210,8 @@ class PlayMusicActivity : AppCompatActivity() {
             }
         }
 
-        setSupportActionBar(play_music_bar)
+
         play_music_bar.setNavigationIcon(R.drawable.ic_back)
-        play_music_bar.title = ""
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         playerBt.setOnClickListener {
@@ -328,28 +311,15 @@ class PlayMusicActivity : AppCompatActivity() {
         return SimpleDateFormat("mm:ss").format(duration)
     }
 
-    override fun onResume() {
-        super.onResume()
-        play_music_bar.title = ""
-        var intentFilter = IntentFilter().apply {
-            this.addAction(PLAY)
-            this.addAction(START)
-            this.addAction(PAUSE)
-            this.addAction(NEXT)
-            this.addAction(PREVIOUS)
-            this.addAction(RESTART)
-            this.addAction(MODE)
-            this.addAction(LOOPING)
-            this.addAction(CURRENT_TIME)
-            this.addAction(RESTORE)
-        }
-        registerReceiver(myReceiver, intentFilter)
+    override fun onStart() {
+        super.onStart()
+        mLocalBroadcastManager.registerReceiver(myBroadcastReceiver, MyBroadcastReceiver.getIntentFilter(this))
+
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(TAG, "onDestroy()")
-        unregisterReceiver(myReceiver)
+    override fun onStop() {
+        super.onStop()
+        mLocalBroadcastManager.unregisterReceiver(myBroadcastReceiver)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -18,6 +18,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.shang.mediaplayerbykotlin.*
 import com.shang.mediaplayerbykotlin.Adapter.MusicDataAdapter
@@ -34,30 +35,36 @@ import kotlinx.android.synthetic.main.sample_controller_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 
 class MainActivity : AppCompatActivity() {
+
     private val TAG: String = "MainActivity"
     lateinit var adapterMain: MusicDataAdapter
     lateinit var adapterListName: PlayListNameAdapter
     val loadDialog: LoadDialog by lazy { LoadDialog() }
     private val mediaPlayerModel: MediaPlayerModel by lazy { ViewModelProviders.of(this).get(MediaPlayerModel::class.java) }
+    private val mLocalBroadcastManager by lazy {
+        LocalBroadcastManager.getInstance(this)
+    }
 
-    private var myBroadcastReceiverUI=object : MyBroadcastReceiverUI {
+    var myBroadcastReceiverUI=object :MyBroadcastReceiverUI{
         override fun start(intent: Intent) {
-
+            Log.d(TAG,"start")
         }
 
         override fun pause() {
-
+            Log.d(TAG,"pause")
         }
 
         override fun reStart() {
-
+            Log.d(TAG,"reStart")
         }
     }
-    private var myBroadcastReceiver=MyBroadcastReceiver(myBroadcastReceiverUI)
+    var myBroadcastReceiver=MyBroadcastReceiver(myBroadcastReceiverUI)
+
     private var broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent!!.action) {
                 PlayMusicActivity.START -> {
+                    Log.d(TAG,"START")
                     simpleBt.setImageResource(R.drawable.ic_remote_pause)
 
                     simpleTitle.text = intent.getStringExtra(MPC_Interface.NAME)
@@ -71,9 +78,11 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 PlayMusicActivity.PAUSE -> {
+                    Log.d(TAG,"PAUSE")
                     simpleBt.setImageResource(R.drawable.ic_remote_play)
                 }
                 PlayMusicActivity.RESTART -> {
+                    Log.d(TAG,"RESTART")
                     simpleBt.setImageResource(R.drawable.ic_remote_pause)
                 }
             }
@@ -240,20 +249,26 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        var intentFilter = IntentFilter().apply {
+        mLocalBroadcastManager
+                .registerReceiver(myBroadcastReceiver,MyBroadcastReceiver.getIntentFilter(this))
+
+        /*var intentFilter = IntentFilter().apply {
             this.addAction(PlayMusicActivity.START)
             this.addAction(PlayMusicActivity.PAUSE)
             this.addAction(PlayMusicActivity.RESTART)
         }
-        registerReceiver(myBroadcastReceiver, intentFilter)
+        registerReceiver(myBroadcastReceiver, intentFilter)*/
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mLocalBroadcastManager.unregisterReceiver(myBroadcastReceiver)
     }
 
     override fun onDestroy() {
 
         super.onDestroy()
         Log.d("TAG", "onDestroy")
-
-        unregisterReceiver(broadcastReceiver)
         stopService(Intent(this, MediaPlayerService::class.java))
     }
 

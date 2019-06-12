@@ -9,7 +9,7 @@ import com.shang.mediaplayerbykotlin.Activity.MainActivity
 import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
 
 
-class MyBroadcastReceiver(var myBroadcastReceiverUI: MyBroadcastReceiverUI) : BroadcastReceiver() {
+open class MyBroadcastReceiver(var myBroadcastReceiverUI: MyBroadcastReceiverUI) : BroadcastReceiver() {
 
     companion object {
         val PLAY: String = "PLAY"
@@ -26,66 +26,73 @@ class MyBroadcastReceiver(var myBroadcastReceiverUI: MyBroadcastReceiverUI) : Br
         val CURRENT_TIME: String = "CURRENT_TIME"
         val RESTORE: String = "RESTORE"
 
-        fun getMainActivityIntentFilter(): IntentFilter {
-            return IntentFilter().apply {
-                this.addAction(START)
-                this.addAction(PAUSE)
-                this.addAction(RESTART)
-            }
-        }
-
-        fun getPlayMusicActivityIntentFilter(): IntentFilter {
-            return IntentFilter().apply {
-                this.addAction(PLAY)
-                this.addAction(START)
-                this.addAction(PAUSE)
-                this.addAction(NEXT)
-                this.addAction(PREVIOUS)
-                this.addAction(RESTART)
-                this.addAction(MODE)
-                this.addAction(LOOPING)
-                this.addAction(CURRENT_TIME)
-                this.addAction(RESTORE)
+        fun getIntentFilter(context: Context):IntentFilter{
+            when(context){
+                is MainActivity ->{
+                    return IntentFilter().apply {
+                        this.addAction(START)
+                        this.addAction(PAUSE)
+                        this.addAction(RESTART)
+                    }
+                }
+                is PlayMusicActivity->{
+                    return IntentFilter().apply {
+                        this.addAction(PLAY)
+                        this.addAction(START)
+                        this.addAction(PAUSE)
+                        this.addAction(NEXT)
+                        this.addAction(PREVIOUS)
+                        this.addAction(RESTART)
+                        this.addAction(MODE)
+                        this.addAction(LOOPING)
+                        this.addAction(CURRENT_TIME)
+                        this.addAction(RESTORE)
+                    }
+                }
+                else->{
+                    return IntentFilter()
+                }
             }
         }
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.d("TAG", (context is MainActivity).toString())
-        if (context is MainActivity || context is PlayMusicActivity) {
-            when (intent?.action) {
-                START -> {
-                    myBroadcastReceiverUI.start(intent)
-                }
-                RESTART -> {
-                    myBroadcastReceiverUI.reStart()
-                }
-                PAUSE -> {
-                    myBroadcastReceiverUI.pause()
-                }
-                NEXT -> {
-                    myBroadcastReceiverUI.next()
-                }
+        var main = (context is MainActivity).toString()
+        var music = (context is PlayMusicActivity).toString()
+        Log.d("TAG", main + " " + music+" "+intent?.action)
 
-                PREVIOUS -> {
-                    myBroadcastReceiverUI.previous()
-                }
+        when (intent?.action) {
+            START -> {
+                myBroadcastReceiverUI.start(intent)
+            }
+            RESTART -> {
+                myBroadcastReceiverUI.reStart()
+            }
+            PAUSE -> {
+                myBroadcastReceiverUI.pause()
+            }
+            NEXT -> {
+                myBroadcastReceiverUI.next()
+            }
 
-                LOOPING -> {
-                    myBroadcastReceiverUI.looping()
-                }
+            PREVIOUS -> {
+                myBroadcastReceiverUI.previous()
+            }
 
-                CURRENT_TIME -> {
-                    myBroadcastReceiverUI.current_time(intent)
-                }
+            LOOPING -> {
+                myBroadcastReceiverUI.looping()
+            }
 
-                MODE -> {
-                    myBroadcastReceiverUI.mode()
-                }
+            CURRENT_TIME -> {
+                myBroadcastReceiverUI.current_time(intent)
+            }
 
-                RESTORE -> {
-                    myBroadcastReceiverUI.reStore()
-                }
+            MODE -> {
+                myBroadcastReceiverUI.mode()
+            }
+
+            RESTORE -> {
+                myBroadcastReceiverUI.reStore()
             }
         }
 
