@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.util.Log
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import java.util.*
@@ -64,7 +65,7 @@ class MPC{
                             this.action = PlayMusicActivity.CURRENT_TIME
                             this.putExtra(MPC_Interface.CURRENT_TIME, MPC.mediaPlayer!!.currentPosition)
                         }
-                        context.sendBroadcast(intent)
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
                     }
                 }
                 timer?.scheduleAtFixedRate(timerTask, 0, 1000)

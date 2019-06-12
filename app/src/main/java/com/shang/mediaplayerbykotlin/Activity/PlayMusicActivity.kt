@@ -30,7 +30,6 @@ class PlayMusicActivity : AppCompatActivity() {
 
     //Service用 廣播用
     companion object {
-        lateinit var myReceiver: MyReceiver
         val TAG = "PlayMusicActivity"
         val PLAY: String = "PLAY"
         val START: String = "START"
@@ -47,144 +46,106 @@ class PlayMusicActivity : AppCompatActivity() {
         val RESTORE: String = "RESTORE"
     }
 
-
-    /*廣播步驟
-    1.先new一個class繼承BroadcastReceiver()
-    2.去AndroidManifest.xml寫一個
-    <receiver android:name=".PlayMusicActivity$MyReceiver"
-    android:enabled="true">
-    <intent-filter>
-    <action android:name="@string/MyRecevier"></action>
-    </intent-filter>
-    </receiver>
-    3.在使用Receiver的class裡註冊廣播
-    4.記得要新增IntentFilter(getString(R.string.MyRecevier))
-    5.註銷廣播*/
-    private val mLocalBroadcastManager by lazy {
-        LocalBroadcastManager.getInstance(this)
-    }
+    private val mLocalBroadcastManager by lazy { LocalBroadcastManager.getInstance(this)}
     var myBroadcastReceiverUI=object :MyBroadcastReceiverUI{
         override fun start(intent: Intent) {
-            Log.d(TAG,"start")
+            Log.v(TAG,"START")
+            var duration = intent.getIntExtra(MPC_Interface.DURATION, 0)
+
+            seekBar.progress = 0
+            seekBar.max = duration
+
+            startTimeTv.text = "0:00"
+            endTimeTv.text = getTimeFormat(duration)
+            nameTv.text = intent.getStringExtra(MPC_Interface.NAME)
+
+            var bitmap = BitmapFactory.decodeFile(MPC.musicList.get(MPC.index).picture)
+            if (bitmap == null) {
+                playmusicIg.setImageResource(R.drawable.ic_music)
+            } else {
+                playmusicIg.setImageBitmap(bitmap)
+            }
+
+            playerBt.setImageResource(R.drawable.ic_pause)
+
+            NotificationUnits.instance(this@PlayMusicActivity).update(this@PlayMusicActivity,
+                    MPC.musicList.get(MPC.index).name,
+                    MPC.musicList.get(MPC.index).picture)
         }
 
         override fun pause() {
-            Log.d(TAG,"pause")
+            Log.v(TAG,"PAUSE")
+            playerBt.setImageResource(R.drawable.ic_play_button)
+            NotificationUnits.instance(this@PlayMusicActivity)
+                    .update(this@PlayMusicActivity,
+                    MPC.musicList.get(MPC.index).name,
+                    MPC.musicList.get(MPC.index).picture)
         }
 
         override fun reStart() {
-            Log.d(TAG,"reStart")
+            Log.v(TAG,"RESTART")
+            playerBt.setImageResource(R.drawable.ic_pause)
+            NotificationUnits.instance(this@PlayMusicActivity)
+                    .update(this@PlayMusicActivity,
+                    MPC.musicList.get(MPC.index).name,
+                    MPC.musicList.get(MPC.index).picture)
+        }
+
+        override fun next() {
+            toast("最後一首了")
+        }
+
+        override fun previous() {
+            toast("已經是第一首")
+        }
+
+        override fun looping() {
+            toast(intent.getStringExtra(MPC_Interface.STATUS))
+        }
+
+        override fun current_time(intent: Intent) {
+            var duration: Int = intent.getIntExtra(MPC_Interface.CURRENT_TIME, 0)
+            seekBar.progress = duration
+            startTimeTv.text = getTimeFormat(duration)
+        }
+
+        override fun mode() {
+            var status = intent.getBooleanExtra(MODE, false)
+            var imageResource=if(status) R.drawable.ic_random_focus else R.drawable.ic_random_nofocus
+            var mode=if(status) "隨機模式打開" else "隨機模式關閉"
+            randomBt.setImageResource(imageResource)
+            toast(mode)
+        }
+
+        override fun reStore() {
+            Log.v(TAG, "reStore")
+            seekBar.max = MPC.musicList.get(MPC.index).duration.toInt()
+            seekBar.progress = MPC.currentTime
+
+            startTimeTv.text = getTimeFormat(MPC.currentTime)
+            endTimeTv.text = getTimeFormat(MPC.musicList.get(MPC.index).duration.toInt())
+
+            nameTv.text = MPC.musicList.get(MPC.index).name
+
+            var bitmap = BitmapFactory.decodeFile(MPC.musicList.get(MPC.index).picture)
+            if (bitmap == null) {
+                playmusicIg.setImageResource(R.drawable.ic_music)
+            } else {
+                playmusicIg.setImageBitmap(bitmap)
+            }
+
+            if (MPC.mediaPlayer != null && MPC.mediaPlayer!!.isPlaying) {
+                playerBt.setImageResource(R.drawable.ic_pause)
+            } else {
+                playerBt.setImageResource(R.drawable.ic_play)
+            }
         }
     }
     var myBroadcastReceiver=MyBroadcastReceiver(myBroadcastReceiverUI)
 
-
-    inner class MyReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent) {
-            when (intent.action) {
-                START -> {
-                    Log.d(TAG,"START")
-                    var duration = intent.getIntExtra(MPC_Interface.DURATION, 0)
-
-                    seekBar.progress = 0
-                    seekBar.max = duration
-
-                    startTimeTv.text = "0:00"
-                    endTimeTv.text = getTimeFormat(duration)
-                    nameTv.text = intent.getStringExtra(MPC_Interface.NAME)
-
-                    var bitmap = BitmapFactory.decodeFile(MPC.musicList.get(MPC.index).picture)
-                    if (bitmap == null) {
-                        playmusicIg.setImageResource(R.drawable.ic_music)
-                    } else {
-                        playmusicIg.setImageBitmap(bitmap)
-                    }
-
-                    playerBt.setImageResource(R.drawable.ic_pause)
-
-                    NotificationUnits.instance(this@PlayMusicActivity).update(this@PlayMusicActivity,
-                            MPC.musicList.get(MPC.index).name,
-                            MPC.musicList.get(MPC.index).picture)
-                }
-
-                PAUSE -> {
-                    Log.d(TAG,"PAUSE")
-                    playerBt.setImageResource(R.drawable.ic_play_button)
-                    NotificationUnits.instance(this@PlayMusicActivity).update(this@PlayMusicActivity,
-                            MPC.musicList.get(MPC.index).name,
-                            MPC.musicList.get(MPC.index).picture)
-                }
-
-                RESTART -> {
-                    Log.d(TAG,"RESTART")
-                    playerBt.setImageResource(R.drawable.ic_pause)
-                    NotificationUnits.instance(this@PlayMusicActivity).update(this@PlayMusicActivity,
-                            MPC.musicList.get(MPC.index).name,
-                            MPC.musicList.get(MPC.index).picture)
-                }
-
-                NEXT -> {
-                    toast("最後一首了")
-                }
-
-                PREVIOUS -> {
-                    toast("已經是第一首")
-                }
-
-                LOOPING -> {
-                    toast(intent.getStringExtra(MPC_Interface.STATUS))
-                }
-
-                CURRENT_TIME -> {
-                    var duration: Int = intent.getIntExtra(MPC_Interface.CURRENT_TIME, 0)
-                    seekBar.progress = duration
-                    startTimeTv.text = getTimeFormat(duration)
-                }
-
-                MODE -> {
-                    var status = intent.getBooleanExtra(MODE, false)
-                    if (status) {
-                        randomBt.setImageResource(R.drawable.ic_random_focus)
-                        toast("隨機模式打開")
-                    } else {
-                        randomBt.setImageResource(R.drawable.ic_random_nofocus)
-                        toast("隨機模式關閉")
-                    }
-                }
-
-                RESTORE -> {
-                    Log.d(TAG, "回復")
-                    seekBar.max = MPC.musicList.get(MPC.index).duration.toInt()
-                    seekBar.progress = MPC.currentTime
-
-                    startTimeTv.text = getTimeFormat(MPC.currentTime)
-                    endTimeTv.text = getTimeFormat(MPC.musicList.get(MPC.index).duration.toInt())
-
-                    nameTv.text = MPC.musicList.get(MPC.index).name
-
-                    var bitmap = BitmapFactory.decodeFile(MPC.musicList.get(MPC.index).picture)
-                    if (bitmap == null) {
-                        playmusicIg.setImageResource(R.drawable.ic_music)
-                    } else {
-                        playmusicIg.setImageBitmap(bitmap)
-                    }
-
-                    if (MPC.mediaPlayer != null && MPC.mediaPlayer!!.isPlaying) {
-                        playerBt.setImageResource(R.drawable.ic_pause)
-                    } else {
-                        playerBt.setImageResource(R.drawable.ic_play)
-                    }
-                }
-            }
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play_music)
-
-
-        myReceiver = MyReceiver()
 
         //進入畫面
         var playIndex = intent.getIntExtra(MPC_Interface.INDEX, 0)
@@ -209,7 +170,6 @@ class PlayMusicActivity : AppCompatActivity() {
                 startService(intent)
             }
         }
-
 
         play_music_bar.setNavigationIcon(R.drawable.ic_back)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -269,6 +229,7 @@ class PlayMusicActivity : AppCompatActivity() {
                 startService(intent)
             }
         }
+
         try {
             if (MPC.mpc_mode is MPC_normal) {
                 randomBt.setImageResource(R.drawable.ic_random_nofocus)

@@ -13,6 +13,9 @@ import com.shang.mediaplayerbykotlin.MP.MPC.Companion.stopTimer
 
 class MPC_normal(var context: Context) : MPC_Interface {
 
+    private val mLocalBroadcastManager by lazy {
+        LocalBroadcastManager.getInstance(context)
+    }
 
     override fun getName(): String {
         return "MPC_normal"
@@ -38,12 +41,7 @@ class MPC_normal(var context: Context) : MPC_Interface {
         MPC.mediaPlayer!!.setOnPreparedListener {
             if (it != null) {
                 it.start()
-                LocalBroadcastManager.getInstance(context).sendBroadcast(Intent().apply {
-                    this.action = PlayMusicActivity.START
-                    this.putExtra(MPC_Interface.NAME, MPC.musicList.get(MPC.index).name)
-                    this.putExtra(MPC_Interface.DURATION, MPC!!.mediaPlayer!!.duration)
-                })
-                context.sendBroadcast(Intent().apply {
+                mLocalBroadcastManager.sendBroadcast(Intent().apply {
                     this.action = PlayMusicActivity.START
                     this.putExtra(MPC_Interface.NAME, MPC.musicList.get(MPC.index).name)
                     this.putExtra(MPC_Interface.DURATION, MPC!!.mediaPlayer!!.duration)
@@ -75,12 +73,7 @@ class MPC_normal(var context: Context) : MPC_Interface {
         }
 
         stopTimer()
-
-        /*context.sendBroadcast(Intent().apply {
-            action = PlayMusicActivity.PAUSE
-        })*/
-
-        LocalBroadcastManager.getInstance(context).sendBroadcast(Intent().apply {
+        mLocalBroadcastManager.sendBroadcast(Intent().apply {
             action = PlayMusicActivity.PAUSE
         })
     }
@@ -91,10 +84,8 @@ class MPC_normal(var context: Context) : MPC_Interface {
             MPC.mediaPlayer!!.seekTo(MPC.currentTime)
             MPC.mediaPlayer!!.start()
             MPC.startTimer(context)
-            /*context.sendBroadcast(Intent().apply {
-                action = PlayMusicActivity.RESTART
-            })*/
-            LocalBroadcastManager.getInstance(context).sendBroadcast(Intent().apply {
+
+            mLocalBroadcastManager.sendBroadcast(Intent().apply {
                 action = PlayMusicActivity.RESTART
             })
         }
@@ -107,7 +98,7 @@ class MPC_normal(var context: Context) : MPC_Interface {
             MPC.index++
             start()
         } else { //發出廣播 做UI顯示
-            context.sendBroadcast(Intent().apply {
+            mLocalBroadcastManager.sendBroadcast(Intent().apply {
                 this.action = PlayMusicActivity.NEXT
             })
         }
@@ -124,7 +115,7 @@ class MPC_normal(var context: Context) : MPC_Interface {
             MPC.index--
             start()
         } else {   //發出廣播 做UI顯示
-            context.sendBroadcast(Intent().apply {
+            mLocalBroadcastManager.sendBroadcast(Intent().apply {
                 action = PlayMusicActivity.PREVIOUS
             })
         }
@@ -144,8 +135,7 @@ class MPC_normal(var context: Context) : MPC_Interface {
             var status = if (MPC.mediaPlayer!!.isLooping) "單曲循環播放關閉" else "單曲循環播放開啟"
 
             MPC.mediaPlayer!!.isLooping = !MPC.mediaPlayer!!.isLooping
-
-            context.sendBroadcast(Intent().apply {
+            mLocalBroadcastManager.sendBroadcast(Intent().apply {
                 action = PlayMusicActivity.LOOPING
                 putExtra(MPC_Interface.STATUS, status)
             })
@@ -165,7 +155,7 @@ class MPC_normal(var context: Context) : MPC_Interface {
     }
 
     override fun reStore() {
-        context.sendBroadcast(Intent().apply {
+        mLocalBroadcastManager.sendBroadcast(Intent().apply {
             this.action = PlayMusicActivity.RESTORE
             this.putExtra(MPC_Interface.NAME, MPC.musicList.get(MPC.index).name)
             this.putExtra(MPC_Interface.CURRENT_TIME, MPC.currentTime)

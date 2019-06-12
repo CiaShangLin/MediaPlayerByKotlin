@@ -6,6 +6,7 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Build
 import android.util.Log
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
 
 /**
@@ -13,7 +14,11 @@ import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
  */
 class MPC_random(var context: Context) : MPC_Interface {
 
-    val indexMap: MutableMap<Int, Boolean> by lazy {
+    private val mLocalBroadcastManager by lazy {
+        LocalBroadcastManager.getInstance(context)
+    }
+
+    private val indexMap: MutableMap<Int, Boolean> by lazy {
         mutableMapOf<Int, Boolean>()
     }
 
@@ -41,11 +46,12 @@ class MPC_random(var context: Context) : MPC_Interface {
         MPC.mediaPlayer!!.setOnPreparedListener {
             if (it != null) {
                 it.start()
-                context.sendBroadcast(Intent().apply {
+                mLocalBroadcastManager.sendBroadcast(Intent().apply {
                     this.action = PlayMusicActivity.START
                     this.putExtra(MPC_Interface.NAME, MPC.musicList.get(MPC.index).name)
                     this.putExtra(MPC_Interface.DURATION, MPC!!.mediaPlayer!!.duration)
                 })
+
                 MPC.startTimer(context)
             }
         }
@@ -73,7 +79,8 @@ class MPC_random(var context: Context) : MPC_Interface {
 
         MPC.stopTimer()
 
-        context.sendBroadcast(Intent().apply {
+
+        mLocalBroadcastManager.sendBroadcast(Intent().apply {
             action = PlayMusicActivity.PAUSE
         })
 
@@ -85,7 +92,8 @@ class MPC_random(var context: Context) : MPC_Interface {
             MPC.mediaPlayer!!.seekTo(MPC.currentTime)
             MPC.mediaPlayer!!.start()
             MPC.startTimer(context)
-            context.sendBroadcast(Intent().apply {
+
+            mLocalBroadcastManager.sendBroadcast(Intent().apply {
                 action = PlayMusicActivity.RESTART
             })
         }
@@ -120,7 +128,7 @@ class MPC_random(var context: Context) : MPC_Interface {
             MPC.index--
             start()
         } else {   //發出廣播 做UI顯示
-            context.sendBroadcast(Intent().apply {
+            mLocalBroadcastManager.sendBroadcast(Intent().apply {
                 action = PlayMusicActivity.PREVIOUS
             })
         }
@@ -142,7 +150,7 @@ class MPC_random(var context: Context) : MPC_Interface {
 
             MPC.mediaPlayer!!.isLooping = !MPC.mediaPlayer!!.isLooping
 
-            context.sendBroadcast(Intent().apply {
+            mLocalBroadcastManager.sendBroadcast(Intent().apply {
                 action = PlayMusicActivity.LOOPING
                 putExtra(MPC_Interface.STATUS, status)
             })
@@ -163,7 +171,7 @@ class MPC_random(var context: Context) : MPC_Interface {
 
 
     override fun reStore(){
-        context.sendBroadcast(Intent().apply {
+        mLocalBroadcastManager.sendBroadcast(Intent().apply {
             this.action=PlayMusicActivity.RESTORE
             this.putExtra(MPC_Interface.NAME,MPC.musicList.get(MPC.index).name)
             this.putExtra(MPC_Interface.CURRENT_TIME,MPC.currentTime)

@@ -41,54 +41,36 @@ class MainActivity : AppCompatActivity() {
     lateinit var adapterListName: PlayListNameAdapter
     val loadDialog: LoadDialog by lazy { LoadDialog() }
     private val mediaPlayerModel: MediaPlayerModel by lazy { ViewModelProviders.of(this).get(MediaPlayerModel::class.java) }
+
     private val mLocalBroadcastManager by lazy {
         LocalBroadcastManager.getInstance(this)
     }
-
-    var myBroadcastReceiverUI=object :MyBroadcastReceiverUI{
+    private var myBroadcastReceiverUI=object :MyBroadcastReceiverUI{
         override fun start(intent: Intent) {
-            Log.d(TAG,"start")
-        }
+            Log.v(TAG,"START")
+            simpleBt.setImageResource(R.drawable.ic_remote_pause)
 
+            simpleTitle.text = intent.getStringExtra(MPC_Interface.NAME)
+            simpleTime.text = FileUnits.lastModifiedToSimpleDateFormat(intent.getIntExtra(MPC_Interface.DURATION, 0).toLong())
+
+            var bitmap = BitmapFactory.decodeFile(MPC.musicList.get(MPC.index).picture)
+            if (bitmap == null) {
+                simpleIg.setImageResource(R.drawable.ic_music)
+            } else {
+                simpleIg.setImageBitmap(bitmap)
+            }
+        }
         override fun pause() {
-            Log.d(TAG,"pause")
+            Log.v(TAG,"PAUSE")
+            simpleBt.setImageResource(R.drawable.ic_remote_play)
         }
-
         override fun reStart() {
-            Log.d(TAG,"reStart")
+            Log.v(TAG,"RESTART")
+            simpleBt.setImageResource(R.drawable.ic_remote_pause)
         }
     }
     var myBroadcastReceiver=MyBroadcastReceiver(myBroadcastReceiverUI)
 
-    private var broadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            when (intent!!.action) {
-                PlayMusicActivity.START -> {
-                    Log.d(TAG,"START")
-                    simpleBt.setImageResource(R.drawable.ic_remote_pause)
-
-                    simpleTitle.text = intent.getStringExtra(MPC_Interface.NAME)
-                    simpleTime.text = FileUnits.lastModifiedToSimpleDateFormat(intent.getIntExtra(MPC_Interface.DURATION, 0).toLong())
-
-                    var bitmap = BitmapFactory.decodeFile(MPC.musicList.get(MPC.index).picture)
-                    if (bitmap == null) {
-                        simpleIg.setImageResource(R.drawable.ic_music)
-                    } else {
-                        simpleIg.setImageBitmap(bitmap)
-                    }
-                }
-                PlayMusicActivity.PAUSE -> {
-                    Log.d(TAG,"PAUSE")
-                    simpleBt.setImageResource(R.drawable.ic_remote_play)
-                }
-                PlayMusicActivity.RESTART -> {
-                    Log.d(TAG,"RESTART")
-                    simpleBt.setImageResource(R.drawable.ic_remote_pause)
-                }
-            }
-        }
-
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -248,27 +230,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-
-        mLocalBroadcastManager
-                .registerReceiver(myBroadcastReceiver,MyBroadcastReceiver.getIntentFilter(this))
-
-        /*var intentFilter = IntentFilter().apply {
-            this.addAction(PlayMusicActivity.START)
-            this.addAction(PlayMusicActivity.PAUSE)
-            this.addAction(PlayMusicActivity.RESTART)
-        }
-        registerReceiver(myBroadcastReceiver, intentFilter)*/
+        mLocalBroadcastManager.registerReceiver(myBroadcastReceiver,MyBroadcastReceiver.getIntentFilter(this))
     }
 
-    override fun onStop() {
-        super.onStop()
-        mLocalBroadcastManager.unregisterReceiver(myBroadcastReceiver)
-    }
 
     override fun onDestroy() {
 
         super.onDestroy()
         Log.d("TAG", "onDestroy")
+        mLocalBroadcastManager.unregisterReceiver(myBroadcastReceiver)
         stopService(Intent(this, MediaPlayerService::class.java))
     }
 
