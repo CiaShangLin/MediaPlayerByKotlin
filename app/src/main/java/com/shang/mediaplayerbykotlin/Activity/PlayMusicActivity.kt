@@ -50,28 +50,16 @@ class PlayMusicActivity : AppCompatActivity() {
             }
 
             playerBt.setImageResource(R.drawable.ic_pause)
-
-            NotificationUnits.instance(this@PlayMusicActivity).update(this@PlayMusicActivity,
-                    MPC.musicList.get(MPC.index).name,
-                    MPC.musicList.get(MPC.index).picture)
         }
 
         override fun pause() {
             Log.v(TAG, "PAUSE")
             playerBt.setImageResource(R.drawable.ic_play_button)
-            NotificationUnits.instance(this@PlayMusicActivity)
-                    .update(this@PlayMusicActivity,
-                            MPC.musicList.get(MPC.index).name,
-                            MPC.musicList.get(MPC.index).picture)
         }
 
         override fun reStart() {
             Log.v(TAG, "RESTART")
             playerBt.setImageResource(R.drawable.ic_pause)
-            NotificationUnits.instance(this@PlayMusicActivity)
-                    .update(this@PlayMusicActivity,
-                            MPC.musicList.get(MPC.index).name,
-                            MPC.musicList.get(MPC.index).picture)
         }
 
         override fun next() {

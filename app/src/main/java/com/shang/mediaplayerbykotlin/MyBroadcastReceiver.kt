@@ -57,9 +57,7 @@ open class MyBroadcastReceiver(var myBroadcastReceiverUI: MyBroadcastReceiverUI)
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        var main = (context is MainActivity).toString()
-        var music = (context is PlayMusicActivity).toString()
-        Log.d("TAG", main + " " + music+" "+intent?.action)
+
 
         when (intent?.action) {
             START -> {

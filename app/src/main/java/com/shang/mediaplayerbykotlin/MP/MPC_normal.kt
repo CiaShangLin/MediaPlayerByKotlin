@@ -36,16 +36,16 @@ class MPC_normal(var context: Context) : MPC_Interface {
         Log.d(MPC.TAG, "start()")
 
         MPC.mediaPlayer = MediaPlayer()
-        MPC.mediaPlayer!!.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        MPC.mediaPlayer!!.setDataSource(MPC.musicList.get(MPC.index).path)
-        MPC.mediaPlayer!!.prepare()
-        MPC.mediaPlayer!!.setOnPreparedListener {
+        MPC.mediaPlayer?.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        MPC.mediaPlayer?.setDataSource(MPC.musicList.get(MPC.index).path)
+        MPC.mediaPlayer?.prepare()
+        MPC.mediaPlayer?.setOnPreparedListener {
             if (it != null) {
                 it.start()
                 mLocalBroadcastManager.sendBroadcast(Intent().apply {
                     this.action = MyBroadcastReceiver.START
                     this.putExtra(MPC_Interface.NAME, MPC.musicList.get(MPC.index).name)
-                    this.putExtra(MPC_Interface.DURATION, MPC!!.mediaPlayer!!.duration)
+                    this.putExtra(MPC_Interface.DURATION, MPC?.mediaPlayer?.duration)
                 })
                 MPC.startTimer(context)
             }

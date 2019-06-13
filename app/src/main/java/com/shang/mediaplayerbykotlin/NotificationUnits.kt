@@ -23,7 +23,7 @@ class NotificationUnits {
         val Notification_ID = 906
         lateinit var channel: NotificationChannel
         lateinit var manager: NotificationManager
-        var notiUnits: NotificationUnits? = null
+        private var notiUnits: NotificationUnits? = null
         val channel_ID = "com.shang.mediaplayerbykotlin"
 
 
@@ -39,7 +39,7 @@ class NotificationUnits {
                     manager.createNotificationChannel(channel)
                 }
             }
-            return notiUnits!!
+            return notiUnits as NotificationUnits
         }
     }
 
@@ -66,7 +66,7 @@ class NotificationUnits {
         return builder
     }
 
-    fun getRemoteViews(context: Context, name: String, picture: String): RemoteViews {
+    private fun getRemoteViews(context: Context, name: String, picture: String): RemoteViews {
         var remote = RemoteViews(context.packageName, R.layout.remote_view_layout)
 
         var bitmap = BitmapFactory.decodeFile(picture)
@@ -91,7 +91,7 @@ class NotificationUnits {
         return remote
     }
 
-    fun getPendingIntent(context: Context, action: String): PendingIntent {
+    private fun getPendingIntent(context: Context, action: String): PendingIntent {
         var intent = Intent(context, MediaPlayerService::class.java).apply {
             this.action = action
         }

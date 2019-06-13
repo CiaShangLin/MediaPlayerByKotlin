@@ -11,7 +11,6 @@ import com.shang.mediaplayerbykotlin.MyBroadcastReceiver
 import com.shang.mediaplayerbykotlin.NotificationUnits
 
 
-
 class MediaPlayerService : Service() {
 
     companion object {
@@ -26,11 +25,11 @@ class MediaPlayerService : Service() {
         super.onCreate()
         Log.d(TAG, "onCreate")
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForeground(NotificationUnits.Notification_ID,
-                    NotificationUnits.instance(baseContext).notificationBuilder(baseContext, "", "").build())
-            Log.d(TAG, "startForeground")
-        }
+
+        startForeground(NotificationUnits.Notification_ID,
+                NotificationUnits.instance(baseContext).notificationBuilder(this, "", "").build())
+        Log.d(TAG, "startForeground")
+
 
         MPC.mpc_mode = MPC_normal(baseContext)
 
@@ -38,20 +37,30 @@ class MediaPlayerService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(TAG, "onStartCommand:" + startId)
-
-
-        when (intent!!.action) {
+        when (intent?.action) {
             MyBroadcastReceiver.PLAY -> {
                 MPC.mpc_mode.play()
             }
             MyBroadcastReceiver.START -> {
                 MPC.mpc_mode.start()
+                NotificationUnits.instance(this).update(this,
+                        MPC.musicList.get(MPC.index).name,
+                        MPC.musicList.get(MPC.index).picture)
+                Log.d("TAG",MPC.musicList.get(MPC.index).name+" ")
             }
             MyBroadcastReceiver.PAUSE -> {
                 MPC.mpc_mode.pause()
+                NotificationUnits.instance(this)
+                        .update(this,
+                                MPC.musicList.get(MPC.index).name,
+                                MPC.musicList.get(MPC.index).picture)
+
             }
             MyBroadcastReceiver.RESTART -> {
                 MPC.mpc_mode.reStart()
+                NotificationUnits.instance(this).update(this,
+                        MPC.musicList.get(MPC.index).name,
+                        MPC.musicList.get(MPC.index).picture)
             }
             MyBroadcastReceiver.NEXT -> {
                 MPC.mpc_mode.next()
