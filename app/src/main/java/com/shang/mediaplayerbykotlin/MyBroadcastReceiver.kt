@@ -8,7 +8,7 @@ import android.util.Log
 import com.shang.mediaplayerbykotlin.Activity.MainActivity
 import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
 
-
+//接收廣播 發送UI操作
 open class MyBroadcastReceiver(var myBroadcastReceiverUI: MyBroadcastReceiverUI) : BroadcastReceiver() {
 
     companion object {

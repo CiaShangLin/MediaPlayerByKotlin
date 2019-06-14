@@ -32,7 +32,6 @@ class MediaPlayerService : Service() {
 
 
         MPC.mpc_mode = MPC_normal(baseContext)
-
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
