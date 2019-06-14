@@ -1,9 +1,6 @@
 package com.shang.mediaplayerbykotlin.Activity
 
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.os.Build
@@ -23,6 +20,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.shang.mediaplayerbykotlin.*
 import com.shang.mediaplayerbykotlin.Adapter.MusicDataAdapter
 import com.shang.mediaplayerbykotlin.Adapter.PlayListNameAdapter
+import com.shang.mediaplayerbykotlin.Broadcast.MyBroadcastReceiver
+import com.shang.mediaplayerbykotlin.Broadcast.MyBroadcastReceiverUI
+import com.shang.mediaplayerbykotlin.Dialog.LoadDialog
+import com.shang.mediaplayerbykotlin.Dialog.TimerDialog
 import com.shang.mediaplayerbykotlin.MP.MPC
 import com.shang.mediaplayerbykotlin.MP.MPC_Interface
 import com.shang.mediaplayerbykotlin.MP.MediaPlayerService
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity() {
     private val mLocalBroadcastManager by lazy {
         LocalBroadcastManager.getInstance(this)
     }
-    private var myBroadcastReceiverUI=object :MyBroadcastReceiverUI{
+    private var myBroadcastReceiverUI=object : MyBroadcastReceiverUI {
         override fun start(intent: Intent) {
             Log.v(TAG,"START")
             simpleBt.setImageResource(R.drawable.ic_remote_pause)
@@ -69,7 +70,7 @@ class MainActivity : AppCompatActivity() {
             simpleBt.setImageResource(R.drawable.ic_remote_pause)
         }
     }
-    var myBroadcastReceiver=MyBroadcastReceiver(myBroadcastReceiverUI)
+    var myBroadcastReceiver= MyBroadcastReceiver(myBroadcastReceiverUI)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -229,7 +230,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        mLocalBroadcastManager.registerReceiver(myBroadcastReceiver,MyBroadcastReceiver.getIntentFilter(this))
+        mLocalBroadcastManager.registerReceiver(myBroadcastReceiver, MyBroadcastReceiver.getIntentFilter(this))
     }
 
 

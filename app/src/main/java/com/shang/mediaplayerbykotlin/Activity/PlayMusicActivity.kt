@@ -1,9 +1,6 @@
 package com.shang.mediaplayerbykotlin.Activity
 
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
@@ -16,9 +13,8 @@ import com.shang.mediaplayerbykotlin.MP.MPC
 import com.shang.mediaplayerbykotlin.MP.MPC_Interface
 import com.shang.mediaplayerbykotlin.MP.MPC_normal
 import com.shang.mediaplayerbykotlin.MP.MediaPlayerService
-import com.shang.mediaplayerbykotlin.MyBroadcastReceiver
-import com.shang.mediaplayerbykotlin.MyBroadcastReceiverUI
-import com.shang.mediaplayerbykotlin.NotificationUnits
+import com.shang.mediaplayerbykotlin.Broadcast.MyBroadcastReceiver
+import com.shang.mediaplayerbykotlin.Broadcast.MyBroadcastReceiverUI
 import com.shang.mediaplayerbykotlin.R
 import kotlinx.android.synthetic.main.activity_play_music.*
 import kotlinx.android.synthetic.main.media_play_controller.*

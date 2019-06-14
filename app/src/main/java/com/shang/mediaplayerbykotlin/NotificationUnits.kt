@@ -9,7 +9,7 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.widget.RemoteViews
-import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
+import com.shang.mediaplayerbykotlin.Broadcast.MyBroadcastReceiver
 import com.shang.mediaplayerbykotlin.MP.MPC
 import com.shang.mediaplayerbykotlin.MP.MediaPlayerService
 

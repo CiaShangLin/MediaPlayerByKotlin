@@ -2,12 +2,10 @@ package com.shang.mediaplayerbykotlin.MP
 
 import android.app.Service
 import android.content.Intent
-import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
-import com.shang.mediaplayerbykotlin.MyBroadcastReceiver
+import com.shang.mediaplayerbykotlin.Broadcast.MyBroadcastReceiver
 import com.shang.mediaplayerbykotlin.NotificationUnits
 
 

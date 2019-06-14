@@ -1,10 +1,9 @@
-package com.shang.mediaplayerbykotlin
+package com.shang.mediaplayerbykotlin.Broadcast
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.util.Log
 import com.shang.mediaplayerbykotlin.Activity.MainActivity
 import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
 

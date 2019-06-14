@@ -2,14 +2,8 @@ package com.shang.mediaplayerbykotlin.MP
 
 import android.content.Context
 import android.content.Intent
-import android.media.AudioManager
-import android.media.MediaPlayer
-import android.os.Build
 import android.util.Log
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
-import com.shang.mediaplayerbykotlin.MyBroadcastReceiver
-import com.shang.mediaplayerbykotlin.NotificationUnits
+import com.shang.mediaplayerbykotlin.Broadcast.MyBroadcastReceiver
 
 /**
  * Created by Shang on 2018/8/19.

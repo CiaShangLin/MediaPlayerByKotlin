@@ -1,4 +1,4 @@
-package com.shang.mediaplayerbykotlin
+package com.shang.mediaplayerbykotlin.Dialog
 
 import android.app.DialogFragment
 import android.os.Bundle
@@ -10,6 +10,7 @@ import android.view.Window
 import android.widget.Button
 import android.widget.EditText
 import com.shang.mediaplayerbykotlin.MP.MPC
+import com.shang.mediaplayerbykotlin.R
 import org.jetbrains.anko.toast
 
 /**

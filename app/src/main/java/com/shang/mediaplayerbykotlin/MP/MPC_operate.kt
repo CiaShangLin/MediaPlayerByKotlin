@@ -7,7 +7,7 @@ import android.media.MediaPlayer
 import android.os.Build
 import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.shang.mediaplayerbykotlin.MyBroadcastReceiver
+import com.shang.mediaplayerbykotlin.Broadcast.MyBroadcastReceiver
 import com.shang.mediaplayerbykotlin.NotificationUnits
 
 open abstract class MPC_operate(var context: Context) : MPC_Interface {

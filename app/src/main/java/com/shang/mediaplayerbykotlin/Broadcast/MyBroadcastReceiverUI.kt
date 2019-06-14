@@ -1,4 +1,4 @@
-package com.shang.mediaplayerbykotlin
+package com.shang.mediaplayerbykotlin.Broadcast
 
 import android.content.Intent
 import com.shang.mediaplayerbykotlin.MP.MPC

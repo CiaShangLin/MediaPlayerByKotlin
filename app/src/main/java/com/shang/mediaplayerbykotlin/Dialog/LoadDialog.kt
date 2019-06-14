@@ -1,10 +1,11 @@
-package com.shang.mediaplayerbykotlin
+package com.shang.mediaplayerbykotlin.Dialog
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import com.shang.mediaplayerbykotlin.R
 
 /**
  * Created by SERS on 2018/8/31.
