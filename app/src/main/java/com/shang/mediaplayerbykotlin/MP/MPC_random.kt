@@ -9,6 +9,7 @@ import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
 import com.shang.mediaplayerbykotlin.MyBroadcastReceiver
+import com.shang.mediaplayerbykotlin.NotificationUnits
 
 /**
  * Created by Shang on 2018/8/19.
@@ -41,10 +42,10 @@ class MPC_random(var context: Context) : MPC_Interface {
         Log.d(MPC.TAG, "start()")
 
         MPC.mediaPlayer = MediaPlayer()
-        MPC.mediaPlayer!!.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        MPC.mediaPlayer!!.setDataSource(MPC.musicList.get(MPC.index).path)
-        MPC.mediaPlayer!!.prepare()
-        MPC.mediaPlayer!!.setOnPreparedListener {
+        MPC.mediaPlayer?.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        MPC.mediaPlayer?.setDataSource(MPC.musicList.get(MPC.index).path)
+        MPC.mediaPlayer?.prepare()
+        MPC.mediaPlayer?.setOnPreparedListener {
             if (it != null) {
                 it.start()
                 mLocalBroadcastManager.sendBroadcast(Intent().apply {
@@ -54,6 +55,10 @@ class MPC_random(var context: Context) : MPC_Interface {
                 })
 
                 MPC.startTimer(context)
+
+                NotificationUnits.instance(context).update(context,
+                        MPC.musicList.get(MPC.index).name,
+                        MPC.musicList.get(MPC.index).picture)
             }
         }
 
@@ -73,34 +78,41 @@ class MPC_random(var context: Context) : MPC_Interface {
 
     override fun pause() {
         Log.d(MPC.TAG, "pause()")
-        if (MPC.mediaPlayer != null && MPC!!.mediaPlayer!!.isPlaying) {
-            MPC.currentTime = MPC!!.mediaPlayer!!.currentPosition
-            MPC!!.mediaPlayer!!.pause()
+        if (MPC.mediaPlayer != null && MPC?.mediaPlayer!!.isPlaying) {
+            MPC.currentTime = MPC?.mediaPlayer!!.currentPosition
+            MPC?.mediaPlayer?.pause()
         }
 
         MPC.stopTimer()
 
-
         mLocalBroadcastManager.sendBroadcast(Intent().apply {
             action = MyBroadcastReceiver.PAUSE
         })
+
+        NotificationUnits.instance(context).update(context,
+                MPC.musicList.get(MPC.index).name,
+                MPC.musicList.get(MPC.index).picture)
 
     }
 
     override fun reStart() {
         Log.d(MPC.TAG, "reStart()")
         if (MPC.mediaPlayer != null) {
-            MPC.mediaPlayer!!.seekTo(MPC.currentTime)
-            MPC.mediaPlayer!!.start()
+            MPC.mediaPlayer?.seekTo(MPC.currentTime)
+            MPC.mediaPlayer?.start()
             MPC.startTimer(context)
 
             mLocalBroadcastManager.sendBroadcast(Intent().apply {
                 action = MyBroadcastReceiver.RESTART
             })
         }
+
+        NotificationUnits.instance(context).update(context,
+                MPC.musicList.get(MPC.index).name,
+                MPC.musicList.get(MPC.index).picture)
     }
 
-
+    //mode不一樣
     override fun next() {
         Log.d(MPC.TAG, "next():"+MPC.index)
         if (indexMap.size < MPC.musicList.size) {  //map還沒播完
@@ -139,7 +151,7 @@ class MPC_random(var context: Context) : MPC_Interface {
     override fun seekbar_move(time: Int) {
         if (MPC.mediaPlayer != null) {
             MPC.currentTime = time
-            MPC.mediaPlayer!!.seekTo(time)
+            MPC.mediaPlayer?.seekTo(time)
         }
 
     }

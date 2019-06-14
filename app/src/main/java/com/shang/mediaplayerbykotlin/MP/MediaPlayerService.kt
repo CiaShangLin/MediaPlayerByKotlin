@@ -43,24 +43,14 @@ class MediaPlayerService : Service() {
             }
             MyBroadcastReceiver.START -> {
                 MPC.mpc_mode.start()
-                NotificationUnits.instance(this).update(this,
-                        MPC.musicList.get(MPC.index).name,
-                        MPC.musicList.get(MPC.index).picture)
                 Log.d("TAG",MPC.musicList.get(MPC.index).name+" ")
             }
             MyBroadcastReceiver.PAUSE -> {
                 MPC.mpc_mode.pause()
-                NotificationUnits.instance(this)
-                        .update(this,
-                                MPC.musicList.get(MPC.index).name,
-                                MPC.musicList.get(MPC.index).picture)
 
             }
             MyBroadcastReceiver.RESTART -> {
                 MPC.mpc_mode.reStart()
-                NotificationUnits.instance(this).update(this,
-                        MPC.musicList.get(MPC.index).name,
-                        MPC.musicList.get(MPC.index).picture)
             }
             MyBroadcastReceiver.NEXT -> {
                 MPC.mpc_mode.next()
