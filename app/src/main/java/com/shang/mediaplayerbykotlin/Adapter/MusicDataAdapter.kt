@@ -54,7 +54,6 @@ class MusicDataAdapter(var context: Context, var musicList: MutableList<Music_Da
                     R.id.more_add -> {
                         var playListName = database.getMusic_ListName_Dao().getAll()
                         var array = database.getMusic_ListName_Dao().getAllTableName()
-
                         addDialog(array, playListName, position)
                     }
                 }

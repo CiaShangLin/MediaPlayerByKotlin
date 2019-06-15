@@ -25,7 +25,7 @@ class CheckFileRoom(var context: Context, var mediaPlayerModel: MediaPlayerModel
         Log.d(TAG, "size:" + musicList.size)
 
 
-        if (beforeMap.size == 0) {
+        if (beforeMap.isEmpty()) {
             Log.d(TAG, "第一次載入")
             musicList = FileUnits.getPicture(musicList, context)  //一次取得所有圖片
             musicList.forEach {
@@ -63,6 +63,7 @@ class CheckFileRoom(var context: Context, var mediaPlayerModel: MediaPlayerModel
     override fun onPostExecute(result: Boolean?) {
         super.onPostExecute(result)
         mediaPlayerModel.getLoadStatus().value=true
+        mediaPlayerModel.updateSetting(mediaPlayerModel.getSettingNow())
 
         //不做取圖片1.186秒  讀取占了大份的時間
     }

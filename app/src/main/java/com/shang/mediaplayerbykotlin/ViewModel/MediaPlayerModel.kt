@@ -6,8 +6,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.shang.mediaplayerbykotlin.Repository.MusicRepository
+import com.shang.mediaplayerbykotlin.Repository.PlayListNameRepository
 import com.shang.mediaplayerbykotlin.Repository.SettingRepository
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
+import com.shang.mediaplayerbykotlin.Room.Music_ListName_Entity
 import com.shang.mediaplayerbykotlin.Room.Setting_Entity
 
 class MediaPlayerModel(application: Application) : AndroidViewModel(application) {
@@ -17,6 +19,7 @@ class MediaPlayerModel(application: Application) : AndroidViewModel(application)
     }
     private var musicRepository = MusicRepository(application)
     private var settingRepository = SettingRepository(application)
+    private var playListRepository = PlayListNameRepository(application)
 
     fun getLoadStatus(): MutableLiveData<Boolean> {
         return loadStatus
@@ -27,7 +30,7 @@ class MediaPlayerModel(application: Application) : AndroidViewModel(application)
     }
 
     //如果使用Room的Order by ASC和DESC 不能用參數的方法 連column都不能用參數的 只能改用RawQuery
-    fun getAllMusicDataOrderBy(sort_mode:Boolean,sort_type:Int): MutableList<Music_Data_Entity> {
+    fun getAllMusicDataOrderBy(sort_mode: Boolean, sort_type: Int): MutableList<Music_Data_Entity> {
         var orderBy = if (sort_mode) "DESC" else "ASC"
         var columnInfo: String = Setting_Entity.getSortType(sort_type)
         var simpleSQLiteQuery = SimpleSQLiteQuery("select * from ${Music_Data_Entity.TABLE_NAME} order by $columnInfo $orderBy")
@@ -80,5 +83,14 @@ class MediaPlayerModel(application: Application) : AndroidViewModel(application)
         settingRepository.updateSetting(setting_Entity)
     }
 
+
+    //PlayListName
+    fun getPlayListNameLiveData(): MutableLiveData<Boolean> {
+        return playListRepository.getPlayListNameLiveData()
+    }
+
+    fun getAllListName(): MutableList<Music_ListName_Entity> {
+        return playListRepository.getAllListName()
+    }
 
 }

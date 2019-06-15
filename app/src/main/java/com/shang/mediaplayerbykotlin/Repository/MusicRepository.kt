@@ -14,7 +14,6 @@ class MusicRepository(context: Context) {
     }
 
     fun getAllMusicData(): MutableLiveData<MutableList<Music_Data_Entity>> {
-        musicDataMutableLiveData.postValue(musicDataDao.getAllMusicData())
         return musicDataMutableLiveData
     }
 

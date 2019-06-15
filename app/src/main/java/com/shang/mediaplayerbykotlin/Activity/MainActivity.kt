@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
     private val TAG: String = "MainActivity"
     lateinit var adapterMain: MusicDataAdapter
     lateinit var adapterListName: PlayListNameAdapter
-    val loadDialog: LoadDialog by lazy { LoadDialog() }
+    private val loadDialog: LoadDialog by lazy { LoadDialog() }
     private val mediaPlayerModel: MediaPlayerModel by lazy { ViewModelProviders.of(this).get(MediaPlayerModel::class.java) }
 
     private val mLocalBroadcastManager by lazy {
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
             simpleBt.setImageResource(R.drawable.ic_remote_pause)
         }
     }
-    var myBroadcastReceiver= MyBroadcastReceiver(myBroadcastReceiverUI)
+    private var myBroadcastReceiver= MyBroadcastReceiver(myBroadcastReceiverUI)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,6 +91,7 @@ class MainActivity : AppCompatActivity() {
 
         initView()
         initModel()
+
     }
 
     fun initView() {
@@ -137,13 +138,7 @@ class MainActivity : AppCompatActivity() {
 
                 }
                 R.id.musicList -> {
-
-                    var playList = mutableListOf<Music_ListName_Entity>()
-                    //playList.addAll(database.getMusic_ListName_Dao().getAllMusicData())
-
-                    adapterListName = PlayListNameAdapter(this@MainActivity, playList)
-                    recyclerview.adapter = adapterListName
-
+                    mediaPlayerModel.getPlayListNameLiveData().value=true
                 }
                 R.id.timer -> {
                     var timerDialog = TimerDialog()
@@ -187,6 +182,8 @@ class MainActivity : AppCompatActivity() {
             if (it != null) {
                 mediaPlayerModel.getAllMusicData()
                         .postValue(mediaPlayerModel.getAllMusicDataOrderBy(it.sort_mode, it.sort_type))
+            }else{
+                mediaPlayerModel.insertSetting(Setting_Entity())
             }
         })
 
@@ -194,6 +191,7 @@ class MainActivity : AppCompatActivity() {
         mediaPlayerModel.getAllMusicData().observe(this, Observer<MutableList<Music_Data_Entity>> {
             adapterMain.setData(it)
             MPC.musicList = it
+            Log.d(TAG,"mediaPlayer:${it.size}")
         })
 
         //LoadDailog
@@ -202,6 +200,15 @@ class MainActivity : AppCompatActivity() {
                 loadDialog.dismiss()
             } else {
                 loadDialog.show(supportFragmentManager, LoadDialog.TAG)
+            }
+        })
+
+        mediaPlayerModel.getPlayListNameLiveData().observe(this, Observer {
+            Log.d(TAG,"getPlayListNameLiveData:$it")
+            if(it){
+                adapterListName=PlayListNameAdapter(this,mediaPlayerModel.getAllListName())
+                recyclerview.adapter=adapterListName
+                adapterListName.notifyDataSetChanged()
             }
         })
 

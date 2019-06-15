@@ -45,7 +45,7 @@ class PlayListActivity : AppCompatActivity() {
 
     }
 
-    fun changeData() {
+    private fun changeData() {
 
         playListName_id = intent.getLongExtra(MPC_Interface.ID, 0)
         name = intent.getStringExtra(MPC_Interface.NAME)

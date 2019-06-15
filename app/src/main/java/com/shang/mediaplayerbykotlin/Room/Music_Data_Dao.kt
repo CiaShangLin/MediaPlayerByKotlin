@@ -10,9 +10,6 @@ import androidx.sqlite.db.SupportSQLiteQuery
 @Dao
 interface Music_Data_Dao {
 
-    @Query("select * from " + Music_Data_Entity.TABLE_NAME)
-    fun getAllMusicData(): MutableList<Music_Data_Entity>
-
     @RawQuery
     fun getAllMusicDataOrderBy(query:SupportSQLiteQuery): MutableList<Music_Data_Entity>
 

@@ -18,7 +18,7 @@ interface Setting_Dao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertSetting(setting_Entity: Setting_Entity)
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.IGNORE)
     fun update(setting_Entity: Setting_Entity)
 
 }

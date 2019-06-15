@@ -43,7 +43,7 @@ class PlayListNameAdapter(var context: Context, var playList: MutableList<Music_
         return (playList.size + 1)
     }
 
-    override fun onBindViewHolder(holder: PlayListNameAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         if (playList.size == position) {
             holder.playListTv.visibility = View.INVISIBLE
@@ -86,13 +86,13 @@ class PlayListNameAdapter(var context: Context, var playList: MutableList<Music_
 
         val playListAddBt = view.findViewById<ImageButton>(R.id.playListAddBt)
 
-        val playListCardView = view.findViewById<CardView>(R.id.playListCardView)
+        val playListCardView: CardView = view.findViewById<CardView>(R.id.playListCardView)
 
         val playListCon = view.findViewById<ConstraintLayout>(R.id.playListCon)
 
     }
 
-    fun popupMenu(it: View, position: Int) {
+    private fun popupMenu(it: View, position: Int) {
         var popupMenu = PopupMenu(context, it)
         popupMenu.menuInflater.inflate(R.menu.play_list_more_menu, popupMenu.menu)
 
@@ -133,7 +133,8 @@ class PlayListNameAdapter(var context: Context, var playList: MutableList<Music_
         popupMenu.show()
     }
 
-    fun addPlayListDialog() {
+    //新增播放清單Dialog
+    private fun addPlayListDialog() {
 
         var view = LayoutInflater.from(context).inflate(R.layout.input_edittext, null)
         AlertDialog.Builder(context)
@@ -142,7 +143,7 @@ class PlayListNameAdapter(var context: Context, var playList: MutableList<Music_
                 .setPositiveButton("新增", DialogInterface.OnClickListener { dialog, which ->
 
                     var name = view.playListEt.text.toString().trim()
-                    if (name.length != 0) {
+                    if (name.isNotEmpty()) {
 
                         var entity = Music_ListName_Entity().apply {
                             this.tableName = name
