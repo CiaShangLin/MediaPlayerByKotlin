@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun initView() {
+    private fun initView() {
         //toolbar
         toolbar.setNavigationIcon(R.drawable.ic_navigation)
         toolbar.inflateMenu(R.menu.toolbar_menu)
@@ -175,7 +175,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun initModel() {
+    private fun initModel() {
         //Setting
         mediaPlayerModel?.getSettingLiveData().observe(this, Observer<Setting_Entity> {
             //應該要寫預設插入

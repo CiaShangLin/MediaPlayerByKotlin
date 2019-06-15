@@ -24,16 +24,17 @@ class PlayListActivity : AppCompatActivity() {
     val TAG = "PlayListActivity"
 
     val database: MusicDatabase by lazy {
-        //只會調用一次 用於val
         MusicDatabase.getMusicDatabase(this)
     }
 
 
-    lateinit var DataList: MutableList<Music_ListData_Entity>
+    private var dataList: MutableList<Music_ListData_Entity> = mutableListOf()
 
-    companion object {
-        var playListName_id: Long = 0
-        var name: String = ""
+    private val playListName_id by lazy {
+        intent.getLongExtra(MPC_Interface.ID, 0)
+    }
+    private val toolbarTitle by lazy {
+        intent.getStringExtra(MPC_Interface.NAME)
     }
 
 
@@ -47,14 +48,10 @@ class PlayListActivity : AppCompatActivity() {
 
     private fun changeData() {
 
-        playListName_id = intent.getLongExtra(MPC_Interface.ID, 0)
-        name = intent.getStringExtra(MPC_Interface.NAME)
-
-        DataList = database.getMusic_ListData_Dao().getListDataFromListName(playListName_id)
-        update(0, 0)
+        dataList = database.getMusic_ListData_Dao().getListDataFromListName(playListName_id)
 
         var musicList = mutableListOf<Music_Data_Entity>()
-        DataList.forEach {
+        dataList.forEach {
             musicList.add(database.getMusic_Data_Dao().findListData(it.musicPath))
         }
         MPC.musicList = musicList
@@ -62,16 +59,16 @@ class PlayListActivity : AppCompatActivity() {
         initView()
     }
 
-    fun initView() {
+    private fun initView() {
 
         setSupportActionBar(play_list_toolbar)
-        play_list_toolbar.title = name
+        play_list_toolbar.title = toolbarTitle
         play_list_toolbar.setNavigationIcon(R.drawable.ic_back)
         play_list_toolbar.setNavigationOnClickListener {
             finish()
         }
 
-        var adapter = PlayListDataAdapter(this, MPC.musicList)
+        var adapter = PlayListDataAdapter(this, MPC.musicList, playListName_id)
         play_list_recyc.layoutManager = LinearLayoutManager(this)
         play_list_recyc.adapter = adapter
 
@@ -120,18 +117,21 @@ class PlayListActivity : AppCompatActivity() {
 
 
     fun update(from: Int, to: Int) {
-        var temp = DataList.removeAt(from)
-        DataList.add(to, temp)
+        try{
+            var temp = dataList.removeAt(from)
+            dataList.add(to, temp)
 
-        for (i in DataList.indices) {
-            database.getMusic_ListData_Dao().update(DataList.get(i).apply {
-                this.position = i
-            })
-        }
+            for (i in dataList.indices) {
+                database.getMusic_ListData_Dao().update(dataList.get(i).apply {
+                    this.position = i
+                })
+            }
 
-        DataList.forEach {
-            Log.d(TAG, "DataList:  " + it.musicPath + " " + it.position)
-        }
+            dataList.forEach {
+                Log.d(TAG, "dataList:  " + it.musicPath + " " + it.position)
+            }
+        }catch (e:Exception){}
+
     }
 
     fun setCollapsingBackground() {

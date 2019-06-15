@@ -24,7 +24,7 @@ import com.shang.mediaplayerbykotlin.Room.Music_ListData_Entity
 /**
  * Created by Shang on 2018/8/26.
  */
-class PlayListDataAdapter(var context: Context, var musicList: MutableList<Music_Data_Entity>) : RecyclerView.Adapter<PlayListDataAdapter.ViewHolder>() {
+class PlayListDataAdapter(var context: Context, var musicList: MutableList<Music_Data_Entity>, var playListName_id: Long) : RecyclerView.Adapter<PlayListDataAdapter.ViewHolder>() {
 
     val database: MusicDatabase by lazy {
         MusicDatabase.getMusicDatabase(context)
@@ -72,7 +72,7 @@ class PlayListDataAdapter(var context: Context, var musicList: MutableList<Music
             when (it.itemId) {
                 R.id.playListData_delete -> {
                     database.getMusic_ListData_Dao().delete(Music_ListData_Entity().apply {
-                        this.table_id = PlayListActivity.playListName_id
+                        this.table_id = playListName_id
                         this.musicPath = musicList.get(position).path
                     })
 
