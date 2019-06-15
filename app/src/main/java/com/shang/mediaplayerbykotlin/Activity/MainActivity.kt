@@ -46,9 +46,9 @@ class MainActivity : AppCompatActivity() {
     private val mLocalBroadcastManager by lazy {
         LocalBroadcastManager.getInstance(this)
     }
-    private var myBroadcastReceiverUI=object : MyBroadcastReceiverUI {
+    private var myBroadcastReceiverUI = object : MyBroadcastReceiverUI {
         override fun start(intent: Intent) {
-            Log.v(TAG,"START")
+            Log.v(TAG, "START")
             simpleBt.setImageResource(R.drawable.ic_remote_pause)
 
             simpleTitle.text = intent.getStringExtra(MPC_Interface.NAME)
@@ -61,16 +61,18 @@ class MainActivity : AppCompatActivity() {
                 simpleIg.setImageBitmap(bitmap)
             }
         }
+
         override fun pause() {
-            Log.v(TAG,"PAUSE")
+            Log.v(TAG, "PAUSE")
             simpleBt.setImageResource(R.drawable.ic_remote_play)
         }
+
         override fun reStart() {
-            Log.v(TAG,"RESTART")
+            Log.v(TAG, "RESTART")
             simpleBt.setImageResource(R.drawable.ic_remote_pause)
         }
     }
-    private var myBroadcastReceiver= MyBroadcastReceiver(myBroadcastReceiverUI)
+    private var myBroadcastReceiver = MyBroadcastReceiver(myBroadcastReceiverUI)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -124,21 +126,18 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
 
                 R.id.myMusic -> {
-                    //var list = database.getMusic_Data_Dao().getAllMusicData()
-                    //var setting = database.getSetting_Dao().getSettingLiveData()
-
-                    //MPC.musicList = list
-                    //MPC.sort(setting.sort_mode, setting.sort_type)
-
-                    recyclerview.adapter = adapterMain
-
+                    recyclerview.adapter=adapterMain
+                    toolbar.title="我的音樂"
+                    toolbar.menu.findItem(R.id.sort).isVisible = true
                 }
                 R.id.favorite -> {
 
 
                 }
                 R.id.musicList -> {
-                    mediaPlayerModel.getPlayListNameLiveData().value=true
+                    mediaPlayerModel.getPlayListNameLiveData().value = true
+                    toolbar.title="播放清單"
+                    toolbar.menu.findItem(R.id.sort).isVisible = false
                 }
                 R.id.timer -> {
                     var timerDialog = TimerDialog()
@@ -169,9 +168,12 @@ class MainActivity : AppCompatActivity() {
 
         //整個simple的Layout
         simple_conLy.setOnClickListener {
-            startActivity(Intent(this, PlayMusicActivity::class.java).apply {
-                this.putExtra(MPC_Interface.INDEX, MPC.index)
-            })
+            //一開始是沒有資料的 所以傳遞過去會閃退
+            if(MPC.index!=-1){
+                startActivity(Intent(this, PlayMusicActivity::class.java).apply {
+                    this.putExtra(MPC_Interface.INDEX, MPC.index)
+                })
+            }
         }
     }
 
@@ -182,7 +184,7 @@ class MainActivity : AppCompatActivity() {
             if (it != null) {
                 mediaPlayerModel.getAllMusicData()
                         .postValue(mediaPlayerModel.getAllMusicDataOrderBy(it.sort_mode, it.sort_type))
-            }else{
+            } else {
                 mediaPlayerModel.insertSetting(Setting_Entity())
             }
         })
@@ -191,7 +193,7 @@ class MainActivity : AppCompatActivity() {
         mediaPlayerModel.getAllMusicData().observe(this, Observer<MutableList<Music_Data_Entity>> {
             adapterMain.setData(it)
             MPC.musicList = it
-            Log.d(TAG,"mediaPlayer:${it.size}")
+            Log.d(TAG, "mediaPlayer:${it.size}")
         })
 
         //LoadDailog
@@ -203,11 +205,12 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        //PlayListName
         mediaPlayerModel.getPlayListNameLiveData().observe(this, Observer {
-            Log.d(TAG,"getPlayListNameLiveData:$it")
-            if(it){
-                adapterListName=PlayListNameAdapter(this,mediaPlayerModel.getAllListName())
-                recyclerview.adapter=adapterListName
+            Log.d(TAG, "getPlayListNameLiveData:$it")
+            if (it) {
+                adapterListName = PlayListNameAdapter(this, mediaPlayerModel.getAllListName())
+                recyclerview.adapter = adapterListName
                 adapterListName.notifyDataSetChanged()
             }
         })

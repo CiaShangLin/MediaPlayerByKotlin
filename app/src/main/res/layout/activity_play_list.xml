@@ -27,6 +27,13 @@
                 android:layout_height="?attr/actionBarSize"
                 app:title="@string/playList"></androidx.appcompat.widget.Toolbar>
 
+            <ImageView
+                android:id="@+id/playListImg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="?attr/actionBarSize"
+                android:alpha="0.5" />
+
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>

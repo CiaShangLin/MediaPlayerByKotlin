@@ -144,10 +144,10 @@ class PlayListActivity : AppCompatActivity() {
         }
 
         if (list.size == 0) {
-            collapsing.background = resources.getDrawable(R.color.colorP)
+            playListImg.background = resources.getDrawable(R.color.colorP)
         } else {
             var random = (Math.random() * list.size).toInt()
-            collapsing.background = BitmapDrawable(list.get(random))
+            playListImg.background = BitmapDrawable(list.get(random))
         }
 
     }
