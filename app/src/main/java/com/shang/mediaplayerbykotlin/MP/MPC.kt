@@ -18,7 +18,7 @@ class MPC{
 
         var mediaPlayer: MediaPlayer? = null  //播放器
         var currentTime: Int = 0             //目前撥放到的時間
-        var index: Int = 0                 //第幾首
+        var index: Int = -1                //第幾首
         lateinit var mpc_mode: MPC_Interface  //操作模式
         lateinit var musicList: MutableList<Music_Data_Entity>  //要撥放的清單
         var timer: Timer? = null                              //定時器

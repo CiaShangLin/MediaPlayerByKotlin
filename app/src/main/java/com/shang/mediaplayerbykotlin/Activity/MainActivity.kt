@@ -156,14 +156,17 @@ class MainActivity : AppCompatActivity() {
 
         //撥放按鈕
         simpleBt.setOnClickListener {
-            var intent = Intent(this, MediaPlayerService::class.java).apply {
-                this.action = MyBroadcastReceiver.PLAY
+            if(MPC.index!=-1){
+                var intent = Intent(this, MediaPlayerService::class.java).apply {
+                    this.action = MyBroadcastReceiver.PLAY
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(intent)
+                } else {
+                    startService(intent)
+                }
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(intent)
-            } else {
-                startService(intent)
-            }
+
         }
 
         //整個simple的Layout

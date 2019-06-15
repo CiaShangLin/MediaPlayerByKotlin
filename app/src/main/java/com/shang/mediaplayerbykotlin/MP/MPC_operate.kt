@@ -148,7 +148,7 @@ open abstract class MPC_operate(var context: Context) : MPC_Interface {
             this.putExtra(MPC_Interface.NAME, MPC.musicList.get(MPC.index).name)
             this.putExtra(MPC_Interface.CURRENT_TIME, MPC.currentTime)
             this.putExtra(MPC_Interface.DURATION, MPC.musicList.get(MPC.index).duration)
-            this.putExtra(MPC_Interface.STATUS, MPC.mediaPlayer!!.isPlaying)
+            this.putExtra(MPC_Interface.STATUS, MPC.mediaPlayer?.isPlaying)
         })
     }
 
