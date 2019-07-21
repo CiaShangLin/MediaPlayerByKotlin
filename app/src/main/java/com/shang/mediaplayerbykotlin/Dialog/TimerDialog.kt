@@ -1,17 +1,29 @@
 package com.shang.mediaplayerbykotlin.Dialog
 
-import android.app.DialogFragment
+
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
+import androidx.fragment.app.DialogFragment
 import com.shang.mediaplayerbykotlin.MP.MPC
 import com.shang.mediaplayerbykotlin.R
+import io.reactivex.Observable
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Action
+import io.reactivex.functions.Consumer
 import org.jetbrains.anko.toast
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by SERS on 2018/8/29.
@@ -19,13 +31,21 @@ import org.jetbrains.anko.toast
 //睡眠定時器
 class TimerDialog : DialogFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+    companion object {
+        const val TAG = "TimerDialog"
 
-        var handler = Handler()
-        var runnable = Runnable {
-            MPC.mpc_mode.pause()
+        private var timerDialog: TimerDialog? = null
+        private var compositeDisposable = CompositeDisposable()
+        fun getInstance(): TimerDialog? {
+            if (timerDialog == null) {
+                timerDialog = TimerDialog()
+            }
+            return timerDialog
         }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
 
         var view = inflater?.inflate(R.layout.timer_dialog, container)
         var timerHoursEt = view!!.findViewById<EditText>(R.id.timerHoursEt)
@@ -33,33 +53,50 @@ class TimerDialog : DialogFragment() {
         var timerSecondEt = view!!.findViewById<EditText>(R.id.timerSecondEt)
         var timerStartBt = view!!.findViewById<Button>(R.id.timerStartBt)
         var timerResetBt = view!!.findViewById<Button>(R.id.timerResetBt)
+        var imgClose=view!!.findViewById<ImageView>(R.id.imgClose)
+
+
 
         timerStartBt.setOnClickListener {
             try {
-                var hours = if (timerHoursEt.text.toString() == "") 0 else timerHoursEt.text.toString().toInt() * 60 * 60
-                var minute = if (timerMinuteEt.text.toString() == "") 0 else timerMinuteEt.text.toString().toInt() * 60
-                var second = if (timerSecondEt.text.toString() == "") 0 else timerSecondEt.text.toString().toInt()
+                var hours = if (timerHoursEt.text.isEmpty()) 0 else timerHoursEt.text.toString().toInt() * 60 * 60
+                var minute = if (timerMinuteEt.text.isEmpty()) 0 else timerMinuteEt.text.toString().toInt() * 60
+                var second = if (timerSecondEt.text.isEmpty()) 0 else timerSecondEt.text.toString().toInt()
                 var timer = (hours + minute + second) * 1000
 
-                handler.postDelayed(runnable, timer.toLong())
-                toast("設置完成")
-                dismiss()
+                var disposable = Observable.timer(timer.toLong(), TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(Consumer {
+                            MPC?.mpc_mode?.pause()
+                            Log.d(TAG, "onNext")
+                        }, Consumer {
+                            Log.d(TAG, it.message.toString())
+                        }, Action {
+                            Log.d(TAG, "onComplete")
+                        }, Consumer {
+                            context?.toast("設置完成")
+                            dismiss()
+                            Log.d(TAG, "onSubscribe")
+                        })
+
+                compositeDisposable.add(disposable)
+
             } catch (e: Exception) {
-                toast("請輸入有效時間")
+                context?.toast("請輸入有效時間")
             }
         }
 
         timerResetBt.setOnClickListener {
-            try {
-                handler.removeCallbacks(runnable)
-                toast("重置完成")
-            } catch (e: Exception) {
-                toast("發生錯誤")
-            }
+            compositeDisposable.dispose()
+            context?.toast("重置完成")
+            dismiss()
         }
 
+        imgClose.setOnClickListener {
+            dismiss()
+        }
 
-        return view!!
+        return view
     }
 
     override fun onResume() {
@@ -67,4 +104,5 @@ class TimerDialog : DialogFragment() {
 
         dialog.window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
+
 }

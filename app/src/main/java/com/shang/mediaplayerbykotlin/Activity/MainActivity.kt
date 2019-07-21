@@ -140,8 +140,7 @@ class MainActivity : AppCompatActivity() {
                     toolbar.menu.findItem(R.id.sort).isVisible = false
                 }
                 R.id.timer -> {
-                    var timerDialog = TimerDialog()
-                    timerDialog.show(fragmentManager, "TimerDialog")
+                    TimerDialog.getInstance()?.show(supportFragmentManager, TimerDialog.TAG)
                 }
             }
             true

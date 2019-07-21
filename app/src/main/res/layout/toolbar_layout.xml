@@ -16,7 +16,7 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/actionModeSplitBackground"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:layout_scrollFlags="exitUntilCollapsed|snap"
             app:titleEnabled="false">
 
 
