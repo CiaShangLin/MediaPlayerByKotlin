@@ -27,7 +27,7 @@ import com.shang.mediaplayerbykotlin.Room.Music_ListName_Entity
  * Created by Shang on 2018/8/21.
  */
 class MusicDataAdapter(var context: Context, var musicList: MutableList<Music_Data_Entity>) : RecyclerView.Adapter<MusicDataAdapter.ViewHolder>() {
-
+//New
 
     val database: MusicDatabase by lazy {
         MusicDatabase.getMusicDatabase(context)
