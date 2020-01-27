@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "492712290411-fus7o7t2il36qvenfrkjog5muu461asg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shang.mediaplayerbykotlin",
+            "certificate_hash": "8b55955a316468b6efc43882ec31fee4e3c99458"
+          }
+        },
+        {
           "client_id": "492712290411-706dna99um8aea633ob15fsok3fp7fhh.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
