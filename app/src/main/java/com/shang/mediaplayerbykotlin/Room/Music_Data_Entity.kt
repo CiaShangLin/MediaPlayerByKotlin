@@ -18,6 +18,7 @@ class Music_Data_Entity {
         const val FAVORITE: String = "favorite"
         const val MODIFIED: String = "modified"
         const val PICTURE: String = "picture"
+        const val TEMP_DELETE: String = "temp_delete"
     }
 
     @PrimaryKey()
@@ -38,6 +39,9 @@ class Music_Data_Entity {
 
     @ColumnInfo(name = PICTURE)
     var picture: String = ""
+
+    @ColumnInfo(name = TEMP_DELETE)
+    var tempDelete: Int = 0
 
     //如果有原有資料庫 新增欄位會報錯 要不刪除資料庫,不然就是用程式碼解決
 }

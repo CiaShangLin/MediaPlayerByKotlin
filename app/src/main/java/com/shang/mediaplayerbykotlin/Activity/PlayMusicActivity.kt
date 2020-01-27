@@ -239,10 +239,15 @@ class PlayMusicActivity : AppCompatActivity() {
         return SimpleDateFormat("mm:ss").format(duration)
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        myBroadcastReceiverUI.reStore()
+    }
+
     override fun onStart() {
         super.onStart()
         mLocalBroadcastManager.registerReceiver(myBroadcastReceiver, MyBroadcastReceiver.getIntentFilter(this))
-
     }
 
     override fun onStop() {

@@ -5,7 +5,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
-
+apply plugin: 'com.google.gms.google-services'
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -53,12 +53,14 @@ dependencies {
     kapt 'androidx.room:room-compiler:2.0.0'
 
     //LivaData
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-beta01'
-    implementation "androidx.lifecycle:lifecycle-viewmodel:2.0.0"
-    implementation "androidx.lifecycle:lifecycle-livedata:2.0.0"
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0-rc03'
+    implementation "androidx.lifecycle:lifecycle-viewmodel:2.1.0"
+    implementation "androidx.lifecycle:lifecycle-livedata:2.1.0"
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
     //RxJava
-    implementation "io.reactivex.rxjava2:rxjava:2.2.10"
+    implementation "io.reactivex.rxjava2:rxjava:2.2.16"
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+
+    implementation 'com.google.firebase:firebase-analytics:17.2.0'
 }

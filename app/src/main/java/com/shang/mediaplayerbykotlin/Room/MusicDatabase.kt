@@ -4,9 +4,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 
 
-@Database(entities = arrayOf(Music_Data_Entity::class, Music_ListName_Entity::class, Music_ListData_Entity::class,Setting_Entity::class), version = 1)
+@Database(entities = arrayOf(Music_Data_Entity::class, Music_ListName_Entity::class, Music_ListData_Entity::class, Setting_Entity::class), version = 2)
 abstract class MusicDatabase : RoomDatabase() {
 
     abstract fun getMusic_Data_Dao(): Music_Data_Dao           //沒有新增DAO的話 entity會過不了
@@ -22,9 +24,16 @@ abstract class MusicDatabase : RoomDatabase() {
             if (musicDatabase == null) {
                 musicDatabase = Room.databaseBuilder(context, MusicDatabase::class.java, DATABASE_NAME)
                         .allowMainThreadQueries()
+                        .addMigrations(migration)
                         .build()
             }
             return musicDatabase as MusicDatabase
+        }
+
+        var migration = object : Migration(1, 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE ${Music_Data_Entity.TABLE_NAME}" + " ADD COLUMN temp_delete INTEGER NOT NULL DEFAULT 0")
+            }
         }
 
     }

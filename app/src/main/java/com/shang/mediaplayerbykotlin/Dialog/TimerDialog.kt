@@ -2,6 +2,7 @@ package com.shang.mediaplayerbykotlin.Dialog
 
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -14,6 +15,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.fragment.app.DialogFragment
 import com.shang.mediaplayerbykotlin.MP.MPC
+import com.shang.mediaplayerbykotlin.MP.MediaPlayerService
 import com.shang.mediaplayerbykotlin.R
 import io.reactivex.Observable
 import io.reactivex.Observer
@@ -45,7 +47,7 @@ class TimerDialog : DialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
 
         var view = inflater?.inflate(R.layout.timer_dialog, container)
         var timerHoursEt = view!!.findViewById<EditText>(R.id.timerHoursEt)
@@ -53,7 +55,7 @@ class TimerDialog : DialogFragment() {
         var timerSecondEt = view!!.findViewById<EditText>(R.id.timerSecondEt)
         var timerStartBt = view!!.findViewById<Button>(R.id.timerStartBt)
         var timerResetBt = view!!.findViewById<Button>(R.id.timerResetBt)
-        var imgClose=view!!.findViewById<ImageView>(R.id.imgClose)
+        var imgClose = view!!.findViewById<ImageView>(R.id.imgClose)
 
 
 
@@ -102,7 +104,7 @@ class TimerDialog : DialogFragment() {
     override fun onResume() {
         super.onResume()
 
-        dialog.window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog!!.window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
 }

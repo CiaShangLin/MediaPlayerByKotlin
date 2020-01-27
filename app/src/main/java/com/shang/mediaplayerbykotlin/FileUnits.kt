@@ -21,27 +21,6 @@ class FileUnits {
             return SimpleDateFormat("mm:ss").format(time)
         }
 
-
-        //取得所有Music底下的音樂檔
-        fun findAllMusic(path: File) {
-            try {
-                var f = File(path.path)
-
-                f.walkTopDown().filter {
-                    it.isDirectory && (it.name in listOf<String>("Music", "music", "音樂"))
-                }.forEach {
-                    it.walk().filter {
-                        it.isFile and (it.extension in listOf<String>("mp3", "flac", "3gp", "wav"))
-                    }.forEach {
-                        musicList.add(it)
-                    }
-                }
-                findAllMusic(File(path.parent))
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-
         fun findAllMusicFromContentResolver(context: Context): MutableList<Music_Data_Entity> {
             var entity = mutableListOf<Music_Data_Entity>()
             var uri = context.contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null, null)

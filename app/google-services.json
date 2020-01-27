@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "492712290411",
+    "firebase_url": "https://mediaplayerbykotlin.firebaseio.com",
+    "project_id": "mediaplayerbykotlin",
+    "storage_bucket": "mediaplayerbykotlin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:492712290411:android:869fdf6223b113589da92e",
+        "android_client_info": {
+          "package_name": "com.shang.mediaplayerbykotlin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "492712290411-706dna99um8aea633ob15fsok3fp7fhh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shang.mediaplayerbykotlin",
+            "certificate_hash": "a3584a3a4f16ffd4811acf6258be0ea6dd8c31c3"
+          }
+        },
+        {
+          "client_id": "492712290411-pcfs3k8gd0otadkobidndhis8vcfcl3t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLutrDnZfnLvLEY33BMAMvieEgZPJ2fV8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "492712290411-pcfs3k8gd0otadkobidndhis8vcfcl3t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

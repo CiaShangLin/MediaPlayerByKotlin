@@ -25,9 +25,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:elevation="4dp"
-                app:layout_collapseMode="pin"
                 android:fitsSystemWindows="true"
-                app:title="@string/myMusic"></androidx.appcompat.widget.Toolbar>
+                app:layout_collapseMode="pin"
+                app:title="@string/myMusic"
+                app:titleTextColor="@color/white"></androidx.appcompat.widget.Toolbar>
 
             <include
                 layout="@layout/sample_controller_layout"

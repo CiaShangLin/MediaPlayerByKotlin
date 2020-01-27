@@ -16,18 +16,21 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.shang.mediaplayerbykotlin.Activity.PlayMusicActivity
 import com.shang.mediaplayerbykotlin.FileUnits
+import com.shang.mediaplayerbykotlin.MP.MPC
 import com.shang.mediaplayerbykotlin.MP.MPC_Interface
 import com.shang.mediaplayerbykotlin.R
 import com.shang.mediaplayerbykotlin.Room.MusicDatabase
 import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import com.shang.mediaplayerbykotlin.Room.Music_ListData_Entity
 import com.shang.mediaplayerbykotlin.Room.Music_ListName_Entity
+import com.shang.mediaplayerbykotlin.ViewModel.MediaPlayerModel
+import org.jetbrains.anko.runOnUiThread
 
 /**
  * Created by Shang on 2018/8/21.
  */
-class MusicDataAdapter(var context: Context, var musicList: MutableList<Music_Data_Entity>) : RecyclerView.Adapter<MusicDataAdapter.ViewHolder>() {
-//New
+class MusicDataAdapter(var context: Context, var musicList: MutableList<Music_Data_Entity>, var model: MediaPlayerModel) : RecyclerView.Adapter<MusicDataAdapter.ViewHolder>() {
+
 
     val database: MusicDatabase by lazy {
         MusicDatabase.getMusicDatabase(context)
@@ -40,6 +43,17 @@ class MusicDataAdapter(var context: Context, var musicList: MutableList<Music_Da
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
+        if (musicList[position].tempDelete == 1) {
+            holder.cardview.setOnClickListener(null)
+            holder.cardview.isClickable = false
+            holder.cardview.alpha = 0.5f
+        } else {
+            holder.cardview.setOnClickListener {
+                context.startActivity(Intent(context, PlayMusicActivity::class.java).apply {
+                    this.putExtra(MPC_Interface.INDEX, position)
+                })
+            }
+        }
 
         holder.title.text = musicList.get(position).name
 
@@ -56,20 +70,40 @@ class MusicDataAdapter(var context: Context, var musicList: MutableList<Music_Da
                         var array = database.getMusic_ListName_Dao().getAllTableName()
                         addDialog(array, playListName, position)
                     }
+                    R.id.more_recovery -> {
+                        musicList[position].tempDelete = 0
+                        MPC.musicList[position].tempDelete = 0
+                        var musicDateEntity = musicList.get(position).apply {
+                            this.tempDelete = 0
+                        }
+                        model.update(musicDateEntity)
+                        holder.cardview.setOnClickListener {
+                            context.startActivity(Intent(context, PlayMusicActivity::class.java).apply {
+                                this.putExtra(MPC_Interface.INDEX, position)
+                            })
+                        }
+                        notifyItemChanged(position)
+                    }
+                    R.id.more_temp_delete -> {
+                        musicList[position].tempDelete = 1
+                        MPC.musicList[position].tempDelete = 1
+                        var musicDateEntity = musicList.get(position).apply {
+                            this.tempDelete = 1
+                        }
+                        model.update(musicDateEntity)
+
+                        holder.cardview.setOnClickListener(null)
+                        holder.cardview.isClickable = false
+                        holder.cardview.alpha = 0.5f
+                        notifyItemChanged(position)
+                    }
                 }
                 true
             }
             popupMenu.show()
         }
 
-        holder.cardview.setOnClickListener {
-            context.startActivity(Intent(context, PlayMusicActivity::class.java).apply {
-                this.putExtra(MPC_Interface.INDEX, position)
-            })
-        }
-
         holder.itemView.setTag(position)
-
     }
 
     fun setData(data: MutableList<Music_Data_Entity>) {

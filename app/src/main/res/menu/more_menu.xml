@@ -7,6 +7,14 @@
             android:id="@+id/more_add"
             android:title="@string/more_add"
             app:showAsAction="always" />
+        <item android:id="@+id/more_recovery"
+            android:title="回復刪除"
+            app:showAsAction="always">
+        </item>
+        <item android:id="@+id/more_temp_delete"
+            android:title="暫時刪除"
+            app:showAsAction="always">
+        </item>
     </group>
 
 </menu>

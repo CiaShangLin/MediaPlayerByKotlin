@@ -79,6 +79,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+
         var readPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
         var writePermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
 
@@ -88,12 +90,11 @@ class MainActivity : AppCompatActivity() {
                     arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE,
                             android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
         } else {
+            SingleMediaScanner(this)
             CheckFileRoom(this, mediaPlayerModel).execute()
         }
-
         initView()
         initModel()
-
     }
 
     private fun initView() {
@@ -124,15 +125,10 @@ class MainActivity : AppCompatActivity() {
         nav_view.setNavigationItemSelectedListener {
             drawerLayout.closeDrawers()
             when (it.itemId) {
-
                 R.id.myMusic -> {
                     recyclerview.adapter=adapterMain
                     toolbar.title="我的音樂"
                     toolbar.menu.findItem(R.id.sort).isVisible = true
-                }
-                R.id.favorite -> {
-
-
                 }
                 R.id.musicList -> {
                     mediaPlayerModel.getPlayListNameLiveData().value = true
@@ -150,7 +146,7 @@ class MainActivity : AppCompatActivity() {
         //recyclerview
         recyclerview.layoutManager = LinearLayoutManager(this@MainActivity)
         recyclerview.setHasFixedSize(true)
-        adapterMain = MusicDataAdapter(this, mutableListOf())
+        adapterMain = MusicDataAdapter(this, mutableListOf(),mediaPlayerModel )
         recyclerview.adapter = adapterMain
 
         //撥放按鈕
@@ -198,7 +194,7 @@ class MainActivity : AppCompatActivity() {
             Log.d(TAG, "mediaPlayer:${it.size}")
         })
 
-        //LoadDailog
+        //LoadDialog
         mediaPlayerModel.getLoadStatus().observe(this, Observer {
             if (it) {
                 loadDialog.dismiss()

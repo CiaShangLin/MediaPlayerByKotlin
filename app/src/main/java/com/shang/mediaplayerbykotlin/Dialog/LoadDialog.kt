@@ -30,6 +30,6 @@ class LoadDialog : androidx.fragment.app.DialogFragment() {
     override fun onResume() {
         super.onResume()
 
-        dialog.window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+        dialog!!.window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
     }
 }
