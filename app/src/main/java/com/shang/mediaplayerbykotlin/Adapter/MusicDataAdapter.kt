@@ -24,6 +24,7 @@ import com.shang.mediaplayerbykotlin.Room.Music_Data_Entity
 import com.shang.mediaplayerbykotlin.Room.Music_ListData_Entity
 import com.shang.mediaplayerbykotlin.Room.Music_ListName_Entity
 import com.shang.mediaplayerbykotlin.ViewModel.MediaPlayerModel
+import kotlinx.android.synthetic.main.music_data_item.view.*
 import org.jetbrains.anko.runOnUiThread
 
 /**
@@ -43,21 +44,9 @@ class MusicDataAdapter(var context: Context, var musicList: MutableList<Music_Da
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        if (musicList[position].tempDelete == 1) {
-            holder.cardview.setOnClickListener(null)
-            holder.cardview.isClickable = false
-            holder.cardview.alpha = 0.5f
-        } else {
-            holder.cardview.setOnClickListener {
-                context.startActivity(Intent(context, PlayMusicActivity::class.java).apply {
-                    this.putExtra(MPC_Interface.INDEX, position)
-                })
-            }
-        }
+        holder.title.text = musicList[position].name
 
-        holder.title.text = musicList.get(position).name
-
-        holder.time.text = FileUnits.lastModifiedToSimpleDateFormat(musicList.get(position).duration)
+        holder.time.text = FileUnits.lastModifiedToSimpleDateFormat(musicList[position].duration)
 
         holder.moreBt.setOnClickListener {
             var popupMenu = PopupMenu(context, it)
@@ -82,6 +71,7 @@ class MusicDataAdapter(var context: Context, var musicList: MutableList<Music_Da
                                 this.putExtra(MPC_Interface.INDEX, position)
                             })
                         }
+                        Log.d("TAG","$position")
                         notifyItemChanged(position)
                     }
                     R.id.more_temp_delete -> {
@@ -92,9 +82,10 @@ class MusicDataAdapter(var context: Context, var musicList: MutableList<Music_Da
                         }
                         model.update(musicDateEntity)
 
-                        holder.cardview.setOnClickListener(null)
-                        holder.cardview.isClickable = false
-                        holder.cardview.alpha = 0.5f
+                        Log.d("TAG","$position")
+                        //holder.cardview.setOnClickListener(null)
+//                        holder.cardview.isClickable = false
+//                        holder.cardview.alpha = 0.5f
                         notifyItemChanged(position)
                     }
                 }
@@ -103,8 +94,23 @@ class MusicDataAdapter(var context: Context, var musicList: MutableList<Music_Da
             popupMenu.show()
         }
 
-        holder.itemView.setTag(position)
+        if (musicList[position].tempDelete == 1) {
+            holder.cardview.setOnClickListener(null)
+            holder.cardview.isClickable = false
+            holder.cardview.alpha = 0.5f
+        } else {
+            holder.cardview.isClickable = true
+            holder.cardview.alpha = 1.0f
+            holder.cardview.setOnClickListener {
+                context.startActivity(Intent(context, PlayMusicActivity::class.java).apply {
+                    this.putExtra(MPC_Interface.INDEX, position)
+                })
+            }
+        }
+
+        holder.itemView.cardview.tag = musicList[position].path
     }
+
 
     fun setData(data: MutableList<Music_Data_Entity>) {
         musicList.clear()
